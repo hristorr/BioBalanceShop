@@ -16,3 +16,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#site-logo {
+/*    width: 496px;
+    height: 100px;*/
+    max-width: 350px;
+    max-height: auto;
+}
