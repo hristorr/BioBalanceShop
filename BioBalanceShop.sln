@@ -5,6 +5,10 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioBalanceShop", "BioBalanceShop\BioBalanceShop.csproj", "{457356F4-01BA-451D-A075-4FEC20BFDA7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioBalanceShop.Core", "BioBalanceShop.Core\BioBalanceShop.Core.csproj", "{8BAEA0B7-E6F6-410A-B4E9-1CEE9E169A4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioBalanceShop.Infrastructure", "BioBalanceShop.Infrastructure\BioBalanceShop.Infrastructure.csproj", "{91F79158-E06B-4B42-9D8E-0FDA02999569}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{457356F4-01BA-451D-A075-4FEC20BFDA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{457356F4-01BA-451D-A075-4FEC20BFDA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{457356F4-01BA-451D-A075-4FEC20BFDA7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BAEA0B7-E6F6-410A-B4E9-1CEE9E169A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BAEA0B7-E6F6-410A-B4E9-1CEE9E169A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BAEA0B7-E6F6-410A-B4E9-1CEE9E169A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BAEA0B7-E6F6-410A-B4E9-1CEE9E169A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F79158-E06B-4B42-9D8E-0FDA02999569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F79158-E06B-4B42-9D8E-0FDA02999569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F79158-E06B-4B42-9D8E-0FDA02999569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F79158-E06B-4B42-9D8E-0FDA02999569}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿using BioBalanceShop.Data;
+﻿using BioBalanceShop.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
