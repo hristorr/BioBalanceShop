@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BioBalanceShop.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(BioBalanceDbContext))]
     [Migration("20240305113943_InitialMigration")]
     partial class InitialMigration
     {
