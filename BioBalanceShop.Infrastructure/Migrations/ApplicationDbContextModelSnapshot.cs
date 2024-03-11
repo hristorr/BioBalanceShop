@@ -43,7 +43,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Country", b =>
@@ -79,7 +79,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Customer", b =>
@@ -116,7 +116,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.CustomerBillingAddress", b =>
@@ -158,7 +158,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CustomerBillingAddresses");
+                    b.ToTable("CustomerBillingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.CustomerShippingAddress", b =>
@@ -200,7 +200,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CustomerShippingAddresses");
+                    b.ToTable("CustomerShippingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Order", b =>
@@ -286,7 +286,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderBillingAddress", b =>
@@ -328,7 +328,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("OrderBillingAddresses");
+                    b.ToTable("OrderBillingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderItem", b =>
@@ -413,7 +413,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderShippingAddress", b =>
@@ -455,7 +455,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("OrderShippingAddresses");
+                    b.ToTable("OrderShippingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
@@ -555,7 +555,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
@@ -608,7 +608,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Shops");
+                    b.ToTable("Shops", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
