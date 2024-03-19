@@ -20,6 +20,26 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .WithMany(s => s.ShipToCountries)
                 .HasForeignKey(c => c.ShopId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.HasMany(c => c.CustomerBillingAddresseses)
+            //    .WithOne(cba => cba.Country)
+            //    .HasForeignKey(cba => cba.CountryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.HasMany(c => c.CustomerShippingAddresses)
+            //    .WithOne(csa => csa.Country)
+            //    .HasForeignKey(csa => csa.CountryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.HasMany(c => c.OrderBillingAddresseses)
+            //    .WithOne(oba => oba.Country)
+            //    .HasForeignKey(oba => oba.CountryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.HasMany(c => c.OrderShippingAddresses)
+            //    .WithOne(osa => osa.Country)
+            //    .HasForeignKey(osa => osa.CountryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

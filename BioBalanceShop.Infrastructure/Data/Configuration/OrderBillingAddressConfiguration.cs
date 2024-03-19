@@ -15,9 +15,9 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(oba => oba.IsActive);
 
-            builder.HasOne(oba => oba.Country)
+            builder.HasOne(cba => cba.Country)
                 .WithMany(c => c.OrderBillingAddresseses)
-                .HasForeignKey(oba => oba.CountryId)
+                .HasForeignKey(cba => cba.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

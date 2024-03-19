@@ -9,6 +9,16 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasQueryFilter(c => c.IsActive);
+
+            //builder.HasMany(c => c.Products)
+            //    .WithOne(p => p.Category)
+            //    .HasForeignKey(p => p.CategoryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //builder.HasMany(c => c.OrderItems)
+            //    .WithOne(oi => oi.Category)
+            //    .HasForeignKey(oi => oi.CategoryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
