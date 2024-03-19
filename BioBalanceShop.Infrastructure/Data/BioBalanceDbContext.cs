@@ -1,11 +1,12 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Configuration;
 using BioBalanceShop.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BioBalanceShop.Infrastructure.Data
 {
-    public class BioBalanceDbContext : IdentityDbContext
+    public class BioBalanceDbContext : IdentityDbContext<IdentityUser>
     {
         public BioBalanceDbContext(DbContextOptions<BioBalanceDbContext> options)
             : base(options)
