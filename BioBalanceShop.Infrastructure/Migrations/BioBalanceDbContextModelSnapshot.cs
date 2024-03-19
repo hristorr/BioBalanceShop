@@ -43,7 +43,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Country", b =>
@@ -79,7 +79,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Customer", b =>
@@ -116,7 +116,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.CustomerBillingAddress", b =>
@@ -158,7 +158,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CustomerBillingAddresses");
+                    b.ToTable("CustomerBillingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.CustomerShippingAddress", b =>
@@ -200,7 +200,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CustomerShippingAddresses");
+                    b.ToTable("CustomerShippingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Order", b =>
@@ -286,7 +286,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderBillingAddress", b =>
@@ -328,7 +328,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("OrderBillingAddresses");
+                    b.ToTable("OrderBillingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderItem", b =>
@@ -413,7 +413,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderShippingAddress", b =>
@@ -455,7 +455,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("OrderShippingAddresses");
+                    b.ToTable("OrderShippingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
@@ -555,7 +555,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
@@ -608,7 +608,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Shops");
+                    b.ToTable("Shops", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -641,14 +641,14 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         new
                         {
                             Id = "03f649d4-5366-4680-97d0-a90777f42356",
-                            ConcurrencyStamp = "fc8917eb-9e60-4c9b-ac62-e0863189b488",
+                            ConcurrencyStamp = "91cbf97f-a30b-4601-9f3c-e7570764ff07",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53",
-                            ConcurrencyStamp = "4ebfb060-ed31-4c13-b759-add97b278264",
+                            ConcurrencyStamp = "a7aa4bd2-2d73-45e6-bab3-9fe628b02517",
                             Name = "customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -753,15 +753,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         {
                             Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f80d6c43-fc0f-481f-b9ef-d93bcadb460e",
+                            ConcurrencyStamp = "fe1ad454-c0e8-4510-80af-6724ef2490b5",
                             Email = "admin@mail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEe2kDSoqIvyiVKBCC3c1O+jpmXI92l+rUIrkZWLO4GQbcz9mIhwTzrYUEhRih1LfA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMUiVavCWQ2Tv+nPNL/bSKGVDkr7T6s/vpYyaxK2wQbWGkvQK+rSvykFA1dipdu4Ug==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3808835a-6a74-4a3f-bbd4-db2e4e719c00",
+                            SecurityStamp = "d8b1aa6a-a90e-42a1-bdab-8151400d5032",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         },
@@ -769,15 +769,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         {
                             Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e1886255-bd12-46c9-b9cd-f7853f4ce829",
+                            ConcurrencyStamp = "5b8849df-f5c9-457e-8910-1e8fc0e95e5d",
                             Email = "customer@mail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "CUSTOMER@MAIL.COM",
                             NormalizedUserName = "CUSTOMER@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMs59kbt7K1Yc96VgMInh6ZkUpOu1QW3KoF09yQB6vIc6KnQIDOumR9EowNOPCm8Ag==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOUDA/Gp9icQlKYKPo3KZ18fQJsypIWacCVUShSmr3MIdUjZq9lZCUVEeB4jbEhWeQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "55713733-c7b9-463f-ba82-fc5acb7070b1",
+                            SecurityStamp = "212a5d34-f316-4386-b902-db8ffbe7a1bf",
                             TwoFactorEnabled = false,
                             UserName = "customer@mail.com"
                         });

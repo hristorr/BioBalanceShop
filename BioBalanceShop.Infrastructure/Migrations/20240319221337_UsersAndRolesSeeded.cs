@@ -4,7 +4,7 @@
 
 namespace BioBalanceShop.Infrastructure.Migrations
 {
-    public partial class SeedRolesAndUsers : Migration
+    public partial class UsersAndRolesSeeded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +13,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "03f649d4-5366-4680-97d0-a90777f42356", "fc8917eb-9e60-4c9b-ac62-e0863189b488", "admin", "ADMIN" },
-                    { "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53", "4ebfb060-ed31-4c13-b759-add97b278264", "customer", "CUSTOMER" }
+                    { "03f649d4-5366-4680-97d0-a90777f42356", "91cbf97f-a30b-4601-9f3c-e7570764ff07", "admin", "ADMIN" },
+                    { "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53", "a7aa4bd2-2d73-45e6-bab3-9fe628b02517", "customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
@@ -22,8 +22,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "ShopId", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "02c32793-47c7-4f3b-9487-d91c2a0e4345", 0, "f80d6c43-fc0f-481f-b9ef-d93bcadb460e", "admin@mail.com", true, false, null, "ADMIN@MAIL.COM", "ADMIN@MAIL.COM", "AQAAAAEAACcQAAAAEEe2kDSoqIvyiVKBCC3c1O+jpmXI92l+rUIrkZWLO4GQbcz9mIhwTzrYUEhRih1LfA==", null, false, "3808835a-6a74-4a3f-bbd4-db2e4e719c00", null, false, "admin@mail.com" },
-                    { "c4f1530f-2727-4bc8-9de3-075fc7420586", 0, "e1886255-bd12-46c9-b9cd-f7853f4ce829", "customer@mail.com", true, false, null, "CUSTOMER@MAIL.COM", "CUSTOMER@MAIL.COM", "AQAAAAEAACcQAAAAEMs59kbt7K1Yc96VgMInh6ZkUpOu1QW3KoF09yQB6vIc6KnQIDOumR9EowNOPCm8Ag==", null, false, "55713733-c7b9-463f-ba82-fc5acb7070b1", null, false, "customer@mail.com" }
+                    { "02c32793-47c7-4f3b-9487-d91c2a0e4345", 0, "fe1ad454-c0e8-4510-80af-6724ef2490b5", "admin@mail.com", true, false, null, "ADMIN@MAIL.COM", "ADMIN@MAIL.COM", "AQAAAAEAACcQAAAAEMUiVavCWQ2Tv+nPNL/bSKGVDkr7T6s/vpYyaxK2wQbWGkvQK+rSvykFA1dipdu4Ug==", null, false, "d8b1aa6a-a90e-42a1-bdab-8151400d5032", null, false, "admin@mail.com" },
+                    { "c4f1530f-2727-4bc8-9de3-075fc7420586", 0, "5b8849df-f5c9-457e-8910-1e8fc0e95e5d", "customer@mail.com", true, false, null, "CUSTOMER@MAIL.COM", "CUSTOMER@MAIL.COM", "AQAAAAEAACcQAAAAEOUDA/Gp9icQlKYKPo3KZ18fQJsypIWacCVUShSmr3MIdUjZq9lZCUVEeB4jbEhWeQ==", null, false, "212a5d34-f316-4386-b902-db8ffbe7a1bf", null, false, "customer@mail.com" }
                 });
 
             migrationBuilder.InsertData(
