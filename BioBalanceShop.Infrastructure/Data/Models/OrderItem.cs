@@ -36,30 +36,9 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Order item name
         /// </summary>
         [Required]
-        [MaxLength(NameMaxLength)]
+        [MaxLength(TitleMaxLength)]
         [Comment("Order item name")]
-        public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Order item description
-        /// </summary>
-        [Required]
-        [MaxLength(DescriptionMaxLength)]
-        [Comment("Order item description")]
-        public string Description { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Order item front image
-        /// </summary>
-        [Required]
-        [Comment("Order item front image")]
-        public byte[] ImageFront { get; set; } = null!;
-
-        /// <summary>
-        /// Order item back image
-        /// </summary>
-        [Comment("Order item back image")]
-        public byte[]? ImageBack { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Order item quantity
@@ -138,5 +117,10 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(OrderId))]
         public Order Order { get; set; } = null!;
+
+        /// <summary>
+        /// Product images
+        /// </summary>
+        public IEnumerable<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

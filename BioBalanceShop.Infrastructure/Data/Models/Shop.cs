@@ -27,34 +27,11 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public bool IsActive { get; set; } = true;
 
         /// <summary>
-        /// Shop name
-        /// </summary>
-        [Required]
-        [MaxLength(NameMaxLength)]
-        [Comment("Shop name")]
-        public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Shop logotype
-        /// </summary>
-        [Comment("Shop logotype")]
-        public byte[]? Logotype { get; set; }
-
-        /// <summary>
-        /// Shop owner identificator
-        /// </summary>
-        [Required]
-        [Comment("Shop owner identificator")]
-        public string OwnerId { get; set; } = string.Empty;
-
-        /// <summary>
         /// Shop currency
         /// </summary>
         [Required]
-        [MaxLength(CurrencyCodeMaxLength)]
-        [RegularExpression(CurrencyCodeRegexPattern)]
-        [Comment("Shop currency code")]
-        public string CurrencyCode { get; set; } = string.Empty;
+        [Comment("Shop currency identificator")]
+        public int CurrencyId { get; set; }
 
         /// <summary>
         /// Tax rate applied to shop products
@@ -78,29 +55,19 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public decimal? ShippingFeeRate { get; set; }
 
         /// <summary>
-        /// Shop owner
+        /// Shop currency
         /// </summary>
-        [ForeignKey(nameof(OwnerId))]
-        public IdentityUser Owner { get; set; } = null!;
+        [ForeignKey(nameof(CurrencyId))]
+        public Currency Currency { get; set; } = null!;
 
         /// <summary>
-        /// Shop users
-        /// </summary>
-        public IEnumerable<IdentityUser> Users { get; set; } = new List<IdentityUser>();
-
-        /// <summary>
-        /// Countries the shop ships to
-        /// </summary>
-        public IEnumerable<Country> ShipToCountries { get; set; } = new List<Country>();
-
-        /// <summary>
-        /// Shop products
+        /// Products
         /// </summary>
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
 
         /// <summary>
-        /// Shop orders
+        /// Customers
         /// </summary>
-        public IEnumerable<Order> Orders { get; set; } = new List<Order>();
+        public IEnumerable<Customer> Customers { get; set; } = new List<Customer>();
     }
 }

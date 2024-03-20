@@ -6,57 +6,57 @@ using static BioBalanceShop.Infrastructure.Constants.DataConstants.Address;
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Order shipping address data entity
+    /// Order address data entity
     /// </summary>
-    public class OrderShippingAddress
+    public class OrderAddress
     {
         /// <summary>
-        /// Order shipping address identificator
+        /// Order address identificator
         /// </summary>
         [Key]
-        [Comment("Order shipping address identificator")]
+        [Comment("Order address identificator")]
         public int Id { get; set; }
 
         /// <summary>
-        /// Indicator if order shipping address exists
+        /// Indicator if order address exists
         /// </summary>
         [Required]
-        [Comment("Indicator if order shipping address exists")]
+        [Comment("Indicator if order address exists")]
         public bool IsActive { get; set; } = true;
 
         /// <summary>
-        /// Order shipping address street name
+        /// Order address street name
         /// </summary>
         [Required]
         [MaxLength(StreetMaxLength)]
-        [Comment("Order shipping address street name")]
+        [Comment("Order address street name")]
         public string Street { get; set; } = string.Empty;
 
         /// <summary>
-        /// Order shipping address post code
+        /// Order address post code
         /// </summary>
         [Required]
         [MaxLength(PostCodeMaxLength)]
-        [Comment("Order shipping address post code")]
+        [Comment("Order address post code")]
         public string PostCode { get; set; } = string.Empty;
 
         /// <summary>
-        /// Order shipping address city
+        /// Order address city
         /// </summary>
         [Required]
         [MaxLength(CityMaxLength)]
-        [Comment("Order shipping address city")]
+        [Comment("Order address city")]
         public string City { get; set; } = string.Empty;
 
         /// <summary>
-        /// Order shipping address country identificator
+        /// Order address country identificator
         /// </summary>
         [Required]
-        [Comment("Order shipping address country identificator")]
+        [Comment("Order address country identificator")]
         public int CountryId { get; set; }
 
         /// <summary>
-        /// Order shipping address country
+        /// Order address country
         /// </summary>
         [ForeignKey(nameof(CountryId))]
         public Country Country { get; set; } = null!;

@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Infrastructure.Data.Configuration
 {
-    public class OrderBillingAddressConfiguration : IEntityTypeConfiguration<OrderBillingAddress>
+    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
-        public void Configure(EntityTypeBuilder<OrderBillingAddress> builder)
+        public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
-            builder.HasQueryFilter(oba => oba.IsActive);
+            builder.HasQueryFilter(p => p.IsActive);
 
-            builder.HasOne(cba => cba.Country)
-                .WithMany(c => c.OrderBillingAddresseses)
-                .HasForeignKey(cba => cba.CountryId)
+            builder.HasOne(pi => pi.Product)
+                .WithMany(p => p.Images)
+                .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

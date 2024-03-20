@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.Customer;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -25,6 +26,20 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public bool IsActive { get; set; } = true;
 
         /// <summary>
+        /// Cusotmer first name
+        /// </summary>
+        [MaxLength(NameMaxLength)]
+        [Comment("Customer first name")]
+        public string? FirstName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Cusotmer last name
+        /// </summary>
+        [MaxLength(NameMaxLength)]
+        [Comment("Customer last name")]
+        public string? LastName { get; set; } = string.Empty;
+
+        /// <summary>
         /// User identificator
         /// </summary>
         [Required]
@@ -38,30 +53,29 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public IdentityUser User { get; set; } = null!;
 
         /// <summary>
-        /// Customer shipping address identificator
+        /// Customer address identificator
+        /// </summary>
+        [Comment("Customer address identificator")]
+        public int? AddressId { get; set; }
+
+        /// <summary>
+        /// Shop identificator
         /// </summary>
         [Required]
-        [Comment("Customer shipping address identificator")]
-        public int CustomerShippingAddressId { get; set; }
+        [Comment("Shop identificator")]
+        public int ShopId { get; set; }
 
         /// <summary>
-        /// Customer billing address identificator
+        /// Customer address
         /// </summary>
-        [Required]
-        [Comment("Customer billing address identificator")]
-        public int CustomerBillingAddressId { get; set; }
+        [ForeignKey(nameof(AddressId))]
+        public CustomerAddress? Address { get; set; } = null!;
 
         /// <summary>
-        /// Customer shipping address
+        /// Shop
         /// </summary>
-        [ForeignKey(nameof(CustomerShippingAddressId))]
-        public CustomerShippingAddress CustomerShippingAddress { get; set; } = null!;
-
-        /// <summary>
-        /// Customer billing address
-        /// </summary>
-        [ForeignKey(nameof(CustomerBillingAddressId))]
-        public CustomerBillingAddress CustomerBillingAddress { get; set; } = null!;
+        [ForeignKey(nameof(ShopId))]
+        public Shop Shop { get; set; } = null!;
 
         public IEnumerable<Order> Orders { get; set; } = new List<Order>();
     }

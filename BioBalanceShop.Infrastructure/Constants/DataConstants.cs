@@ -19,11 +19,17 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int ProductCodeMaxLength = 20;
             public const int ProductCodeMinLength = 3;
 
-            public const int NameMaxLength = 50;
-            public const int NameMinLength = 2;
+            public const int TitleMaxLength = 50;
+            public const int TitleMinLength = 2;
 
-            public const int DescriptionMaxLength = 250;
+            public const int SubtitleMaxLength = 50;
+            public const int SubtitleMinLength = 2;
+
+            public const int DescriptionMaxLength = 3000;
             public const int DescriptionMinLength = 10;
+
+            public const int IngredeientsMaxLength = 3000;
+            public const int IngredeientsMinLength = 10;
 
             public const int QuantityMaxRange = int.MaxValue;
             public const int QuantityMinRange = 0;
@@ -55,9 +61,6 @@ namespace BioBalanceShop.Infrastructure.Constants
         {
             public const int OrderNumberMaxLength = 20;
             public const int OrderNumberMinLength = 5;
-
-            public const int StatusMaxLength = 20;
-            public const int StatusMinLength = 2;
         }
 
         public static class Address
@@ -70,6 +73,22 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const int CityMaxLength = 20;
             public const int CityMinLength = 1;
+        }
+
+        public static class Customer
+        {
+            public const int NameMaxLength = 25;
+            public const int NameMinLength = 2;
+        }
+
+        public static class Currency
+        {
+            public const int CurrencySymbolMaxLength = 3;
+            public const int CurrencySymbolMinLength = 1;
+
+            public const int CurrencyCodeMaxLength = 3;
+            public const int CurrencyCodeMinLength = 3;
+            public const string CurrencyCodeRegexPattern = "[A-Z]{3}";
         }
     }
 }

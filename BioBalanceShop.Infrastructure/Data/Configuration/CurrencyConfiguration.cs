@@ -1,6 +1,5 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Infrastructure.Data.Configuration
 {
-    public class CountryConfiguration : IEntityTypeConfiguration<Country>
+    public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
     {
-        public void Configure(EntityTypeBuilder<Country> builder)
+        public void Configure(EntityTypeBuilder<Currency> builder)
         {
             builder.HasQueryFilter(c => c.IsActive);
+
         }
     }
 }

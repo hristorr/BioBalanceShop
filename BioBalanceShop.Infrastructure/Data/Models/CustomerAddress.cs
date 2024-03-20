@@ -1,62 +1,62 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.Address;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Customer billing address data entity
+    /// Customer address data entity
     /// </summary>
-    public class CustomerBillingAddress
+    public class CustomerAddress
     {
         /// <summary>
-        /// Customer billing address identificator
+        /// Customer address identificator
         /// </summary>
         [Key]
-        [Comment("Customer billing address identificator")]
+        [Comment("Customer address identificator")]
         public int Id { get; set; }
 
         /// <summary>
-        /// Indicator if customer billing address exists
+        /// Indicator if customer address exists
         /// </summary>
         [Required]
-        [Comment("Indicator if customer billing address exists")]
+        [Comment("Indicator if customer address exists")]
         public bool IsActive { get; set; } = true;
 
         /// <summary>
-        /// Customer billing address street name
+        /// Customer address street name
         /// </summary>
         [Required]
         [MaxLength(StreetMaxLength)]
-        [Comment("Customer billing address street name")]
+        [Comment("Customer address street name")]
         public string Street { get; set; } = string.Empty;
 
         /// <summary>
-        /// Customer billing address post code
+        /// Customer address post code
         /// </summary>
         [Required]
         [MaxLength(PostCodeMaxLength)]
-        [Comment("Customer billing address post code")]
+        [Comment("Customer address post code")]
         public string PostCode { get; set; } = string.Empty;
 
         /// <summary>
-        /// Customer billing address city
+        /// Customer address city
         /// </summary>
         [Required]
         [MaxLength(CityMaxLength)]
-        [Comment("Customer billing address city")]
+        [Comment("Customer address city")]
         public string City { get; set; } = string.Empty;
 
         /// <summary>
-        /// Customer billing address country identificator
+        /// Customer address country identificator
         /// </summary>
         [Required]
-        [Comment("Customer billing address country identificator")]
+        [Comment("Customer address country identificator")]
         public int CountryId { get; set; }
 
         /// <summary>
-        /// Customer billing address country
+        /// Customer address country
         /// </summary>
         [ForeignKey(nameof(CountryId))]
         public Country Country { get; set; } = null!;

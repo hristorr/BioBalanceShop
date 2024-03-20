@@ -46,34 +46,14 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Comment("Country code")]
         public string Code { get; set; } = string.Empty;
 
-        [Required]
-        [Comment("Shop identificator")]
-        public int ShopId { get; set; }
+        /// <summary>
+        /// Customer addresses
+        /// </summary>
+        public IEnumerable<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
         /// <summary>
-        /// Shop
+        /// Order addresses
         /// </summary>
-        [ForeignKey(nameof(ShopId))]
-        public Shop Shop { get; set; } = null!;
-
-        /// <summary>
-        /// Customer shipping addresses
-        /// </summary>
-        public IEnumerable<CustomerShippingAddress> CustomerShippingAddresses { get; set; } = new List<CustomerShippingAddress>();
-
-        /// <summary>
-        /// Customer billing addresses
-        /// </summary>
-        public IEnumerable<CustomerBillingAddress> CustomerBillingAddresseses { get; set; } = new List<CustomerBillingAddress>();
-
-        /// <summary>
-        /// Order shipping addresses
-        /// </summary>
-        public IEnumerable<OrderShippingAddress> OrderShippingAddresses { get; set; } = new List<OrderShippingAddress>();
-
-        /// <summary>
-        /// Order billing addresses
-        /// </summary>
-        public IEnumerable<OrderBillingAddress> OrderBillingAddresseses { get; set; } = new List<OrderBillingAddress>();
+        public IEnumerable<OrderAddress> OrderAddresses { get; set; } = new List<OrderAddress>();
     }
 }

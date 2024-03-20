@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Infrastructure.Data.Configuration
 {
-    public class OrderShippingAddressConfiguration : IEntityTypeConfiguration<OrderShippingAddress>
+    public class OrderAddressConfiguration : IEntityTypeConfiguration<OrderAddress>
     {
-        public void Configure(EntityTypeBuilder<OrderShippingAddress> builder)
+        public void Configure(EntityTypeBuilder<OrderAddress> builder)
         {
             builder.HasQueryFilter(osa => osa.IsActive);
 
             builder.HasOne(osa => osa.Country)
-                .WithMany(c => c.OrderShippingAddresses)
+                .WithMany(c => c.OrderAddresses)
                 .HasForeignKey(osa => osa.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

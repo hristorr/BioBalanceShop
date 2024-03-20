@@ -37,9 +37,17 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Product name
         /// </summary>
         [Required]
-        [MaxLength(NameMaxLength)]
+        [MaxLength(TitleMaxLength)]
         [Comment("Product name")]
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Product subtitle
+        /// </summary>
+        [Required]
+        [MaxLength(SubtitleMaxLength)]
+        [Comment("Product subtitle")]
+        public string Subtitle { get; set; } = string.Empty;
 
         /// <summary>
         /// Product description
@@ -49,18 +57,14 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Comment("Product description")]
         public string Description { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product front image
-        /// </summary>
-        [Required]
-        [Comment("Product front image")]
-        public byte[] ImageFront { get; set; } = null!;
 
         /// <summary>
-        /// Product back image
+        /// Product ingredients
         /// </summary>
-        [Comment("Product back image")]
-        public byte[]? ImageBack { get; set; }
+        [Required]
+        [MaxLength(IngredeientsMaxLength)]
+        [Comment("Product ingredients")]
+        public string Ingredients { get; set; } = string.Empty;
 
         /// <summary>
         /// Product quantity
@@ -90,6 +94,13 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Column(TypeName = "decimal(18, 2)")]
         [Comment("Discount amount on product level")]
         public decimal? DiscountAmount { get; set; }
+
+        /// <summary>
+        /// Product shipping fee
+        /// </summary>
+        [Column(TypeName = "decimal(18, 2)")]
+        [Comment("Product shipping fee")]
+        public decimal? ShippingFee { get; set; }
 
         /// <summary>
         /// Product net price including discount before taxes
@@ -162,9 +173,15 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public IdentityUser CreatedBy { get; set; } = null!;
 
         /// <summary>
-        /// Shop selling the product
+        /// Shop
         /// </summary>
         [ForeignKey(nameof(ShopId))]
         public Shop Shop { get; set; } = null!;
+
+        /// <summary>
+        /// Product images
+        /// </summary>
+        public IEnumerable<ProductImage> Images { get; set; } = new List<ProductImage>();
+
     }
 }

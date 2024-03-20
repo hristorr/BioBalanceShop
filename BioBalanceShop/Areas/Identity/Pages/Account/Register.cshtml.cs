@@ -10,9 +10,12 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using BioBalanceShop.Infrastructure.Data;
+using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,6 +33,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly BioBalanceDbContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -37,7 +41,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            BioBalanceDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -46,6 +51,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -135,8 +141,16 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
                         if (resultAddToRole.Succeeded)
                         {
                             _logger.LogInformation("User created a new account with password.");
-
                             var userId = await _userManager.GetUserIdAsync(user);
+
+                            var customer = new Customer()
+                            {
+                                UserId = userId
+                            };
+
+                            await _context.AddAsync(customer);
+                            await _context.SaveChangesAsync();
+
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                             var callbackUrl = Url.Page(

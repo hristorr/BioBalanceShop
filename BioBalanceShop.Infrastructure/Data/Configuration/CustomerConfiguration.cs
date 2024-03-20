@@ -14,6 +14,11 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.HasQueryFilter(c => c.IsActive);
+
+            builder.HasOne(c => c.Shop)
+                .WithMany(s => s.Customers)
+                .HasForeignKey(c => c.ShopId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

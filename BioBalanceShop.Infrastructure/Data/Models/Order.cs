@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BioBalanceShop.Infrastructure.Data.Enumerations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -45,9 +46,9 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Order status
         /// </summary>
         [Required]
-        [MaxLength(StatusMaxLength)]
+        [EnumDataType(typeof(OrderStatus))]
         [Comment("Order status")]
-        public string Status { get; set; } = string.Empty;
+        public OrderStatus Status { get; set; } = OrderStatus.Paid;
 
         /// <summary>
         /// Order net price
@@ -111,18 +112,11 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int CustomerId { get; set; }
 
         /// <summary>
-        /// Order shipping address identificator
+        /// Order address identificator
         /// </summary>
         [Required]
-        [Comment("Order shipping address identificator")]
-        public int OrderShippingAddressId { get; set; }
-
-        /// <summary>
-        /// Order billing address identificator
-        /// </summary>
-        [Required]
-        [Comment("Order billing address identificator")]
-        public int OrderBillingAddressId { get; set; }
+        [Comment("Order address identificator")]
+        public int OrderAddressId { get; set; }
 
         /// <summary>
         /// Customer
@@ -131,16 +125,10 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public Customer Customer { get; set; } = null!;
 
         /// <summary>
-        /// Order shipping address
+        /// Order address
         /// </summary>
-        [ForeignKey(nameof(OrderShippingAddressId))]
-        public OrderShippingAddress OrderShippingAddress { get; set; } = null!;
-
-        /// <summary>
-        /// Order billing address
-        /// </summary>
-        [ForeignKey(nameof(OrderBillingAddressId))]
-        public OrderBillingAddress OrderBillingAddress { get; set; } = null!;
+        [ForeignKey(nameof(OrderAddressId))]
+        public OrderAddress OrderAddress { get; set; } = null!;
 
         /// <summary>
         /// Order items
