@@ -183,5 +183,10 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         public IEnumerable<ProductImage> Images { get; set; } = new List<ProductImage>();
 
+        /// <summary>
+        /// Order items
+        /// </summary>
+        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
     }
 }

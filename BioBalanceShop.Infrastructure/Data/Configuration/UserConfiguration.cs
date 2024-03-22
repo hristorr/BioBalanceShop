@@ -15,7 +15,10 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             var data = new SeedData();
 
-            builder.HasData(new IdentityUser[] { data.AdminUser, data.CustomerUser });
+            builder.HasData(new IdentityUser[] {
+                data.AdminUser,
+                data.CustomerUser
+            });
         }
     }
 }

@@ -10,10 +10,6 @@ namespace BioBalanceShop.Infrastructure.Constants
     {
         public const string DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss";
 
-        public const int CurrencyCodeMaxLength = 3;
-        public const int CurrencyCodeMinLength = 3;
-        public const string CurrencyCodeRegexPattern = "[A-Z]{3}";
-
         public static class Product
         {
             public const int ProductCodeMaxLength = 20;
@@ -33,12 +29,6 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const int QuantityMaxRange = int.MaxValue;
             public const int QuantityMinRange = 0;
-        }
-
-        public static class Shop
-        {
-            public const int NameMaxLength = 50;
-            public const int NameMinLength = 2;
         }
 
         public static class Category
@@ -83,12 +73,12 @@ namespace BioBalanceShop.Infrastructure.Constants
 
         public static class Currency
         {
-            public const int CurrencySymbolMaxLength = 3;
-            public const int CurrencySymbolMinLength = 1;
-
             public const int CurrencyCodeMaxLength = 3;
             public const int CurrencyCodeMinLength = 3;
             public const string CurrencyCodeRegexPattern = "[A-Z]{3}";
+
+            public const int CurrencySymbolMaxLength = 3;
+            public const int CurrencySymbolMinLength = 1;
         }
     }
 }

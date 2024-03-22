@@ -19,6 +19,12 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .WithMany(c => c.OrderAddresses)
                 .HasForeignKey(osa => osa.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            var data = new SeedData();
+
+            builder.HasData(new OrderAddress[] {
+                data.IvanIvanovOrderAddress
+            });
         }
     }
 }

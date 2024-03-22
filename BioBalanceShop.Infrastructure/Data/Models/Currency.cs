@@ -51,5 +51,15 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [Comment("Indicator if the currency symbol is displayed before or after price")]
         public bool IsSymbolPrefix { get; set; } = true;
+
+        /// <summary>
+        /// Orders
+        /// </summary>
+        public IEnumerable<Order> Orders { get; set; } = new List<Order>();
+
+        /// <summary>
+        /// Order items
+        /// </summary>
+        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

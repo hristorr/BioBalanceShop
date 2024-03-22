@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Shop;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

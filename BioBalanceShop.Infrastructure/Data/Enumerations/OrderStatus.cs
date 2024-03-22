@@ -8,9 +8,9 @@ namespace BioBalanceShop.Infrastructure.Data.Enumerations
 {
     public enum OrderStatus
     {
-        Paid = 1,
-        Processing = 2,
-        Shipped = 3,
-        Delivered = 4
+        Processing = 1,
+        Shipped = 2,
+        Delivered = 3,
+        Returned = 4
     }
 }

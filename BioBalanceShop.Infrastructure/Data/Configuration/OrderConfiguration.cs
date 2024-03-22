@@ -21,6 +21,17 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(o => o.Currency)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CurrencyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            var data = new SeedData();
+
+            builder.HasData(new Order[] {
+                data.IvanIvanovOrder
+            });
         }
     }
 }

@@ -33,14 +33,14 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [MaxLength(OrderNumberMaxLength)]
         [Comment("Order number")]
-        public int OrderNumber { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Order date
         /// </summary>
         [Required]
         [Comment("Order date")]
-        public int OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
 
         /// <summary>
         /// Order status
@@ -48,7 +48,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [EnumDataType(typeof(OrderStatus))]
         [Comment("Order status")]
-        public OrderStatus Status { get; set; } = OrderStatus.Paid;
+        public OrderStatus Status { get; set; }
 
         /// <summary>
         /// Order net price
@@ -96,13 +96,11 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public decimal TotalPrice { get; set; }
 
         /// <summary>
-        /// Order currency code
+        /// Order currency identificator
         /// </summary>
         [Required]
-        [MaxLength(CurrencyCodeMaxLength)]
-        [RegularExpression(CurrencyCodeRegexPattern)]
-        [Comment("Order currency code")]
-        public string CurrencyCode { get; set; } = string.Empty;
+        [Comment("Order currency identificator")]
+        public int CurrencyId { get; set; }
 
         /// <summary>
         /// Customer identificator
@@ -119,6 +117,19 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int OrderAddressId { get; set; }
 
         /// <summary>
+        /// Payment identificator
+        /// </summary>
+        [Required]
+        [Comment("Payment identificator")]
+        public int PaymentId { get; set; }
+
+        /// <summary>
+        /// Order currency
+        /// </summary>
+        [ForeignKey(nameof(CurrencyId))]
+        public Currency Currency { get; set; } = null!;
+
+        /// <summary>
         /// Customer
         /// </summary>
         [ForeignKey(nameof(CustomerId))]
@@ -129,6 +140,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(OrderAddressId))]
         public OrderAddress OrderAddress { get; set; } = null!;
+
+        /// <summary>
+        /// Payment
+        /// </summary>
+        [ForeignKey(nameof(PaymentId))]
+        public Payment Payment { get; set; } = null!;
 
         /// <summary>
         /// Order items

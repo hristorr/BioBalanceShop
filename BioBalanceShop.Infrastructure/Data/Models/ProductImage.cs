@@ -47,18 +47,5 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; } = null!;
-
-        /// <summary>
-        /// Order item identificator
-        /// </summary>
-        [Required]
-        [Comment("Order item identificator")]
-        public int OrderItemId { get; set; }
-
-        /// <summary>
-        /// Order item
-        /// </summary>
-        [ForeignKey(nameof(OrderItemId))]
-        public OrderItem OrderItem { get; set; } = null!;
     }
 }

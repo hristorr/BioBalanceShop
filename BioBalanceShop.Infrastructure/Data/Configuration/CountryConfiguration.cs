@@ -15,6 +15,16 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Country> builder)
         {
             builder.HasQueryFilter(c => c.IsActive);
+
+            var data = new SeedData();
+
+            builder.HasData(new Country[] {
+                data.Bulgaria,
+                data.UnitedKingdom,
+                data.UnitedStates,
+                data.Germany,
+                data.Spain
+            });
         }
     }
 }

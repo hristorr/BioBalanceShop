@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,15 +11,15 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(c => c.IsActive);
 
-            //builder.HasMany(c => c.Products)
-            //    .WithOne(p => p.Category)
-            //    .HasForeignKey(p => p.CategoryId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            var data = new SeedData();
 
-            //builder.HasMany(c => c.OrderItems)
-            //    .WithOne(oi => oi.Category)
-            //    .HasForeignKey(oi => oi.CategoryId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder.HasData(new Category[] {
+                data.OrganicProducts,
+                data.Superfoods,
+                data.MuscleMass,
+                data.ImmunitySupport,
+                data.DietFoods
+            });
         }
     }
 }

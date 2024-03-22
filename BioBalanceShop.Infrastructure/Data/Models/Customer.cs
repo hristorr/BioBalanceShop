@@ -47,12 +47,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public string UserId { get; set; } = string.Empty;
 
         /// <summary>
-        /// User
-        /// </summary>
-        [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; } = null!;
-
-        /// <summary>
         /// Customer address identificator
         /// </summary>
         [Comment("Customer address identificator")]
@@ -64,6 +58,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [Comment("Shop identificator")]
         public int ShopId { get; set; }
+
+        /// <summary>
+        /// User
+        /// </summary>
+        [ForeignKey(nameof(UserId))]
+        public IdentityUser User { get; set; } = null!;
 
         /// <summary>
         /// Customer address

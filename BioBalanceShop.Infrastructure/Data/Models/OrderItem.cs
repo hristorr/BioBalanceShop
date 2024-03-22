@@ -25,22 +25,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public bool IsActive { get; set; } = true;
 
         /// <summary>
-        /// Order item code
-        /// </summary>
-        [Required]
-        [MaxLength(ProductCodeMaxLength)]
-        [Comment("Order item product code")]
-        public string ProductCode { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Order item name
-        /// </summary>
-        [Required]
-        [MaxLength(TitleMaxLength)]
-        [Comment("Order item name")]
-        public string Title { get; set; } = string.Empty;
-
-        /// <summary>
         /// Order item quantity
         /// </summary>
         [Required]
@@ -93,11 +77,18 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public decimal TotalPrice { get; set; }
 
         /// <summary>
-        /// Order item category identificator
+        /// Order item currency identificator
         /// </summary>
         [Required]
-        [Comment("Order item category identificator")]
-        public int CategoryId { get; set; }
+        [Comment("Order item currency identificator")]
+        public int CurrencyId { get; set; }
+
+        /// <summary>
+        /// Order item product identificator
+        /// </summary>
+        [Required]
+        [Comment("Order item product identificator")]
+        public int ProductId { get; set; }
 
         /// <summary>
         /// Order item order identificator
@@ -107,20 +98,21 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int OrderId { get; set; }
 
         /// <summary>
-        /// Order item category
+        /// Order item currency
         /// </summary>
-        [ForeignKey(nameof(CategoryId))]
-        public Category Category { get; set; } = null!;
+        [ForeignKey(nameof(CurrencyId))]
+        public Currency Currency { get; set; } = null!;
+
+        /// <summary>
+        /// Order item product
+        /// </summary>
+        [ForeignKey(nameof(ProductId))]
+        public Product Product { get; set; } = null!;
 
         /// <summary>
         /// Order item order
         /// </summary>
         [ForeignKey(nameof(OrderId))]
         public Order Order { get; set; } = null!;
-
-        /// <summary>
-        /// Product images
-        /// </summary>
-        public IEnumerable<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

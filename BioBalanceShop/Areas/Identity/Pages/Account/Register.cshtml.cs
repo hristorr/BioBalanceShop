@@ -145,7 +145,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
 
                             var customer = new Customer()
                             {
-                                UserId = userId
+                                UserId = userId,
+                                ShopId = 1
                             };
 
                             await _context.AddAsync(customer);

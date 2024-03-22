@@ -19,6 +19,21 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .WithMany(p => p.Images)
                 .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            var data = new SeedData();
+
+            builder.HasData(new List<List<ProductImage>> {
+                data.GreenNourishCompleteImages,
+                data.MaxNourishImages,
+                data.AcaiImmunoDefenceImages,
+                data.AppleCiderVinegarComplexImages,
+                data.WheyNourishChocolateFlavourImages,
+                data.PeaNourishImages,
+                data.ProBioMaxImages,
+                data.NaturaCImages,
+                data.MealTimeVanillaFlavourImages,
+                data.FibreAndFullImages
+            });
         }
     }
 }
