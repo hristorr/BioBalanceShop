@@ -13,11 +13,11 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
-            //var data = new SeedData();
+            var data = new SeedData();
 
-            //builder.HasData(new Payment[] {
-            //    data.IvanIvanovPayment
-            //});
+            builder.HasData(new Payment[] {
+                data.IvanIvanovPayment
+            });
         }
     }
 }

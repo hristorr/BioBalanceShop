@@ -15,10 +15,10 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int ProductCodeMaxLength = 20;
             public const int ProductCodeMinLength = 3;
 
-            public const int TitleMaxLength = 50;
+            public const int TitleMaxLength = 250;
             public const int TitleMinLength = 2;
 
-            public const int SubtitleMaxLength = 50;
+            public const int SubtitleMaxLength = 500;
             public const int SubtitleMinLength = 2;
 
             public const int DescriptionMaxLength = 3000;
@@ -26,6 +26,9 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const int IngredeientsMaxLength = 3000;
             public const int IngredeientsMinLength = 10;
+
+            public const int ImageUrlMaxLength = 500;
+            public const int ImageUrlMinLength = 5;
 
             public const int QuantityMaxRange = int.MaxValue;
             public const int QuantityMinRange = 0;

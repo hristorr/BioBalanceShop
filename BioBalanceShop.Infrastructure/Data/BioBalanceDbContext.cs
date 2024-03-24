@@ -23,7 +23,6 @@ namespace BioBalanceShop.Infrastructure.Data
         public DbSet<OrderAddress> OrderAddresses { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Shop> Shops { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -38,7 +37,6 @@ namespace BioBalanceShop.Infrastructure.Data
             builder.ApplyConfiguration(new OrderAddressConfiguration());
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
-            builder.ApplyConfiguration(new ProductImageConfiguration());
             builder.ApplyConfiguration(new ShopConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());

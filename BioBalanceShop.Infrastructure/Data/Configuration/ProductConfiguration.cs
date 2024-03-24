@@ -25,20 +25,20 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //var data = new SeedData();
+            var data = new SeedData();
 
-            //builder.HasData(new Product[] {
-            //    data.GreenNourishComplete,
-            //    data.MaxNourish,
-            //    data.AcaiImmunoDefence,
-            //    data.AppleCiderVinegarComplex,
-            //    data.WheyNourishChocolateFlavour,
-            //    data.PeaNourish,
-            //    data.ProBioMax,
-            //    data.NaturaC,
-            //    data.MealTimeVanillaFlavour,
-            //    data.FibreAndFull
-            //});
+            builder.HasData(new Product[] {
+                data.GreenNourishComplete,
+                data.MaxNourish,
+                data.AcaiImmunoDefence,
+                data.AppleCiderVinegarComplex,
+                data.WheyNourishChocolateFlavour,
+                data.PeaNourish,
+                data.ProBioMax,
+                data.NaturaC,
+                data.MealTimeVanillaFlavour,
+                data.FibreAndFull
+            });
         }
     }
 }

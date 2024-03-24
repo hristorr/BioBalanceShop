@@ -31,12 +31,12 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(oi => oi.CurrencyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //var data = new SeedData();
+            var data = new SeedData();
 
-            //builder.HasData(new OrderItem[] {
-            //    data.GreenNourishCompleteOrderItem,
-            //    data.AppleCiderVinegarComplexOrderItem
-            //});
+            builder.HasData(new OrderItem[] {
+                data.GreenNourishCompleteOrderItem,
+                data.AppleCiderVinegarComplexOrderItem
+            });
         }
     }
 }
