@@ -1,4 +1,4 @@
-﻿using BioBalanceShop.Data;
+﻿using BioBalanceShop.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<BioBalanceDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -32,7 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BioBalanceDbContext>();
 
             return services;
         }
