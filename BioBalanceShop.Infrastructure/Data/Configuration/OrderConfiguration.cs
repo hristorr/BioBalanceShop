@@ -27,11 +27,11 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(o => o.CurrencyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new Order[] {
-                data.IvanIvanovOrder
-            });
+            //builder.HasData(new Order[] {
+            //    data.IvanIvanovOrder
+            //});
         }
     }
 }

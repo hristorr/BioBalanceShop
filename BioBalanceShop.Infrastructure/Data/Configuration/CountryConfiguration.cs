@@ -16,15 +16,15 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(c => c.IsActive);
 
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new Country[] {
-                data.Bulgaria,
-                data.UnitedKingdom,
-                data.UnitedStates,
-                data.Germany,
-                data.Spain
-            });
+            //builder.HasData(new Country[] {
+            //    data.Bulgaria,
+            //    data.UnitedKingdom,
+            //    data.UnitedStates,
+            //    data.Germany,
+            //    data.Spain
+            //});
         }
     }
 }

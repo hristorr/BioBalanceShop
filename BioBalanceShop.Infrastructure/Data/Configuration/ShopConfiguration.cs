@@ -15,11 +15,11 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(s => s.IsActive);
 
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new Shop[] {
-                data.BioBalanceShop
-            });
+            //builder.HasData(new Shop[] {
+            //    data.BioBalanceShop
+            //});
         }
     }
 }

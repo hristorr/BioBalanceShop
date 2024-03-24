@@ -20,11 +20,11 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(c => c.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new CustomerAddress[] {
-                data.IvanIvanovAddress
-            });
+            //builder.HasData(new CustomerAddress[] {
+            //    data.IvanIvanovAddress
+            //});
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BioBalanceShop.Infrastructure.Migrations
 {
     [DbContext(typeof(BioBalanceDbContext))]
-    [Migration("20240320145214_UpdatedDataEntities")]
-    partial class UpdatedDataEntities
+    [Migration("20240324130503_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,15 +73,43 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasComment("Country name");
 
-                    b.Property<int>("ShopId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComment("Shop identificator");
+                        .HasComment("Currency identificator");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasComment("Currency code");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasComment("Indicator if currency exists");
+
+                    b.Property<bool>("IsSymbolPrefix")
+                        .HasColumnType("bit")
+                        .HasComment("Indicator if the currency symbol is displayed before or after price");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasComment("Currency symbol");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("Countries");
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Customer", b =>
@@ -111,6 +139,10 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasComment("Customer last name");
 
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int")
+                        .HasComment("Shop identificator");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
@@ -119,6 +151,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("ShopId");
 
                     b.HasIndex("UserId");
 
@@ -130,7 +164,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComment("Customer shipping address identificator");
+                        .HasComment("Customer address identificator");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -138,33 +172,33 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
-                        .HasComment("Customer shipping address city");
+                        .HasComment("Customer address city");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int")
-                        .HasComment("Customer shipping address country identificator");
+                        .HasComment("Customer address country identificator");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
-                        .HasComment("Indicator if customer shipping address exists");
+                        .HasComment("Indicator if customer address exists");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)")
-                        .HasComment("Customer shipping address post code");
+                        .HasComment("Customer address post code");
 
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasComment("Customer shipping address street name");
+                        .HasComment("Customer address street name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("CustomerShippingAddresses");
+                    b.ToTable("CustomerAddresses");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Order", b =>
@@ -176,11 +210,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)")
-                        .HasComment("Order currency code");
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int")
+                        .HasComment("Order currency identificator");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -202,26 +234,26 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Order address identificator");
 
-                    b.Property<int>("OrderDate")
-                        .HasColumnType("int")
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2")
                         .HasComment("Order date");
 
-                    b.Property<int>("OrderNumber")
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("int")
+                        .HasColumnType("nvarchar(20)")
                         .HasComment("Order number");
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int")
+                        .HasComment("Payment identificator");
 
                     b.Property<decimal?>("ShippingFee")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Order shipping fee");
 
-                    b.Property<int?>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
                         .HasComment("Order status");
 
                     b.Property<decimal?>("TaxAmount")
@@ -238,11 +270,13 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CurrencyId");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderAddressId");
 
-                    b.HasIndex("ShopId");
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Orders");
                 });
@@ -252,7 +286,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComment("Order shipping address identificator");
+                        .HasComment("Order address identificator");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -260,33 +294,33 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
-                        .HasComment("Order shipping address city");
+                        .HasComment("Order address city");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int")
-                        .HasComment("Order shipping address country identificator");
+                        .HasComment("Order address country identificator");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
-                        .HasComment("Indicator if order shipping address exists");
+                        .HasComment("Indicator if order address exists");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)")
-                        .HasComment("Order shipping address post code");
+                        .HasComment("Order address post code");
 
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasComment("Order shipping address street name");
+                        .HasComment("Order address street name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("OrderShippingAddresses");
+                    b.ToTable("OrderAddresses");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderItem", b =>
@@ -302,9 +336,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Order item price before discounts and taxes");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CurrencyId")
                         .HasColumnType("int")
-                        .HasComment("Order item category identificator");
+                        .HasComment("Order item currency identificator");
 
                     b.Property<decimal?>("DiscountAmount")
                         .HasColumnType("decimal(18,2)")
@@ -322,11 +356,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Order item net price including discount before taxes");
 
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasComment("Order item product code");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasComment("Order item product identificator");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -340,23 +372,45 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Tax rate on order item level");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasComment("Order item name");
-
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Order item price including discounts and taxes");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CurrencyId");
 
                     b.HasIndex("OrderId");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Payment identificator");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("PaymentAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("Payment amount");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2")
+                        .HasComment("Payment date");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int")
+                        .HasComment("Payment status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
@@ -484,21 +538,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasComment("Indicator if product image exists");
 
-                    b.Property<int>("OrderItemId")
-                        .HasColumnType("int")
-                        .HasComment("Order item identificator");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasComment("Product identificator");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderItemId");
-
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
@@ -510,11 +558,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)")
-                        .HasComment("Shop currency code");
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int")
+                        .HasComment("Shop currency identificator");
 
                     b.Property<decimal?>("DiscountRate")
                         .HasColumnType("decimal(18,2)")
@@ -533,6 +579,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasComment("Tax rate applied to shop products");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
 
                     b.ToTable("Shops");
                 });
@@ -562,22 +610,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "03f649d4-5366-4680-97d0-a90777f42356",
-                            ConcurrencyStamp = "e81e6a1b-8747-45c3-8cae-0cc86e6f97a7",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53",
-                            ConcurrencyStamp = "38af0150-cff9-4276-9bd8-af8f0326f579",
-                            Name = "customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -668,40 +700,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "842b4235-2862-4739-8d4c-7f0d4cd14251",
-                            Email = "admin@mail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@MAIL.COM",
-                            NormalizedUserName = "ADMIN@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJshm8fDISP8fpLMQljQmKPJFX4I2yBzyDK/46vYJ42UdvDVvV9dMC+dwt4Xq6Br+w==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "24141816-6660-4796-91f5-6148edf3b808",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@mail.com"
-                        },
-                        new
-                        {
-                            Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a032bba8-481f-4bc3-8acf-dc1a6399c824",
-                            Email = "customer@mail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CUSTOMER@MAIL.COM",
-                            NormalizedUserName = "CUSTOMER@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENt3E1X8tyoBaIC7UzPvlKma4fSHJv0Wk1U1XUtCfCnvdwOM75TdHvmTKDbLtkdfrg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "1fbde278-42a5-4a04-ae12-31661a625283",
-                            TwoFactorEnabled = false,
-                            UserName = "customer@mail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -766,18 +764,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            RoleId = "03f649d4-5366-4680-97d0-a90777f42356"
-                        },
-                        new
-                        {
-                            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-                            RoleId = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -801,22 +787,17 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Country", b =>
-                {
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Shop", "Shop")
-                        .WithMany("ShipToCountries")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Customer", b =>
                 {
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.CustomerAddress", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
+
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Shop", "Shop")
+                        .WithMany("Customers")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -826,13 +807,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.Navigation("Address");
 
+                    b.Navigation("Shop");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.CustomerAddress", b =>
                 {
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Country", "Country")
-                        .WithMany("CustomerShippingAddresses")
+                        .WithMany("CustomerAddresses")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -842,6 +825,12 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Order", b =>
                 {
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Currency", "Currency")
+                        .WithMany("Orders")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
@@ -854,19 +843,25 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Shop", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ShopId");
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
 
                     b.Navigation("Customer");
 
                     b.Navigation("OrderAddress");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderAddress", b =>
                 {
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Country", "Country")
-                        .WithMany("OrderShippingAddresses")
+                        .WithMany("OrderAddresses")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -876,9 +871,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderItem", b =>
                 {
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Category", "Category")
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Currency", "Currency")
                         .WithMany("OrderItems")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -888,9 +883,17 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
 
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
@@ -922,21 +925,24 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.ProductImage", b =>
                 {
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.OrderItem", "OrderItem")
-                        .WithMany("Images")
-                        .HasForeignKey("OrderItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
+                {
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OrderItem");
-
-                    b.Navigation("Product");
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -992,16 +998,21 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Category", b =>
                 {
-                    b.Navigation("OrderItems");
-
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Country", b =>
                 {
-                    b.Navigation("CustomerShippingAddresses");
+                    b.Navigation("CustomerAddresses");
 
-                    b.Navigation("OrderShippingAddresses");
+                    b.Navigation("OrderAddresses");
+                });
+
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Currency", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Customer", b =>
@@ -1014,23 +1025,18 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderItem", b =>
-                {
-                    b.Navigation("Images");
-                });
-
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Customers");
 
                     b.Navigation("Products");
-
-                    b.Navigation("ShipToCountries");
                 });
 #pragma warning restore 612, 618
         }

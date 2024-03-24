@@ -14,12 +14,12 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new IdentityRole[] {
-                data.AdminRole,
-                data.CustomerRole
-            });
+            //builder.HasData(new IdentityRole[] {
+            //    data.AdminRole,
+            //    data.CustomerRole
+            //});
         }
     }
 }

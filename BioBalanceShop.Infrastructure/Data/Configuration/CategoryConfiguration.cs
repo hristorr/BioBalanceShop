@@ -11,15 +11,15 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(c => c.IsActive);
 
-            var data = new SeedData();
+            //var data = new SeedData();
 
-            builder.HasData(new Category[] {
-                data.OrganicProducts,
-                data.Superfoods,
-                data.MuscleMass,
-                data.ImmunitySupport,
-                data.DietFoods
-            });
+            //builder.HasData(new Category[] {
+            //    data.OrganicProducts,
+            //    data.Superfoods,
+            //    data.MuscleMass,
+            //    data.ImmunitySupport,
+            //    data.DietFoods
+            //});
         }
     }
 }
