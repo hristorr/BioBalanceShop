@@ -36,5 +36,18 @@ namespace BioBalanceShop.Controllers
 
             return View(model);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await _productService.GetProductByIdAsync(id);
+
+            if (model == null) {
+                return BadRequest();
+            }
+
+            return View(model);
+        }
     }
 }

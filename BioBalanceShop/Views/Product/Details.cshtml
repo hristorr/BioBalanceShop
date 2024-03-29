@@ -1,0 +1,41 @@
+﻿@model ProductDetailsServiceModel
+
+@{
+    ViewBag.Title = "Product Details";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="container" style="display:inline">
+    <div class="row">
+        <div class="col-4">
+            <img class="card-img-top" style="width: 20rem;"
+                 src="@Model.ImageFrontUrl" alt="Product Front Image">
+                 @if (!string.IsNullOrEmpty(Model.ImageBackUrl))
+            {
+                <img class="card-img-top" style="width: 20rem;"
+                     src="@Model.ImageBackUrl" alt="Product Back Image">
+            }
+        </div>
+        <div class="card col-8 border-0">
+            <h2>@Model.Title</h2>
+            <h4>@Model.Subtitle</h4>
+            <p>
+                <b>
+                    @if (Model.CurrencyIsSymbolPrefix)
+                    {
+                        @Model.CurrencySymbol
+                    }
+                    @String.Format("{0:f2}", Model.Price)
+                    @if (!Model.CurrencyIsSymbolPrefix)
+                    {
+                        @Model.CurrencySymbol
+                    }
+                </b>
+            </p>
+            <p style="font-size:16px;">@Model.Description</p>
+            <p style="font-size:16px;">@Model.Ingredients</p>
+        </div>
+    </div>
+</div>

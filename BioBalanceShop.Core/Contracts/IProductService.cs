@@ -24,5 +24,7 @@ namespace BioBalanceShop.Core.Contracts
         Task<IEnumerable<ProductCategoryServiceModel>> AllCategoriesAsync();
         
         Task<IEnumerable<string>> AllCategoryNamesAsync();
+
+        Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id);
     }
 }

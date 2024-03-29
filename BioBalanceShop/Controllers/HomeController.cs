@@ -20,6 +20,7 @@ namespace BioBalanceShop.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return RedirectToAction("All", "Product");

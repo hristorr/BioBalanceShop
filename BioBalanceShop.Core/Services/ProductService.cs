@@ -97,5 +97,26 @@ namespace BioBalanceShop.Core.Services
                 .Distinct()
                 .ToListAsync();
         }
+
+        public async Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id)
+        {
+            return await _repository
+                .AllReadOnly<Product>()
+                .Where(p => p.Id == id)
+                .Select(p => new ProductDetailsServiceModel()
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Subtitle = p.Subtitle,
+                    Description = p.Description,
+                    Ingredients = p.Ingredients,
+                    ImageFrontUrl = p.ImageFrontUrl,
+                    ImageBackUrl = p.ImageBackUrl,
+                    Price = p.TotalPrice,
+                    CurrencySymbol = p.Shop.Currency.Symbol,
+                    CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

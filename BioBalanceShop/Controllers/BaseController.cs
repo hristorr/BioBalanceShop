@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BioBalanceShop.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class BaseController : Controller
     {
 
