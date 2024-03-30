@@ -17,7 +17,7 @@ public class SeedData
     public IdentityUser AdminUser { get; set; }
 
     public IdentityUser CustomerUser { get; set; }
-
+    
     public IdentityUserRole<string> AdminUserRole { get; set; }
 
     public IdentityUserRole<string> CustomerUserRole { get; set; }
