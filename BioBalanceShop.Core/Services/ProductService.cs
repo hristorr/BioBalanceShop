@@ -3,6 +3,7 @@ using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
+using BioBalanceShop.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ namespace BioBalanceShop.Core.Services
 
         public async Task<ProductQueryServiceModel> AllAsync(string? category = null, string? searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 1)
         {
-            var productsToShow = _repository.AllReadOnly<Product>();
+            var productsToShow = _repository.AllReadOnly<Product>()
+                .Where(p => p.Quantity > 0);
 
             if (category != null)
             {
@@ -113,10 +115,31 @@ namespace BioBalanceShop.Core.Services
                     ImageFrontUrl = p.ImageFrontUrl,
                     ImageBackUrl = p.ImageBackUrl,
                     Price = p.TotalPrice,
+                    QuantityToOrder = 1,
+                    QuantityInStock = p.Quantity,
                     CurrencySymbol = p.Shop.Currency.Symbol,
                     CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<CartItemServiceModel?> GetProductFromCart(int id, int quantity)
+        {
+            return await _repository
+               .AllReadOnly<Product>()
+               .Where(p => p.Id == id)
+               .Select(p => new CartItemServiceModel()
+               {
+                   ProductId = p.Id,
+                   Title = p.Title,
+                   ImageURL = p.ImageFrontUrl,
+                   QuantityToOrder = quantity,
+                   QuantityInStock = p.Quantity,
+                   Price = p.TotalPrice,
+                   CurrencySymbol = p.Shop.Currency.Symbol,
+                   CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
+               })
+               .FirstOrDefaultAsync();
         }
     }
 }

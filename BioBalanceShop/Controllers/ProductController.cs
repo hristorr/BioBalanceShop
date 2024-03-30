@@ -12,10 +12,10 @@ namespace BioBalanceShop.Controllers
         private readonly ILogger _logger;
 
         public ProductController(
-            IProductService houseService,
+            IProductService productService,
             ILogger<ProductController> logger)
         {
-            _productService = houseService;
+            _productService = productService;
             _logger = logger;
         }
 

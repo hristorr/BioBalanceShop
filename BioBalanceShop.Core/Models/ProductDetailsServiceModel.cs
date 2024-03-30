@@ -33,6 +33,12 @@ namespace BioBalanceShop.Core.Models
         public decimal Price { get; set; }
 
         [Required]
+        public int QuantityToOrder { get; set; }
+
+        [Required]
+        public int QuantityInStock { get; set; }
+
+        [Required]
         public string CurrencySymbol { get; set; } = string.Empty;
 
         [Required]
