@@ -71,6 +71,38 @@ namespace BioBalanceShop.Controllers
             return RedirectToAction("Index");
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult UpdateCart(CartUpdateModel updateModel)
+        {
+            CartCookieModel cart = GetOrCreateCart();
+
+            foreach (var kvp in updateModel.ProductQuantities)
+            {
+                CartItemCookieModel? itemToUpdate = cart.Items.FirstOrDefault(item => item.ProductId == kvp.Key);
+                if (itemToUpdate != null)
+                {
+                    itemToUpdate.Quantity = kvp.Value;
+                }
+            }
+
+            foreach (int productId in updateModel.RemovedProductIds)
+            {
+                cart.Items.RemoveAll(item => item.ProductId == productId);
+            }
+
+            string cartJson = JsonConvert.SerializeObject(cart);
+            Response.Cookies.Append("ShoppingCart", cartJson, new CookieOptions
+            {
+                Expires = DateTime.Now.AddHours(1),
+                HttpOnly = true,
+                Secure = true
+            });
+
+            return RedirectToAction("Index");
+        }
+
+
         private CartCookieModel GetOrCreateCart()
         {
             CartCookieModel cart;
