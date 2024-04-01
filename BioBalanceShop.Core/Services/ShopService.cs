@@ -20,15 +20,35 @@ namespace BioBalanceShop.Core.Services
             _repository = repository;
 
         }
+
+        public async Task<decimal?> GetShippingFeeRate()
+        {
+            return await _repository.AllReadOnly<Shop>()
+                .Select(s => s.ShippingFeeRate)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ShopCurrencyServiceModel?> GetShopCurrency()
         {
             return await _repository.AllReadOnly<Shop>()
                 .Select(s => new ShopCurrencyServiceModel()
                 {
+                    CurrencyCode = s.Currency.Code,
                     CurrencySymbol = s.Currency.Symbol,
                     CurrencyIsSymbolPrefix = s.Currency.IsSymbolPrefix
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<ShopCountryServiceModel>> AllCountriesAsync()
+        {
+            return await _repository.AllReadOnly<Country>()
+               .Select(c => new ShopCountryServiceModel()
+               {
+                   Id = c.Id,
+                   Name = c.Name,
+               })
+               .ToListAsync();
         }
     }
 }

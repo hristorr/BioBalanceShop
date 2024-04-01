@@ -10,5 +10,9 @@ namespace BioBalanceShop.Core.Contracts
     public interface IShopService
     {
         Task<ShopCurrencyServiceModel?> GetShopCurrency();
+
+        Task<decimal?> GetShippingFeeRate();
+
+        Task<IEnumerable<ShopCountryServiceModel>> AllCountriesAsync();
     }
 }
