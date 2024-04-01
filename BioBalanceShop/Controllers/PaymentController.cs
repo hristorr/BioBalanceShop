@@ -94,6 +94,7 @@ namespace BioBalanceShop.Controllers
             return View(checkoutModel);
         }
 
+        [IgnoreAntiforgeryToken]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Charge(string stripeToken, string stripeEmail)
