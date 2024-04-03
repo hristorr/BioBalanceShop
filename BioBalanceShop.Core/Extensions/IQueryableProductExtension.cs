@@ -1,4 +1,4 @@
-﻿using BioBalanceShop.Core.Models;
+﻿using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Models;
 using System;
 using System.Collections.Generic;

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models.Payment
 {
-    public class CheckoutCustomerServiceModel
+    public class PaymentCheckoutGetCustomerModel
     {
         [Required]
         [Display(Name = "First Name")]
@@ -43,6 +43,6 @@ namespace BioBalanceShop.Core.Models
         [Display(Name = "Country")]
         public string Country { get; set; }
 
-        public IEnumerable<ShopCountryServiceModel> Countries { get; set; } = new List<ShopCountryServiceModel>();
+        public IEnumerable<PaymentCheckoutGetCountryModel> Countries { get; set; } = new List<PaymentCheckoutGetCountryModel>();
     }
 }

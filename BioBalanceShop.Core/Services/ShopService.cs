@@ -1,5 +1,6 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Models;
+using BioBalanceShop.Core.Models._Base;
+using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -40,10 +41,10 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<ShopCountryServiceModel>> AllCountriesAsync()
+        public async Task<IEnumerable<PaymentCheckoutGetCountryModel>> AllCountriesAsync()
         {
             return await _repository.AllReadOnly<Country>()
-               .Select(c => new ShopCountryServiceModel()
+               .Select(c => new PaymentCheckoutGetCountryModel()
                {
                    Id = c.Id,
                    Name = c.Name,

@@ -1,5 +1,7 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models;
+using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Core.Services;
 using BioBalanceShop.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -48,18 +50,18 @@ namespace BioBalanceShop.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
-            CartServiceModel productsInCart = new CartServiceModel();
+            CartIndexGetModel productsInCart = new CartIndexGetModel();
 
             foreach (var item in cart.Items)
             {
                 if (await _productService.ExistsAsync(item.ProductId))
                 {
-                    CartItemServiceModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
+                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
                     productsInCart.Items.Add(product);
                 }
             }
 
-            var order = new CheckoutOrderServiceModel();
+            var order = new PaymentCheckoutGetOrderModel();
 
             order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
             var currency = await _shopService.GetShopCurrency();
@@ -75,7 +77,7 @@ namespace BioBalanceShop.Controllers
 
             order.ShippingFee = Math.Round(shippingFeeRate * order.OrderAmount / 100.00M, 2);
 
-            var customer = new CheckoutCustomerServiceModel();
+            var customer = new PaymentCheckoutGetCustomerModel();
 
             if (await _paymentService.ExistsAsync(User.Id()))
             {
@@ -85,7 +87,7 @@ namespace BioBalanceShop.Controllers
             var countries = await _shopService.AllCountriesAsync();
             customer.Countries = countries;
 
-            var checkoutModel = new CheckoutServiceModel()
+            var checkoutModel = new PaymentCheckoutGetModel()
             {
                 Customer = customer,
                 Order = order
@@ -103,13 +105,13 @@ namespace BioBalanceShop.Controllers
 
             var cart = GetOrCreateCart();
 
-            CartServiceModel productsInCart = new CartServiceModel();
+            CartIndexGetModel productsInCart = new CartIndexGetModel();
 
             foreach (var item in cart.Items)
             {
                 if (await _productService.ExistsAsync(item.ProductId))
                 {
-                    CartItemServiceModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
+                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
                     productsInCart.Items.Add(product);
                 }
             }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 
-namespace BioBalanceShop.Models
+namespace BioBalanceShop.Core.Models.Cart
 {
-    public class CartServiceModel
+    public class CartIndexGetModel
     {
-        public List<CartItemServiceModel> Items { get; set; } = new List<CartItemServiceModel>();
+        public List<CartIndexGetProductModel> Items { get; set; } = new List<CartIndexGetProductModel>();
 
         public decimal TotalPrice { get; set; }
 

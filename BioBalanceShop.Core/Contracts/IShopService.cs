@@ -1,4 +1,5 @@
-﻿using BioBalanceShop.Core.Models;
+﻿using BioBalanceShop.Core.Models._Base;
+using BioBalanceShop.Core.Models.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,6 @@ namespace BioBalanceShop.Core.Contracts
 
         Task<decimal?> GetShippingFeeRate();
 
-        Task<IEnumerable<ShopCountryServiceModel>> AllCountriesAsync();
+        Task<IEnumerable<PaymentCheckoutGetCountryModel>> AllCountriesAsync();
     }
 }

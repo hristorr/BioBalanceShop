@@ -1,9 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Enumerations;
-using BioBalanceShop.Core.Models;
+using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
-using BioBalanceShop.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -81,10 +81,10 @@ namespace BioBalanceShop.Core.Services
                 .AnyAsync(c => c.Id == categoryId);
         }
 
-        public async Task<IEnumerable<ProductCategoryServiceModel>> AllCategoriesAsync()
+        public async Task<IEnumerable<ProductAllGetCategoryModel>> AllCategoriesAsync()
         {
             return await _repository.AllReadOnly<Category>()
-               .Select(c => new ProductCategoryServiceModel()
+               .Select(c => new ProductAllGetCategoryModel()
                {
                    Id = c.Id,
                    Name = c.Name,
@@ -100,12 +100,12 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id)
+        public async Task<ProductDetailsGetModel?> GetProductByIdAsync(int id)
         {
             return await _repository
                 .AllReadOnly<Product>()
                 .Where(p => p.Id == id)
-                .Select(p => new ProductDetailsServiceModel()
+                .Select(p => new ProductDetailsGetModel()
                 {
                     Id = p.Id,
                     Title = p.Title,
@@ -123,12 +123,12 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<CartItemServiceModel?> GetProductFromCart(int id, int quantity)
+        public async Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity)
         {
             return await _repository
                .AllReadOnly<Product>()
                .Where(p => p.Id == id)
-               .Select(p => new CartItemServiceModel()
+               .Select(p => new CartIndexGetProductModel()
                {
                    ProductId = p.Id,
                    Title = p.Title,

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models._Base
 {
     public class ShopCurrencyServiceModel
     {

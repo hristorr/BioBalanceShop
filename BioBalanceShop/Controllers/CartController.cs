@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -30,13 +31,13 @@ namespace BioBalanceShop.Controllers
         {
             CartCookieModel cart = GetOrCreateCart();
 
-            CartServiceModel productsInCart = new CartServiceModel();
+            CartIndexGetModel productsInCart = new CartIndexGetModel();
 
             foreach (var item in cart.Items)
             {
                 if (await _productService.ExistsAsync(item.ProductId))
                 {
-                    CartItemServiceModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
+                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
                     productsInCart.Items.Add(product);
                 }
             }

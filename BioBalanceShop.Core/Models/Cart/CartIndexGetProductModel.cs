@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BioBalanceShop.Models
+namespace BioBalanceShop.Core.Models.Cart
 {
-    public class CartItemServiceModel
+    public class CartIndexGetProductModel
     {
         public int ProductId { get; set; }
 

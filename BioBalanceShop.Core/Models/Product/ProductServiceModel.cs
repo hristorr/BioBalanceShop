@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models.Product
 {
     public class ProductServiceModel
     {

@@ -1,14 +1,9 @@
 ﻿using BioBalanceShop.Core.Enumerations;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models.Product
 {
-    public class AllProductsQueryModel
+    public class ProductAllGetModel
     {
         public int ProductsPerPage { get; } = 6;
 

@@ -1,6 +1,6 @@
 ﻿using BioBalanceShop.Core.Enumerations;
-using BioBalanceShop.Core.Models;
-using BioBalanceShop.Models;
+using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +22,12 @@ namespace BioBalanceShop.Core.Contracts
 
         Task<bool> CategoryExistsAsync(int categoryId);
 
-        Task<IEnumerable<ProductCategoryServiceModel>> AllCategoriesAsync();
+        Task<IEnumerable<ProductAllGetCategoryModel>> AllCategoriesAsync();
         
         Task<IEnumerable<string>> AllCategoryNamesAsync();
 
-        Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id);
+        Task<ProductDetailsGetModel?> GetProductByIdAsync(int id);
 
-        Task<CartItemServiceModel?> GetProductFromCart(int id, int quantity);
+        Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity);
     }
 }

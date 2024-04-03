@@ -1,4 +1,4 @@
-﻿@model CheckoutServiceModel
+﻿@model PaymentCheckoutGetModel
 
 
 @{
@@ -89,7 +89,7 @@
         <dt>Country:</dt>
         <dd>
             <select class="form-select" aria-label="Countries">
-                @foreach(ShopCountryServiceModel country in Model.Customer.Countries)
+                @foreach(PaymentCheckoutGetCountryModel country in Model.Customer.Countries)
                 {
                     if (@country.Name == @Model.Customer.Country)
                     {

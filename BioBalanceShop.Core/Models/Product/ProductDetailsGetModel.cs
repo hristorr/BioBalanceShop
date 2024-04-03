@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models.Product
 {
-    public class ProductDetailsServiceModel
+    public class ProductDetailsGetModel
     {
         [Required]
         public int Id { get; set; }

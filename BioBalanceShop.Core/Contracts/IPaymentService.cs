@@ -1,4 +1,4 @@
-﻿using BioBalanceShop.Core.Models;
+﻿using BioBalanceShop.Core.Models.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace BioBalanceShop.Core.Contracts
     public interface IPaymentService
     {
         Task<bool> ExistsAsync(string userId);
-        Task<CheckoutCustomerServiceModel> GetCustomerInfoAsync(string userId);
+        Task<PaymentCheckoutGetCustomerModel> GetCustomerInfoAsync(string userId);
     
     }
 }

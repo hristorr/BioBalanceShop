@@ -1,5 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Models;
+using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +21,7 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> All([FromQuery] AllProductsQueryModel model)
+        public async Task<IActionResult> All([FromQuery] ProductAllGetModel model)
         {
             var products = await _productService.AllAsync(
                 model.Category,

@@ -1,5 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Models;
+using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -28,11 +28,11 @@ namespace BioBalanceShop.Core.Services
                 .AnyAsync(c => c.UserId == userId);
         }
 
-        public async Task<CheckoutCustomerServiceModel> GetCustomerInfoAsync(string userId)
+        public async Task<PaymentCheckoutGetCustomerModel> GetCustomerInfoAsync(string userId)
         {
             return await _repository.AllReadOnly<Customer>()
                 .Where(c => c.UserId == userId)
-                .Select(c => new CheckoutCustomerServiceModel()
+                .Select(c => new PaymentCheckoutGetCustomerModel()
                 {
                     FirstName = c.FirstName,
                     LastName = c.LastName,

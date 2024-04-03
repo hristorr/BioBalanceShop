@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models
+namespace BioBalanceShop.Core.Models.Payment
 {
-    public class CheckoutOrderServiceModel
+    public class PaymentCheckoutGetOrderModel
     {
         public decimal OrderAmount { get; set; }
 
