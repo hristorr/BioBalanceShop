@@ -23,7 +23,8 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return RedirectToAction("All", "Product");
+            var model = await _productService.GetLastFiveProductsAsync();
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

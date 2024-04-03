@@ -1,6 +1,7 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Home;
 using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
@@ -140,6 +141,21 @@ namespace BioBalanceShop.Core.Services
                    CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
                })
                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync()
+        {
+            return await _repository
+                .AllReadOnly<Product>()
+                .OrderByDescending(p => p.Id)
+                .Take(5)
+                .Select(p => new HomeIndexGetProductModel()
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ImageUrl = p.ImageFrontUrl,
+                })
+                .ToListAsync();
         }
     }
 }

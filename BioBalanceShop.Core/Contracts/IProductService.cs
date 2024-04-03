@@ -1,5 +1,6 @@
 ﻿using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Home;
 using BioBalanceShop.Core.Models.Product;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,7 @@ namespace BioBalanceShop.Core.Contracts
         Task<ProductDetailsGetModel?> GetProductByIdAsync(int id);
 
         Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity);
+
+        Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync();
     }
 }
