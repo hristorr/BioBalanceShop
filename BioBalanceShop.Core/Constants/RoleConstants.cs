@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Constants
 {
-    public class RoleConstants
+    public static class RoleConstants
     {
         public const string AdminRole = "admin";
 

@@ -54,9 +54,9 @@ namespace BioBalanceShop.Core.Services
             productsToShow = sorting switch
             {
                 ProductSorting.PriceAscending => productsToShow
-                    .OrderBy(p => p.TotalPrice),
+                    .OrderBy(p => p.Price),
                 ProductSorting.PriceDescending => productsToShow
-                    .OrderByDescending(p => p.TotalPrice),
+                    .OrderByDescending(p => p.Price),
                 _ => productsToShow
                     .OrderByDescending(h => h.Id)
             };
@@ -113,9 +113,8 @@ namespace BioBalanceShop.Core.Services
                     Subtitle = p.Subtitle,
                     Description = p.Description,
                     Ingredients = p.Ingredients,
-                    ImageFrontUrl = p.ImageFrontUrl,
-                    ImageBackUrl = p.ImageBackUrl,
-                    Price = p.TotalPrice,
+                    ImageUrl = p.ImageUrl,
+                    Price = p.Price,
                     QuantityToOrder = 1,
                     QuantityInStock = p.Quantity,
                     CurrencySymbol = p.Shop.Currency.Symbol,
@@ -133,10 +132,10 @@ namespace BioBalanceShop.Core.Services
                {
                    ProductId = p.Id,
                    Title = p.Title,
-                   ImageURL = p.ImageFrontUrl,
+                   ImageURL = p.ImageUrl,
                    QuantityToOrder = quantity,
                    QuantityInStock = p.Quantity,
-                   Price = p.TotalPrice,
+                   Price = p.Price,
                    CurrencySymbol = p.Shop.Currency.Symbol,
                    CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
                })
@@ -153,7 +152,7 @@ namespace BioBalanceShop.Core.Services
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    ImageUrl = p.ImageFrontUrl,
+                    ImageUrl = p.ImageUrl,
                 })
                 .ToListAsync();
         }

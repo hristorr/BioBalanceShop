@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Configuration;
+using BioBalanceShop.Infrastructure.Data.Configurations;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -19,8 +20,9 @@ namespace BioBalanceShop.Infrastructure.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerAddress> CustomerAddresses { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderAddress> OrderAddresses { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderRecipient> OrderRecipients { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Shop> Shops { get; set; }
@@ -33,8 +35,9 @@ namespace BioBalanceShop.Infrastructure.Data
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new CustomerAddressConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
-            builder.ApplyConfiguration(new OrderItemConfiguration());
             builder.ApplyConfiguration(new OrderAddressConfiguration());
+            builder.ApplyConfiguration(new OrderItemConfiguration());
+            builder.ApplyConfiguration(new OrderRecipientConfiguration());
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ShopConfiguration());

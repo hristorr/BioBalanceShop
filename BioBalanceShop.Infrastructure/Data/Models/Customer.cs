@@ -27,9 +27,8 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// User identificator
         /// </summary>
-        [Required]
         [Comment("User identificator")]
-        public string UserId { get; set; } = string.Empty;
+        public string? UserId { get; set; }
 
         /// <summary>
         /// Customer address identificator

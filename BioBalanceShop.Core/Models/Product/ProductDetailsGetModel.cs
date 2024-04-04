@@ -25,9 +25,7 @@ namespace BioBalanceShop.Core.Models.Product
         public string Ingredients { get; set; } = string.Empty;
 
         [Required]
-        public string ImageFrontUrl { get; set; } = string.Empty;
-
-        public string? ImageBackUrl { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         [Required]
         public decimal Price { get; set; }

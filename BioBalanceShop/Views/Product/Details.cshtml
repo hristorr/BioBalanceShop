@@ -11,12 +11,7 @@
     <div class="row">
         <div class="col-4">
             <img class="card-img-top" style="width: 20rem;"
-                 src="@Model.ImageFrontUrl" alt="Product Front Image">
-                 @if (!string.IsNullOrEmpty(Model.ImageBackUrl))
-            {
-                <img class="card-img-top" style="width: 20rem;"
-                     src="@Model.ImageBackUrl" alt="Product Back Image">
-            }
+                 src="@Model.ImageUrl" alt="Product Front Image">
         </div>
         <div class="card col-8 border-0">
             <h2>@Model.Title</h2>

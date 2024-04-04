@@ -30,51 +30,14 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [Comment("Order item quantity")]
         public int Quantity { get; set; }
-
+        
         /// <summary>
-        /// Order item price before discounts and taxes
+        /// Order item price
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order item price before discounts and taxes")]
-        public decimal BasePrice { get; set; }
-
-        /// <summary>
-        /// Discount amount on order item level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount amount on order item level")]
-        public decimal? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// Order item net price including discount before taxes
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order item net price including discount before taxes")]
-        public decimal PriceBeforeTax { get; set; }
-
-        /// <summary>
-        /// Tax rate on order item level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax rate on order item level")]
-        public decimal? TaxRate { get; set; }
-
-        /// <summary>
-        /// Tax amount on order item level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax amount on order item level")]
-        public decimal? TaxAmount { get; set; }
-
-        /// <summary>
-        /// Order item price including discounts and taxes
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order item price including discounts and taxes")]
-        public decimal TotalPrice { get; set; }
+        [Comment("Order item price")]
+        public decimal Price { get; set; }
 
         /// <summary>
         /// Order item currency identificator

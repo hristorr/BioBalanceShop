@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Infrastructure.Constants
 {
-    public class CustomClaims
+    public static class CustomClaims
     {
         public const string UserFullNameClaim = "user:fullname";
     }

@@ -17,8 +17,8 @@ namespace System.Linq
                 {
                     Id = h.Id,
                     Title = h.Title,
-                    ImageUrl = h.ImageFrontUrl,
-                    Price = h.TotalPrice,
+                    ImageUrl = h.ImageUrl,
+                    Price = h.Price,
                 });
         }
     }

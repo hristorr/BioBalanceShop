@@ -47,7 +47,7 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const int CountryCodeMaxLength = 3;
             public const int CountryCodeMinLength = 3;
-            public const string CountryCodeRegexPattern = "[A-Z]{3}";
+            public const string CountryCodeRegexPattern = @"[A-Z]{3}";
         }
 
         public static class Order
@@ -74,11 +74,25 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int NameMinLength = 2;
         }
 
+        public static class OrderRecipientUser
+        {
+            public const int NameMaxLength = 25;
+            public const int NameMinLength = 2;
+
+            public const int PhoneMaxLength = 15;
+            public const int PhoneMinLength = 5;
+            public const string PhoneRegexPattern = @"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$";
+
+            public const int EmailMaxLength = 30;
+            public const int EmailMinLength = 6;
+            public const string EmailRegexPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+        }
+
         public static class Currency
         {
             public const int CurrencyCodeMaxLength = 3;
             public const int CurrencyCodeMinLength = 3;
-            public const string CurrencyCodeRegexPattern = "[A-Z]{3}";
+            public const string CurrencyCodeRegexPattern = @"[A-Z]{3}";
 
             public const int CurrencySymbolMaxLength = 3;
             public const int CurrencySymbolMinLength = 1;

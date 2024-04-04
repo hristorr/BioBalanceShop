@@ -33,7 +33,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [MaxLength(OrderNumberMaxLength)]
         [Comment("Order number")]
-        public string OrderNumber { get; set; } = string.Empty;
+        public string OrderNumber => "PO" + new Random().Next(10, 100) + (char)(new Random().Next(101, 133)) + Id + new Random().Next(100, 1000);
 
         /// <summary>
         /// Order date
@@ -51,12 +51,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public OrderStatus Status { get; set; }
 
         /// <summary>
-        /// Order net price
+        /// Order amount excluding shipping fee
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order net price")]
-        public decimal NetPrice { get; set; }
+        [Comment("Order amount excluding shipping fee")]
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// Order shipping fee
@@ -66,34 +66,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public decimal? ShippingFee { get; set; }
 
         /// <summary>
-        /// Discount amount on order level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount amount on order level")]
-        public decimal? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// Taxable amount including discount and shipping fees
+        /// Order total amount including shipping fee
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Taxable amount including discount and shipping fees")]
-        public decimal TaxableAmount { get; set; }
-
-        /// <summary>
-        /// Tax amount on order level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax amount on order level")]
-        public decimal? TaxAmount { get; set; }
-
-        /// <summary>
-        /// Order total price with tax
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order total price with tax")]
-        public decimal TotalPrice { get; set; }
+        [Comment("Order total amount including shipping fee")]
+        public decimal TotalAmount { get; set; }
 
         /// <summary>
         /// Order currency identificator
@@ -124,6 +102,13 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int PaymentId { get; set; }
 
         /// <summary>
+        /// Order recipient identificator
+        /// </summary>
+        [Required]
+        [Comment("Order recipient identificator")]
+        public int OrderRecipientId { get; set; }
+
+        /// <summary>
         /// Order currency
         /// </summary>
         [ForeignKey(nameof(CurrencyId))]
@@ -146,6 +131,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(PaymentId))]
         public Payment Payment { get; set; } = null!;
+
+        /// <summary>
+        /// Order recipient
+        /// </summary>
+        [ForeignKey(nameof(OrderRecipientId))]
+        public OrderRecipient OrderRecipient { get; set; } = null!;
 
         /// <summary>
         /// Order items
