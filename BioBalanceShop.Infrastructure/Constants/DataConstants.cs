@@ -68,7 +68,7 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int CityMinLength = 1;
         }
 
-        public static class Customer
+        public static class User
         {
             public const int NameMaxLength = 25;
             public const int NameMinLength = 2;

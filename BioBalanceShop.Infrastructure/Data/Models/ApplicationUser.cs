@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Customer;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.User;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

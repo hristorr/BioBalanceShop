@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using static BioBalanceShop.Core.Constants.RoleConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.User;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account
 {
@@ -107,6 +108,16 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+            public string LastName { get; set; }
         }
 
 
@@ -124,6 +135,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var resultCreateUser = await _userManager.CreateAsync(user, Input.Password);
@@ -141,8 +154,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
                         if (resultAddToRole.Succeeded)
                         {
                             _logger.LogInformation("User created a new account with password.");
-                            var userId = await _userManager.GetUserIdAsync(user);
 
+                            var userId = user.Id;
                             var customer = new Customer()
                             {
                                 UserId = userId
