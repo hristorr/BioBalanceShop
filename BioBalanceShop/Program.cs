@@ -37,4 +37,6 @@ app.UseAuthorization();
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
+await app.CreateRolesAsync();
+
 await app.RunAsync();
