@@ -7,20 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 public class SeedData
 {
-    public IdentityRole AdminRole { get; set; }
+    public Country Bulgaria { get; set; }
 
-    public IdentityRole CustomerRole { get; set; }
+    public Country UnitedKingdom { get; set; }
 
-    public IdentityUser AdminUser { get; set; }
+    public Country UnitedStates { get; set; }
 
-    public IdentityUser CustomerUser { get; set; }
-    
-    public IdentityUserRole<string> AdminUserRole { get; set; }
+    public Country Germany { get; set; }
 
-    public IdentityUserRole<string> CustomerUserRole { get; set; }
+    public Country Spain { get; set; }
 
 
     public Currency BgnCurrency { get; set; }
@@ -35,6 +34,21 @@ public class SeedData
     public Shop BioBalanceShop { get; set; }
 
 
+    public CustomerAddress AdminUserAddress { get; set; }
+
+    public CustomerAddress IvanIvanovAddress { get; set; }
+
+    public IdentityUserClaim<string> AdminUserClaim { get; set; }
+
+    public IdentityUserClaim<string> CustomerUserClaim { get; set; }
+
+    public ApplicationUser AdminUser { get; set; }
+
+    public ApplicationUser CustomerUser { get; set; }
+
+    public Customer IvanIvanovCustomer { get; set; }
+
+
     public Category OrganicProducts { get; set; }
 
     public Category Superfoods { get; set; }
@@ -44,17 +58,6 @@ public class SeedData
     public Category ImmunitySupport { get; set; }
 
     public Category DietFoods { get; set; }
-
-
-    public Country Bulgaria { get; set; }
-
-    public Country UnitedKingdom { get; set; }
-
-    public Country UnitedStates { get; set; }
-
-    public Country Germany { get; set; }
-
-    public Country Spain { get; set; }
 
 
     public Product GreenNourishComplete { get; set; }
@@ -78,11 +81,6 @@ public class SeedData
     public Product FibreAndFull { get; set; }
 
 
-    public CustomerAddress IvanIvanovAddress { get; set; }
-
-    public Customer IvanIvanovCustomer { get; set; }
-
-
     public Payment IvanIvanovPayment { get; set; }
 
     public OrderAddress IvanIvanovOrderAddress { get; set; }
@@ -96,85 +94,57 @@ public class SeedData
 
     public SeedData()
     {
-        SeedRoles();
-        SeedUsers();
-        SeedUsersRoles();
+        SeedCountries();
         SeedCurrencies();
         SeedShop();
-        SeedCategories();
-        SeedCountries();
-        SeedProducts();
         SeedCustomerAddresses();
+        SeedUsers();
         SeedCustomers();
+        SeedCategories();
+        SeedProducts();
         SeedPayments();
         SeedOrderAddresses();
         SeedOrders();
         SeedOrderItems();
     }
 
-    private void SeedRoles()
+    private void SeedCountries()
     {
-        AdminRole = new IdentityRole
+        Bulgaria = new Country()
         {
-            Id = "03f649d4-5366-4680-97d0-a90777f42356",
-            Name = "admin",
-            NormalizedName = "ADMIN"
+            Id = 1,
+            Name = "Bulgaria",
+            Code = "BG"
         };
 
-        CustomerRole = new IdentityRole
+        UnitedKingdom = new Country()
         {
-            Id = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53",
-            Name = "customer",
-            NormalizedName = "CUSTOMER"
+            Id = 2,
+            Name = "United Kingdom",
+            Code = "GB"
+        };
+
+        UnitedStates = new Country()
+        {
+            Id = 3,
+            Name = "United States",
+            Code = "US"
+        };
+
+        Germany = new Country()
+        {
+            Id = 4,
+            Name = "Germany",
+            Code = "DE"
+        };
+
+        Spain = new Country()
+        {
+            Id = 5,
+            Name = "Spain",
+            Code = "ES"
         };
     }
-
-    private void SeedUsers()
-    {
-        var hasher = new PasswordHasher<IdentityUser>();
-
-        AdminUser = new IdentityUser
-        {
-            Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-            UserName = "admin@mail.com",
-            NormalizedUserName = "ADMIN@MAIL.COM",
-            Email = "admin@mail.com",
-            NormalizedEmail = "ADMIN@MAIL.COM",
-            EmailConfirmed = true
-        };
-
-        AdminUser.PasswordHash =
-                 hasher.HashPassword(AdminUser, "AdminPassword123!");
-
-        CustomerUser = new IdentityUser
-        {
-            Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-            UserName = "customer@mail.com",
-            NormalizedUserName = "CUSTOMER@MAIL.COM",
-            Email = "customer@mail.com",
-            NormalizedEmail = "CUSTOMER@MAIL.COM",
-            EmailConfirmed = true
-        };
-
-        CustomerUser.PasswordHash =
-                 hasher.HashPassword(CustomerUser, "CustomerPassword123!");
-    }
-
-    private void SeedUsersRoles()
-    {
-        AdminUserRole = new IdentityUserRole<string>
-        {
-            RoleId = "03f649d4-5366-4680-97d0-a90777f42356",
-            UserId = "02c32793-47c7-4f3b-9487-d91c2a0e4345"
-        };
-
-        CustomerUserRole = new IdentityUserRole<string>
-        {
-            RoleId = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53",
-            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586"
-        };
-    }
-
     private void SeedCurrencies()
     {
         BgnCurrency = new Currency()
@@ -219,43 +189,79 @@ public class SeedData
         };
     }
 
-    private void SeedCountries()
+    private void SeedCustomerAddresses()
     {
-        Bulgaria = new Country()
+        IvanIvanovAddress = new CustomerAddress()
         {
             Id = 1,
-            Name = "Bulgaria",
-            Code = "BG"
-        };
-
-        UnitedKingdom = new Country()
-        {
-            Id = 2,
-            Name = "United Kingdom",
-            Code = "GB"
-        };
-
-        UnitedStates = new Country()
-        {
-            Id = 3,
-            Name = "United States",
-            Code = "US"
-        };
-
-        Germany = new Country()
-        {
-            Id = 4,
-            Name = "Germany",
-            Code = "DE"
-        };
-
-        Spain = new Country()
-        {
-            Id = 5,
-            Name = "Spain",
-            Code = "ES"
+            Street = "Tsarigradsko shose 45",
+            PostCode = "1000",
+            City = "Sofia",
+            CountryId = 1
         };
     }
+
+    private void SeedUsers()
+    {
+        var hasher = new PasswordHasher<ApplicationUser>();
+
+        AdminUser = new ApplicationUser
+        {
+            Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
+            UserName = "admin@mail.com",
+            NormalizedUserName = "ADMIN@MAIL.COM",
+            Email = "admin@mail.com",
+            NormalizedEmail = "ADMIN@MAIL.COM",
+            EmailConfirmed = true,
+            FirstName = "Admin",
+            LastName = "User",
+        };
+
+        AdminUserClaim = new IdentityUserClaim<string>()
+        {
+            Id = 1,
+            ClaimType = UserFullNameClaim,
+            ClaimValue = "Admin User",
+            UserId = "02c32793-47c7-4f3b-9487-d91c2a0e4345"
+        };
+
+        AdminUser.PasswordHash =
+                 hasher.HashPassword(AdminUser, "AdminPassword123!");
+
+        CustomerUser = new ApplicationUser
+        {
+            Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
+            UserName = "customer@mail.com",
+            NormalizedUserName = "CUSTOMER@MAIL.COM",
+            Email = "customer@mail.com",
+            NormalizedEmail = "CUSTOMER@MAIL.COM",
+            EmailConfirmed = true,
+            FirstName = "Ivan",
+            LastName = "Ivanov",
+        };
+
+        CustomerUserClaim = new IdentityUserClaim<string>()
+        {
+            Id = 2,
+            ClaimType = UserFullNameClaim,
+            ClaimValue = "Ivan Ivanov",
+            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586"
+        };
+
+        CustomerUser.PasswordHash =
+                 hasher.HashPassword(CustomerUser, "CustomerPassword123!");
+    }
+
+    private void SeedCustomers()
+    {
+        IvanIvanovCustomer = new Customer()
+        {
+            Id = 1,
+            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586",
+            AddressId = 1
+        };
+    }
+
 
     private void SeedCategories()
     {
@@ -501,31 +507,6 @@ public class SeedData
             CategoryId = 5,
             CreatedDate = DateTime.Now,
             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-            ShopId = 1
-        };
-    }
-
-    private void SeedCustomerAddresses()
-    {
-        IvanIvanovAddress = new CustomerAddress()
-        {
-            Id = 1,
-            Street = "Tsarigradsko shose 45",
-            PostCode = "1000",
-            City = "Sofia",
-            CountryId = 1
-        };
-    }
-
-    private void SeedCustomers()
-    {
-        IvanIvanovCustomer = new Customer()
-        {
-            Id = 1,
-            FirstName = "Ivan",
-            LastName = "Ivanov",
-            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-            AddressId = 1,
             ShopId = 1
         };
     }

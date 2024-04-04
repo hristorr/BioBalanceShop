@@ -15,11 +15,6 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(c => c.IsActive);
 
-            builder.HasOne(c => c.Shop)
-                .WithMany(s => s.Customers)
-                .HasForeignKey(c => c.ShopId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             var data = new SeedData();
 
             builder.HasData(new Customer[] {

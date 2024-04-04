@@ -184,7 +184,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Product creator
         /// </summary>
         [ForeignKey(nameof(CreatedById))]
-        public IdentityUser CreatedBy { get; set; } = null!;
+        public ApplicationUser CreatedBy { get; set; } = null!;
 
         /// <summary>
         /// Shop

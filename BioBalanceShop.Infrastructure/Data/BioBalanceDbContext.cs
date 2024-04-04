@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BioBalanceShop.Infrastructure.Data
 {
-    public class BioBalanceDbContext : IdentityDbContext<IdentityUser>
+    public class BioBalanceDbContext : IdentityDbContext<ApplicationUser>
     {
         public BioBalanceDbContext(DbContextOptions<BioBalanceDbContext> options)
             : base(options)
@@ -38,9 +38,7 @@ namespace BioBalanceShop.Infrastructure.Data
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ShopConfiguration());
-            builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new UserRoleConfiguration());
 
             base.OnModelCreating(builder);
         }

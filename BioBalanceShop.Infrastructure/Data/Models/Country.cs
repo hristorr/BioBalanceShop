@@ -47,7 +47,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public string Code { get; set; } = string.Empty;
 
         /// <summary>
-        /// Customer addresses
+        /// User addresses
         /// </summary>
         public IEnumerable<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 

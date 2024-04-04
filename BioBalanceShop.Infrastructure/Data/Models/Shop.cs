@@ -63,10 +63,5 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Products
         /// </summary>
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
-
-        /// <summary>
-        /// Customers
-        /// </summary>
-        public IEnumerable<Customer> Customers { get; set; } = new List<Customer>();
     }
 }

@@ -34,8 +34,8 @@ namespace BioBalanceShop.Core.Services
                 .Where(c => c.UserId == userId)
                 .Select(c => new PaymentCheckoutGetCustomerModel()
                 {
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
+                    FirstName = c.User.FirstName,
+                    LastName = c.User.LastName,
                     Email = c.User.Email,
                     PhoneNumber = c.User.PhoneNumber,
                     Street = c.Address.Street,
