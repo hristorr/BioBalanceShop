@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.User;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account
 {
@@ -155,7 +156,9 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
                         {
                             _logger.LogInformation("User created a new account with password.");
 
-                            var userId = user.Id;
+                            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{user.FirstName} {user.LastName}"));
+
+                            var userId = await _userManager.GetUserIdAsync(user);
                             var customer = new Customer()
                             {
                                 UserId = userId
