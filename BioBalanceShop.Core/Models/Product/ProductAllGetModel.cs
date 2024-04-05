@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Enumerations;
+using BioBalanceShop.Core.Models._Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Product

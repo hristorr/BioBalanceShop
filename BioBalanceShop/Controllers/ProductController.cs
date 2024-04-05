@@ -8,14 +8,16 @@ namespace BioBalanceShop.Controllers
     public class ProductController : BaseController
     {
         private readonly IProductService _productService;
-
+        private readonly IShopService _shopService;
         private readonly ILogger _logger;
 
         public ProductController(
             IProductService productService,
+            IShopService shopService,
             ILogger<ProductController> logger)
         {
             _productService = productService;
+            _shopService = shopService;
             _logger = logger;
         }
 

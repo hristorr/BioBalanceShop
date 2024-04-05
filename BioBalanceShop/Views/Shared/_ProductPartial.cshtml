@@ -7,7 +7,19 @@
             <img class="card-img-top" src="@Model.ImageUrl" alt="Product Image">
             <div class="card-body text-center">
                 <h4>@Model.Title</h4>
-                <h6><b>@String.Format("{0:f2}", Model.Price) EUR</b></h6>
+                <h6>
+                    <b>
+                        @if (Model.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Currency.CurrencySymbol
+                        }
+                        @String.Format("{0:f2}", Model.Price)
+                        @if (!Model.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Currency.CurrencySymbol
+                        }
+                    </b>
+                </h6>
             </div>
         </a>
     </div>

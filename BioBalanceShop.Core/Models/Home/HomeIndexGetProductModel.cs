@@ -12,6 +12,8 @@ namespace BioBalanceShop.Core.Models.Home
 
         public string Title { get; set; } = string.Empty;
 
+        public string Subtitle { get; set; } = string.Empty;
+
         public string ImageUrl { get; set; } = string.Empty;
     }
 }

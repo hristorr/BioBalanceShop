@@ -17,11 +17,14 @@ namespace BioBalanceShop.Core.Services
     public class ProductService : IProductService
     {
         private readonly IRepository _repository;
+        private readonly IShopService _shopService;
 
-        public ProductService(IRepository repository)
+        public ProductService(
+            IRepository repository,
+            IShopService shopService)
         {
             _repository = repository;
-
+            _shopService = shopService;
         }
 
         public async Task<bool> ExistsAsync(int id)
@@ -68,6 +71,13 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
 
             int totalProducts = await productsToShow.CountAsync();
+
+            var currency = await _shopService.GetShopCurrency();
+
+            foreach (var prod in products)
+            {
+                prod.Currency = currency;
+            }
 
             return new ProductQueryServiceModel()
             {
@@ -152,6 +162,7 @@ namespace BioBalanceShop.Core.Services
                 {
                     Id = p.Id,
                     Title = p.Title,
+                    Subtitle = p.Subtitle,
                     ImageUrl = p.ImageUrl,
                 })
                 .ToListAsync();
