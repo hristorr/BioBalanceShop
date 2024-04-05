@@ -512,6 +512,7 @@ public class SeedData
         IvanIvanovOrder = new Order()
         {
             Id = 1,
+            OrderNumber = "PO000000",
             OrderDate = DateTime.Now,
             Status = OrderStatus.Processing,
             Amount = 18.00M,

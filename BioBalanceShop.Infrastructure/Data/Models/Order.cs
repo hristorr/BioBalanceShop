@@ -33,8 +33,8 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [MaxLength(OrderNumberMaxLength)]
         [Comment("Order number")]
-        public string OrderNumber => "PO" + new Random().Next(10, 100) + (char)(new Random().Next(101, 133)) + Id + new Random().Next(100, 1000);
-
+        public string OrderNumber { get; set; } = string.Empty;
+             
         /// <summary>
         /// Order date
         /// </summary>

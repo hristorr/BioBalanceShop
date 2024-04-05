@@ -27,6 +27,9 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(o => o.CurrencyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(o => o.OrderNumber)
+            .ValueGeneratedNever();
+
             var data = new SeedData();
 
             builder.HasData(new Order[] {
