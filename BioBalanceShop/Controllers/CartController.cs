@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using static BioBalanceShop.Core.Constants.CookieConstants;
 
 namespace BioBalanceShop.Controllers
 {
@@ -62,7 +63,7 @@ namespace BioBalanceShop.Controllers
             cart.AddProduct(productId, quantity);
 
             string cartJson = JsonConvert.SerializeObject(cart);
-            Response.Cookies.Append("ShoppingCart", cartJson, new CookieOptions
+            Response.Cookies.Append(ShoppingCartCookie, cartJson, new CookieOptions
             {
                 Expires = DateTime.Now.AddHours(1),
                 HttpOnly = true,
@@ -93,7 +94,7 @@ namespace BioBalanceShop.Controllers
             }
 
             string cartJson = JsonConvert.SerializeObject(cart);
-            Response.Cookies.Append("ShoppingCart", cartJson, new CookieOptions
+            Response.Cookies.Append(ShoppingCartCookie, cartJson, new CookieOptions
             {
                 Expires = DateTime.Now.AddHours(1),
                 HttpOnly = true,
@@ -107,7 +108,7 @@ namespace BioBalanceShop.Controllers
         private CartCookieModel GetOrCreateCart()
         {
             CartCookieModel cart;
-            string? cartCookie = Request.Cookies["ShoppingCart"];
+            string? cartCookie = Request.Cookies[ShoppingCartCookie];
 
             if (string.IsNullOrEmpty(cartCookie))
             {

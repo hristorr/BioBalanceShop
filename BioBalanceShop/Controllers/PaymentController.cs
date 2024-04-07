@@ -14,6 +14,7 @@ using System.Security.Claims;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using Microsoft.AspNetCore.Identity;
 using BioBalanceShop.Infrastructure.Data.Models;
+using static BioBalanceShop.Core.Constants.CookieConstants;
 
 namespace BioBalanceShop.Controllers
 {
@@ -151,8 +152,12 @@ namespace BioBalanceShop.Controllers
                     var cart = GetOrCreateCart();
                     CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
 
-                    await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
+                    string orderNumber = await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
 
+                    if (orderNumber != null)
+                    {
+                        ViewBag.OrderNumber = orderNumber;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -161,6 +166,11 @@ namespace BioBalanceShop.Controllers
                 }
 
                 //Empty cookie content
+                RemoveCookie(ShoppingCartCookie);
+                RemoveCookie(OrderInfoCookie);
+
+                
+                ViewBag.CustomerFirstName = orderInfo.Customer.FirstName;
 
                 // Payment success
                 return View("PaymentSuccess");
@@ -196,7 +206,7 @@ namespace BioBalanceShop.Controllers
         private PaymentCheckoutPostModel GetOrderInfoFromCookie()
         {
             PaymentCheckoutPostModel orderInfo;
-            string? orderCookie = Request.Cookies["OrderInfo"];
+            string? orderCookie = Request.Cookies[OrderInfoCookie];
 
             if (string.IsNullOrEmpty(orderCookie))
             {
@@ -213,7 +223,7 @@ namespace BioBalanceShop.Controllers
         private void SaveOrderInfoInCookie(PaymentCheckoutPostModel model)
         {
             string orderInfo = JsonConvert.SerializeObject(model);
-            Response.Cookies.Append("OrderInfo", orderInfo, new CookieOptions
+            Response.Cookies.Append(OrderInfoCookie, orderInfo, new CookieOptions
             {
                 Expires = DateTime.Now.AddHours(1),
                 HttpOnly = true,
@@ -226,7 +236,7 @@ namespace BioBalanceShop.Controllers
         private CartCookieModel GetOrCreateCart()
         {
             CartCookieModel cart;
-            string? cartCookie = Request.Cookies["ShoppingCart"];
+            string? cartCookie = Request.Cookies[ShoppingCartCookie];
 
             if (string.IsNullOrEmpty(cartCookie))
             {
@@ -296,6 +306,14 @@ namespace BioBalanceShop.Controllers
                 Order = order
             };
             return checkoutModel;
+        }
+
+        private void RemoveCookie(string cookie)
+        {
+            Response.Cookies.Append(cookie, "", new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(-1)
+            });
         }
     }
 }

@@ -28,7 +28,7 @@ namespace BioBalanceShop.Core.Services
             _customerService = customerService;
         }
 
-        public async Task CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId)
+        public async Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId)
         {
             
             Payment payment = new Payment()
@@ -67,9 +67,11 @@ namespace BioBalanceShop.Core.Services
                 });
             }
 
+            string orderNumber = GenerateOrderNumber(await GetLastOrderNumberAsync());
+
             Order order = new Order()
             {
-                OrderNumber = GenerateOrderNumber(await GetLastOrderNumberAsync()),
+                OrderNumber = orderNumber,
                 OrderDate = DateTime.Now,
                 Status = OrderStatus.Processing,
                 Amount = model.Order.OrderAmount,
@@ -90,8 +92,9 @@ namespace BioBalanceShop.Core.Services
             
             await _repository.AddAsync<Order>(order);
             await _repository.SaveChangesAsync();
-        }
 
+            return orderNumber;
+        }
 
         private string GenerateOrderNumber(int lastOrderNumber)
         {

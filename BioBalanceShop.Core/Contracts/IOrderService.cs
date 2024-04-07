@@ -10,6 +10,8 @@ namespace BioBalanceShop.Core.Contracts
 {
     public interface IOrderService
     {
-        Task CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId);
+        Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId);
+
+        //Task<string> GetLastOrderNumberForUser(string userId);
     }
 }
