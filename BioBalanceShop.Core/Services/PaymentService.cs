@@ -19,7 +19,12 @@ namespace BioBalanceShop.Core.Services
         public PaymentService(IRepository repository)
         {
             _repository = repository;
+        }
 
+        public async Task CreatePaymentAsync(PaymentCheckoutPostCreatePaymentModel model)
+        {
+            await _repository.AddAsync(model);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task<bool> ExistsAsync(string userId)
@@ -28,11 +33,11 @@ namespace BioBalanceShop.Core.Services
                 .AnyAsync(c => c.UserId == userId);
         }
 
-        public async Task<PaymentCheckoutGetCustomerModel> GetCustomerInfoAsync(string userId)
+        public async Task<PaymentCheckoutPostCustomerModel> GetCustomerInfoAsync(string userId)
         {
             return await _repository.AllReadOnly<Customer>()
                 .Where(c => c.UserId == userId)
-                .Select(c => new PaymentCheckoutGetCustomerModel()
+                .Select(c => new PaymentCheckoutPostCustomerModel()
                 {
                     FirstName = c.User.FirstName,
                     LastName = c.User.LastName,
@@ -41,7 +46,11 @@ namespace BioBalanceShop.Core.Services
                     Street = c.Address.Street,
                     PostCode = c.Address.PostCode,
                     City = c.Address.City,
-                    Country = c.Address.Country.Name
+                    Country = new PaymentCheckoutPostCountryModel()
+                    {
+                        Id = c.Address.Country.Id,
+                        Name = c.Address.Country.Name
+                    }
                 })
                 .FirstAsync();
         }

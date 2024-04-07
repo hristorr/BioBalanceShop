@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using static BioBalanceShop.Core.Constants.RoleConstants;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.User;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account

@@ -534,7 +534,6 @@ public class SeedData
             Quantity = 1,
             Price = 12.00M,
             CurrencyId = 2,
-            ProductId = 1,
             OrderId = 1
         };
 
@@ -544,7 +543,6 @@ public class SeedData
             Quantity = 1,
             Price = 6.00M,
             CurrencyId = 2,
-            ProductId = 4,
             OrderId = 1
         };
     }

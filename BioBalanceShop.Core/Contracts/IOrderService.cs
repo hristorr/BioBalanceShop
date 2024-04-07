@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Payment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +10,6 @@ namespace BioBalanceShop.Core.Contracts
 {
     public interface IOrderService
     {
-        Task<int> GetLastOrderNumberAsync();
-
-        public string GenerateOrderNumber(int lastOrderNumber);
+        Task CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId);
     }
 }

@@ -16,8 +16,6 @@ namespace BioBalanceShop.Core.Models.Cart
 
         public decimal Price { get; set; }
 
-        public string CurrencySymbol { get; set; } = string.Empty;
-
-        public bool CurrencyIsSymbolPrefix { get; set; }
+        public CartIndexGetProductCurrencyModel Currency { get; set; } = null!;
     }
 }

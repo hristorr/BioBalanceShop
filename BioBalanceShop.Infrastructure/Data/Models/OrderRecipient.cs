@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderRecipientUser;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderRecipientData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

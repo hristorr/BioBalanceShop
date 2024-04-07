@@ -146,8 +146,12 @@ namespace BioBalanceShop.Core.Services
                    QuantityToOrder = quantity,
                    QuantityInStock = p.Quantity,
                    Price = p.Price,
-                   CurrencySymbol = p.Shop.Currency.Symbol,
-                   CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
+                   Currency = new CartIndexGetProductCurrencyModel()
+                   {
+                       Id = p.Shop.Currency.Id,
+                       CurrencySymbol = p.Shop.Currency.Symbol,
+                       CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
+                   }
                })
                .FirstOrDefaultAsync();
         }

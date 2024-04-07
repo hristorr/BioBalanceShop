@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Order;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -61,9 +61,10 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// Order shipping fee
         /// </summary>
+        [Required]
         [Column(TypeName = "decimal(18, 2)")]
         [Comment("Order shipping fee")]
-        public decimal? ShippingFee { get; set; }
+        public decimal ShippingFee { get; set; }
 
         /// <summary>
         /// Order total amount including shipping fee
@@ -83,9 +84,8 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// Customer identificator
         /// </summary>
-        [Required]
         [Comment("Customer identificator")]
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         /// <summary>
         /// Order address identificator
@@ -118,7 +118,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Customer
         /// </summary>
         [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; } = null!;
+        public Customer? Customer { get; set; } = null!;
 
         /// <summary>
         /// Order address
@@ -141,6 +141,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// Order items
         /// </summary>
-        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public IList<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

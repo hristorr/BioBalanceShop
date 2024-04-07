@@ -10,7 +10,7 @@ namespace BioBalanceShop.Infrastructure.Constants
     {
         public const string DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss";
 
-        public static class Product
+        public static class ProductData
         {
             public const int ProductCodeMaxLength = 20;
             public const int ProductCodeMinLength = 3;
@@ -34,13 +34,13 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int QuantityMinRange = 0;
         }
 
-        public static class Category
+        public static class CategoryData
         {
             public const int NameMaxLength = 50;
             public const int NameMinLength = 2;
         }
 
-        public static class Country
+        public static class CountryData
         {
             public const int NameMaxLength = 50;
             public const int NameMinLength = 2;
@@ -50,13 +50,16 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const string CountryCodeRegexPattern = @"[A-Z]{3}";
         }
 
-        public static class Order
+        public static class OrderData
         {
             public const int OrderNumberMaxLength = 20;
             public const int OrderNumberMinLength = 5;
+
+            public const string AmountMinValue = "0";
+            public const string AmountMaxValue = "999999";
         }
 
-        public static class Address
+        public static class AddressData
         {
             public const int StreetMaxLength = 50;
             public const int StreetMinLength = 5;
@@ -68,13 +71,13 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int CityMinLength = 1;
         }
 
-        public static class User
+        public static class ApplicationUserData
         {
             public const int NameMaxLength = 25;
             public const int NameMinLength = 2;
         }
 
-        public static class OrderRecipientUser
+        public static class OrderRecipientData
         {
             public const int NameMaxLength = 25;
             public const int NameMinLength = 2;
@@ -88,7 +91,7 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const string EmailRegexPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
         }
 
-        public static class Currency
+        public static class CurrencyData
         {
             public const int CurrencyCodeMaxLength = 3;
             public const int CurrencyCodeMinLength = 3;
@@ -96,6 +99,12 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const int CurrencySymbolMaxLength = 3;
             public const int CurrencySymbolMinLength = 1;
+        }
+
+        public static class PaymentData
+        {
+            public const string PaymentAmountMinValue = "0";
+            public const string PaymentAmountMaxValue = "999999";
         }
     }
 }

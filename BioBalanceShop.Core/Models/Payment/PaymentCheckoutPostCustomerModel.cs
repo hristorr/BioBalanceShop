@@ -5,10 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderRecipientData;
+using static BioBalanceShop.Core.Constants.MessageConstants;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
-    public class PaymentCheckoutGetCustomerModel
+    public class PaymentCheckoutPostCustomerModel
     {
         [Required]
         [Display(Name = "First Name")]
@@ -24,6 +26,9 @@ namespace BioBalanceShop.Core.Models.Payment
         public string Email { get; set; } = string.Empty;
 
         [Required]
+        [StringLength(PhoneMaxLength, 
+            MinimumLength = PhoneMinLength, 
+            ErrorMessage = LengthMessage)]
         [Phone]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = string.Empty;
@@ -42,7 +47,7 @@ namespace BioBalanceShop.Core.Models.Payment
 
         [Required]
         [Display(Name = "Country")]
-        public PaymentCheckoutGetCountryModel Country { get; set; } = null!;
+        public ShopCountryServiceModel Country { get; set; } = null!;
 
         public IList<ShopCountryServiceModel> Countries { get; set; } = new List<ShopCountryServiceModel>();
     }

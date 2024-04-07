@@ -1,0 +1,202 @@
+﻿@model PaymentCheckoutPostModel
+
+@{
+    ViewBag.Title = "Pay";
+}
+
+<head>
+    <style>
+        /* Custom styles for the card fields */
+        #card-element {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            /* margin: auto; */
+        }
+
+            /* Style for the form labels */
+            #card-element label {
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            /* Style for the card input fields */
+            #card-element .StripeElement {
+                height: 46px;
+                padding: 10px 14px;
+                font-size: 16px;
+                line-height: 1.5;
+                color: #495057;
+                background-color: #fff;
+                background-clip: padding-box;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+        /* Style for the error message */
+        #card-errors {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Style for the submit button */
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+
+</head>
+
+
+
+<div>
+    <h2>Order Information</h2>
+  
+    @*  <div class="form-group">
+    <label asp-for="Order.OrderAmount"></label>
+    <input asp-for="Order.OrderAmount" class="form-control" placeholder="Order.OrderAmount...">
+    <span asp-validation-for="Order.OrderAmount" class="small text-danger"></span>
+    </div> *@
+   
+    <div class="form-group">
+        <label>Order Amount (without shipping fee):</label>
+        <p>
+            @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+            @String.Format("{0:f2}", Model.Order.OrderAmount)
+            @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+        </p>
+     
+    </div>
+
+    <div class="form-group">
+        <label>Shipping Fee:</label>
+        <p>
+            @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+            @String.Format("{0:f2}", Model.Order.ShippingFee)
+            @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+        </p>
+    </div>
+
+    <div class="form-group">
+        <label>Total Order Amount (including shipping fee):</label>
+        <p>
+            @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+            @String.Format("{0:f2}", Model.Order.TotalOrderAmount)
+            @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
+            {
+                @Model.Order.Currency.CurrencySymbol
+            }
+        </p>
+    </div>
+
+</div>
+
+<h1>Payment</h1>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<form action="/Payment/Charge" method="post" id="payment-form">
+    <div class="form-row">
+        <label for="card-element">
+            Credit or debit card
+        </label>
+        <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+    </div>
+    <button>Pay</button>
+</form>
+
+<script>
+    var stripe = Stripe('@ViewBag.PublishableKey');
+    var elements = stripe.elements();
+
+    // Create an instance of the card Element.
+    // var card = elements.create('card');
+
+    var card = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                lineHeight: '1.5',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            }
+        },
+        hidePostalCode: true // This hides the ZIP code field
+    });
+
+    // Add an instance of the card Element into the `card-element` div.
+    card.mount('#card-element');
+
+    // Handle form submission.
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                // Inform the Customer if there was an error.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server.
+                stripeTokenHandler(result.token);
+            }
+        });
+    });
+
+    function stripeTokenHandler(token) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+
+        var tokenId = document.createElement('input');
+        tokenId.setAttribute('type', 'hidden');
+        tokenId.setAttribute('name', 'stripeToken');
+        tokenId.setAttribute('value', token.id);
+        form.appendChild(tokenId);
+
+ 
+
+        // Submit the form
+        form.submit();
+    }
+</script>

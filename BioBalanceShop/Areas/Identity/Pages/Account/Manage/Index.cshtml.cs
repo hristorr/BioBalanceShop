@@ -11,7 +11,7 @@ using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.User;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage

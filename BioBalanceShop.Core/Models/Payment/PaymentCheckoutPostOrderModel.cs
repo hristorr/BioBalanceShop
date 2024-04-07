@@ -1,5 +1,4 @@
 ﻿using BioBalanceShop.Core.Models._Base;
-using BioBalanceShop.Core.Models.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
-    public class PaymentCheckoutGetOrderModel
+    public class PaymentCheckoutPostOrderModel
     {
         public decimal OrderAmount { get; set; }
 
@@ -18,6 +17,8 @@ namespace BioBalanceShop.Core.Models.Payment
 
         [Display(Name = "Total Order Amount")]
         public decimal TotalOrderAmount => OrderAmount + ShippingFee;
+
+        //public string CurrencyCode { get; set; } = string.Empty;
 
         public ShopCurrencyServiceModel Currency { get; set; } = null!;
     }

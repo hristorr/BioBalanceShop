@@ -1,6 +1,7 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ namespace BioBalanceShop.Core.Services
             return await _repository.AllReadOnly<Shop>()
                 .Select(s => new ShopCurrencyServiceModel()
                 {
+                    Id = s.Currency.Id,
                     CurrencyCode = s.Currency.Code,
                     CurrencySymbol = s.Currency.Symbol,
                     CurrencyIsSymbolPrefix = s.Currency.IsSymbolPrefix
@@ -41,10 +43,10 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<PaymentCheckoutGetCountryModel>> AllCountriesAsync()
+        public async Task<IList<ShopCountryServiceModel>> AllCountriesAsync()
         {
             return await _repository.AllReadOnly<Country>()
-               .Select(c => new PaymentCheckoutGetCountryModel()
+               .Select(c => new ShopCountryServiceModel()
                {
                    Id = c.Id,
                    Name = c.Name,

@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
+using BioBalanceShop.Infrastructure.Data.Enumerations;
+using Microsoft.AspNetCore.Identity;
+using BioBalanceShop.Infrastructure.Data.Models;
 
 namespace BioBalanceShop.Controllers
 {
@@ -20,6 +23,7 @@ namespace BioBalanceShop.Controllers
         private readonly IProductService _productService;
         private readonly IShopService _shopService;
         private readonly IPaymentService _paymentService;
+        private readonly IOrderService _orderService;
         private readonly ILogger _logger;
 
         public PaymentController(
@@ -27,12 +31,14 @@ namespace BioBalanceShop.Controllers
             IProductService productService,
             IShopService shopService,
             IPaymentService paymentService,
+            IOrderService orderService,
             ILogger<CartController> logger)
         {
             _configuration = configuration;
             _productService = productService;
             _shopService = shopService;
             _paymentService = paymentService;
+            _orderService = orderService;
             _logger = logger;
         }
 
@@ -50,51 +56,42 @@ namespace BioBalanceShop.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
-            CartIndexGetModel productsInCart = new CartIndexGetModel();
+            var customer = await GeneratePaymentCheckoutGetCustomerModel();
+            var order = await GeneratePaymentCheckoutGetOrderModel(cart);
 
-            foreach (var item in cart.Items)
-            {
-                if (await _productService.ExistsAsync(item.ProductId))
-                {
-                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
-                    productsInCart.Items.Add(product);
-                }
-            }
+            //CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
 
-            var order = new PaymentCheckoutGetOrderModel();
+            //var order = new PaymentCheckoutGetOrderModel();
+            //order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
+            //order.Currency = await _shopService.GetShopCurrency();
 
-            order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
-            var currency = await _shopService.GetShopCurrency();
+            //if (currency != null)
+            //{
+            //    order.CurrencyCode = currency.CurrencyCode;
+            //    order.CurrencySymbol = currency.CurrencySymbol;
+            //    order.CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix;
+            //}
 
-            if (currency != null)
-            {
-                order.CurrencyCode = currency.CurrencyCode;
-                order.CurrencySymbol = currency.CurrencySymbol;
-                order.CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix;
-            }
 
-            var shippingFeeRate = await _shopService.GetShippingFeeRate() ?? 0;
-
-            order.ShippingFee = Math.Round(shippingFeeRate * order.OrderAmount / 100.00M, 2);
-
-            var customer = new PaymentCheckoutGetCustomerModel();
-
-            if (await _paymentService.ExistsAsync(User.Id()))
-            {
-                customer = await _paymentService.GetCustomerInfoAsync(User.Id());
-            }
-
-            var countries = await _shopService.AllCountriesAsync();
-            customer.Countries = countries;
-
-            var checkoutModel = new PaymentCheckoutGetModel()
-            {
-                Customer = customer,
-                Order = order
-            };
+            PaymentCheckoutPostModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
 
             return View(checkoutModel);
         }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Charge()
+        {
+            var publishableKey = _configuration["StripeSettings:PublishableKey"];
+            ViewBag.PublishableKey = publishableKey;
+
+            var model = GetOrderInfoFromCookie();
+
+            return View(model);
+
+        }
+
 
         [IgnoreAntiforgeryToken]
         [AllowAnonymous]
@@ -103,22 +100,31 @@ namespace BioBalanceShop.Controllers
         {
             StripeConfiguration.ApiKey = _configuration["StripeSettings:SecretKey"];
 
-            var cart = GetOrCreateCart();
+           
+            var orderInfo = GetOrderInfoFromCookie();
 
-            CartIndexGetModel productsInCart = new CartIndexGetModel();
+            //var cart = GetOrCreateCart();
 
-            foreach (var item in cart.Items)
-            {
-                if (await _productService.ExistsAsync(item.ProductId))
-                {
-                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
-                    productsInCart.Items.Add(product);
-                }
-            }
+            //CartIndexGetModel productsInCart = new CartIndexGetModel();
 
-            decimal totalAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
-            var currencyInfo = await _shopService.GetShopCurrency();
-            var currencyCode = currencyInfo.CurrencyCode;
+            //foreach (var item in cart.Items)
+            //{
+            //    if (await _productService.ExistsAsync(item.ProductId))
+            //    {
+            //        CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
+            //        productsInCart.Items.Add(product);
+            //    }
+            //}
+
+            //decimal totalAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
+            //var currencyInfo = await _shopService.GetShopCurrency();
+            //var currencyCode = currencyInfo.CurrencyCode;
+
+
+
+            decimal totalAmount = orderInfo.Order.TotalOrderAmount;
+            var currencyCode = orderInfo.Order.Currency.CurrencyCode;
+
 
             if (currencyCode == null)
             {
@@ -140,6 +146,22 @@ namespace BioBalanceShop.Controllers
             // Handle success or failure based on charge status
             if (charge.Status == "succeeded")
             {
+                try
+                {
+                    var cart = GetOrCreateCart();
+                    CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
+
+                    await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "PaymentController/Charge/CreatePaymentAsync");
+                    throw new Exception("Internal Server Error");
+                }
+
+                //Empty cookie content
+
                 // Payment success
                 return View("PaymentSuccess");
             }
@@ -149,6 +171,57 @@ namespace BioBalanceShop.Controllers
                 return View("PaymentFailed");
             }
         }
+
+
+      
+
+        //[IgnoreAntiforgeryToken]
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Checkout(PaymentCheckoutPostModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Customer.Countries = await _shopService.AllCountriesAsync();
+                model.Order.Currency = await _shopService.GetShopCurrency();
+                return View(model);
+            }
+
+            SaveOrderInfoInCookie(model);
+            return RedirectToAction(nameof(Charge));
+        }
+
+
+        private PaymentCheckoutPostModel GetOrderInfoFromCookie()
+        {
+            PaymentCheckoutPostModel orderInfo;
+            string? orderCookie = Request.Cookies["OrderInfo"];
+
+            if (string.IsNullOrEmpty(orderCookie))
+            {
+                orderInfo = null;
+            }
+            else
+            {
+                orderInfo = JsonConvert.DeserializeObject<PaymentCheckoutPostModel>(orderCookie);
+            }
+
+            return orderInfo;
+        }
+
+        private void SaveOrderInfoInCookie(PaymentCheckoutPostModel model)
+        {
+            string orderInfo = JsonConvert.SerializeObject(model);
+            Response.Cookies.Append("OrderInfo", orderInfo, new CookieOptions
+            {
+                Expires = DateTime.Now.AddHours(1),
+                HttpOnly = true,
+                Secure = true
+            });
+
+        }
+
 
         private CartCookieModel GetOrCreateCart()
         {
@@ -165,6 +238,64 @@ namespace BioBalanceShop.Controllers
             }
 
             return cart;
+        }
+
+        private async Task<CartIndexGetModel> GetCartProductInfo(CartCookieModel cart)
+        {
+            CartIndexGetModel productsInCart = new CartIndexGetModel();
+
+            foreach (var item in cart.Items)
+            {
+                if (await _productService.ExistsAsync(item.ProductId))
+                {
+                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
+                    productsInCart.Items.Add(product);
+                }
+            }
+
+            return productsInCart;
+        }
+
+
+        private async Task<PaymentCheckoutPostCustomerModel> GeneratePaymentCheckoutGetCustomerModel()
+        {
+            var customer = new PaymentCheckoutPostCustomerModel();
+
+            if (await _paymentService.ExistsAsync(User.Id()))
+            {
+                customer = await _paymentService.GetCustomerInfoAsync(User.Id());
+            }
+            else
+            {
+                customer.Country = new PaymentCheckoutPostCountryModel();
+            }
+                        
+            customer.Countries = await _shopService.AllCountriesAsync();
+            return customer;
+        }
+
+        private async Task<PaymentCheckoutPostOrderModel> GeneratePaymentCheckoutGetOrderModel(CartCookieModel cart)
+        {
+            CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
+
+            var order = new PaymentCheckoutPostOrderModel();
+            order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
+            order.Currency = await _shopService.GetShopCurrency();
+
+            var shippingFeeRate = await _shopService.GetShippingFeeRate() ?? 0;
+            order.ShippingFee = Math.Round(shippingFeeRate * order.OrderAmount / 100.00M, 2);
+
+            return order;
+        }
+
+        private async Task<PaymentCheckoutPostModel> GeneratePaymentCheckoutGetModel(PaymentCheckoutPostCustomerModel customer, PaymentCheckoutPostOrderModel order)
+        {
+            var checkoutModel = new PaymentCheckoutPostModel()
+            {
+                Customer = customer,
+                Order = order
+            };
+            return checkoutModel;
         }
     }
 }

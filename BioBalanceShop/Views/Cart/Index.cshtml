@@ -24,14 +24,14 @@
                     <td>@item.Title</td>
                     <td><input name="productQuantities[@item.ProductId]" type="number" max="@item.QuantityInStock" min="1" value="@item.QuantityToOrder" /></td>
                     <td>
-                        @if (item.CurrencyIsSymbolPrefix)
+                        @if (item.Currency.CurrencyIsSymbolPrefix)
                         {
-                            @item.CurrencySymbol
+                            @item.Currency.CurrencySymbol
                         }
                         @String.Format("{0:f2}", item.Price * item.QuantityToOrder)
-                        @if (!item.CurrencyIsSymbolPrefix)
+                            @if (!item.Currency.CurrencyIsSymbolPrefix)
                         {
-                            @item.CurrencySymbol
+                            @item.Currency.CurrencySymbol
                         }
                     </td>
                     <td><input type="checkbox" name="RemovedProductIds" value="@item.ProductId" /> Remove</td>

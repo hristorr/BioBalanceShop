@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Product;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -47,13 +47,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int CurrencyId { get; set; }
 
         /// <summary>
-        /// Order item product identificator
-        /// </summary>
-        [Required]
-        [Comment("Order item product identificator")]
-        public int ProductId { get; set; }
-
-        /// <summary>
         /// Order item order identificator
         /// </summary>
         [Required]
@@ -65,12 +58,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(CurrencyId))]
         public Currency Currency { get; set; } = null!;
-
-        /// <summary>
-        /// Order item product
-        /// </summary>
-        [ForeignKey(nameof(ProductId))]
-        public Product Product { get; set; } = null!;
 
         /// <summary>
         /// Order item order

@@ -21,11 +21,6 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(oi => oi.Product)
-                .WithMany(p => p.OrderItems)
-                .HasForeignKey(oi => oi.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.HasOne(oi => oi.Currency)
                 .WithMany(c => c.OrderItems)
                 .HasForeignKey(oi => oi.CurrencyId)

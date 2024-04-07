@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Category;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.CategoryData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

@@ -8,6 +8,7 @@ namespace BioBalanceShop.Core.Models._Base
 {
     public class ShopCurrencyServiceModel
     {
+        public int Id { get; set; }
         public string CurrencyCode { get; set; } = string.Empty;
 
         public string CurrencySymbol { get; set; } = string.Empty;

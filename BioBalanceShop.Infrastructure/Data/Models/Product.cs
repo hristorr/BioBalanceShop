@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Product;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -133,10 +133,5 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// </summary>
         [ForeignKey(nameof(ShopId))]
         public Shop Shop { get; set; } = null!;
-
-        /// <summary>
-        /// Order items
-        /// </summary>
-        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
