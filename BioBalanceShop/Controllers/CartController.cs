@@ -70,7 +70,17 @@ namespace BioBalanceShop.Controllers
                 Secure = true
             });
 
-            return RedirectToAction("Index");
+            if (quantity == 1)
+            {
+                TempData["AddedToCartMessage"] = $"{quantity} product successfully added to cart";
+            }
+            else
+            {
+                TempData["AddedToCartMessage"] = $"{quantity} products successfully added to cart";
+            }
+            
+
+            return RedirectToAction("Details", "Product", new { id = productId });
         }
 
         [AllowAnonymous]

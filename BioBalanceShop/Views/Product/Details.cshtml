@@ -4,8 +4,23 @@
     ViewBag.Title = "Product Details";
 }
 
+<head>
+    <style>
+        #closeMsg:hover{
+            color: #214f21;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
+
+@if (!string.IsNullOrEmpty(ViewBag.AddedToCartMessage))
+{
+    <span id="addedToCartMsg" style="color: white; background-color:#214f21; padding: 10px; width: 100%; font-weight:bold; font-size: 2em; display: block; text-align: center">@ViewBag.AddedToCartMessage<span id="closeMsg" style="float: right; padding-right: 5px;">X</span></span>
+}
+
 
 <div class="container" style="display:inline">
     <div class="row">
@@ -38,3 +53,12 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        $("#closeMsg").on("click", function () {
+            $("#addedToCartMsg").css("display", "none");
+        });
+    </script>
+}

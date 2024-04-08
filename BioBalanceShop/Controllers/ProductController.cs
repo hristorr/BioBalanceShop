@@ -2,6 +2,7 @@
 using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace BioBalanceShop.Controllers
 {
@@ -41,13 +42,21 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, bool addedToCart = false)
         {
             var model = await _productService.GetProductByIdAsync(id);
 
             if (model == null) {
                 return BadRequest();
             }
+
+            string? addedToCartMessage = TempData["AddedToCartMessage"] as string;
+
+            if (!string.IsNullOrEmpty(addedToCartMessage))
+            {
+                ViewBag.AddedToCartMessage = addedToCartMessage;
+            }
+            
 
             return View(model);
         }
