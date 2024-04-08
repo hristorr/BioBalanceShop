@@ -38,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
+                options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireDigit = true;
