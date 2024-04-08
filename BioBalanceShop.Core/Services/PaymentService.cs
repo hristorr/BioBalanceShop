@@ -48,14 +48,6 @@ namespace BioBalanceShop.Core.Services
                     Email = c.User.Email,
                     PhoneNumber = c.User.PhoneNumber,
                     Country = new PaymentCheckoutPostCountryModel()
-                    //Street = string.Empty,
-                    //PostCode = string.Empty,
-                    //City = string.Empty
-                    //Country = new PaymentCheckoutPostCountryModel()
-                    //{
-                    //    Id = c.Address.Country.Id,
-                    //    Name = c.Address.Country.Name
-                    //}
                 })
                 .FirstAsync();
 
