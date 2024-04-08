@@ -24,6 +24,7 @@ using Microsoft.Extensions.Logging;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
+using BioBalanceShop.Core.Contracts;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account
 {
@@ -37,6 +38,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly BioBalanceDbContext _context;
+        private readonly ICustomerService _customerService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -45,7 +47,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            BioBalanceDbContext context)
+            BioBalanceDbContext context,
+            ICustomerService customerService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -55,6 +58,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _customerService = customerService;
         }
 
         /// <summary>
@@ -159,13 +163,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
                             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{user.FirstName} {user.LastName}"));
 
                             var userId = await _userManager.GetUserIdAsync(user);
-                            var customer = new Customer()
-                            {
-                                UserId = userId
-                            };
 
-                            await _context.AddAsync(customer);
-                            await _context.SaveChangesAsync();
+                            await _customerService.CreateCustomerAsync(userId);
 
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
