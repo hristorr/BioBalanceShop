@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,13 @@ namespace BioBalanceShop.Core.Services
     public class PaymentService : IPaymentService
     {
         private readonly IRepository _repository;
-
-        public PaymentService(IRepository repository)
+        private readonly ICustomerService _customerService;
+        public PaymentService(
+            IRepository repository,
+            ICustomerService customerService)
         {
             _repository = repository;
+            _customerService = customerService;
         }
 
         public async Task CreatePaymentAsync(PaymentCheckoutPostCreatePaymentModel model)
@@ -35,7 +39,7 @@ namespace BioBalanceShop.Core.Services
 
         public async Task<PaymentCheckoutPostCustomerModel> GetCustomerInfoAsync(string userId)
         {
-            return await _repository.AllReadOnly<Customer>()
+            var customer = await _repository.AllReadOnly<Customer>()
                 .Where(c => c.UserId == userId)
                 .Select(c => new PaymentCheckoutPostCustomerModel()
                 {
@@ -43,16 +47,33 @@ namespace BioBalanceShop.Core.Services
                     LastName = c.User.LastName,
                     Email = c.User.Email,
                     PhoneNumber = c.User.PhoneNumber,
-                    Street = c.Address.Street,
-                    PostCode = c.Address.PostCode,
-                    City = c.Address.City,
                     Country = new PaymentCheckoutPostCountryModel()
-                    {
-                        Id = c.Address.Country.Id,
-                        Name = c.Address.Country.Name
-                    }
+                    //Street = string.Empty,
+                    //PostCode = string.Empty,
+                    //City = string.Empty
+                    //Country = new PaymentCheckoutPostCountryModel()
+                    //{
+                    //    Id = c.Address.Country.Id,
+                    //    Name = c.Address.Country.Name
+                    //}
                 })
                 .FirstAsync();
+
+            if (await _customerService.CustomerAddressExists(userId))
+            {
+                var address = await _customerService.GetCustomerAddress(userId);
+
+                if (address != null)
+                {
+                    customer.Street = address.Street;
+                    customer.PostCode = address.PostCode;
+                    customer.City = address.City;
+                    customer.Country.Id = address.Country.Id;
+                    customer.Country.Name = address.Country.Name;
+                }
+            }
+            
+            return customer;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BioBalanceShop.Infrastructure.Data.Models;
+﻿using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Infrastructure.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,10 @@ namespace BioBalanceShop.Core.Contracts
         Task CreateCustomerAsync(string userId);
 
         Task<int?> GetCustomerIdByUserIdAsync(string userId);
+
+        Task<bool> IsCustomer(string userId);
+
+        Task<bool> CustomerAddressExists(string userId);
+        Task<CustomerAddressServiceModel?> GetCustomerAddress(string userId);
     }
 }

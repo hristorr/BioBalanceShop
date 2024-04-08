@@ -1,4 +1,6 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,31 @@ namespace BioBalanceShop.Core.Services
             await _repository.SaveChangesAsync();
         }
 
+        public async Task<bool> CustomerAddressExists(string userId)
+        {
+            return await _repository.AllReadOnly<Customer>()
+                .Where(c => c.UserId == userId)
+                .AnyAsync(c => c.AddressId != null);
+        }
+
+        public async Task<CustomerAddressServiceModel?> GetCustomerAddress(string userId)
+        {
+            return await _repository.AllReadOnly<Customer>()
+                .Where(c => c.UserId == userId)
+                .Select(c => new CustomerAddressServiceModel()
+                {
+                    Street = c.Address.Street,
+                    PostCode = c.Address.PostCode,
+                    City = c.Address.City,
+                    Country = new ShopCountryServiceModel()
+                    {
+                        Id = c.Address.Country.Id,
+                        Name = c.Address.Country.Name
+                    }
+                })
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int?> GetCustomerIdByUserIdAsync(string userId)
         {
             var customer = await _repository
@@ -38,6 +65,12 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
 
             return customer?.Id;
+        }
+
+        public async Task<bool> IsCustomer(string userId)
+        {
+            return await _repository.AllReadOnly<Customer>()
+                .AnyAsync(c => c.UserId == userId);
         }
     }
 }
