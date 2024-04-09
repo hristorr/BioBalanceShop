@@ -13,6 +13,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
+using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Core.Models.Customer;
+using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models.Shared;
+using Stripe.Tax;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
 {
@@ -20,13 +25,19 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ICustomerService _customerService;
+        private readonly IShopService _shopService;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ICustomerService customerService,
+            IShopService shopService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _customerService = customerService;
+            _shopService = shopService;
         }
 
         /// <summary>
@@ -72,6 +83,20 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Street")]
+            public string Street { get; set; }
+
+            [Display(Name = "Post code")]
+            public string PostCode { get; set; }
+
+            [Display(Name = "City")]
+            public string City { get; set; }
+
+            [Display(Name = "Country")]
+            public CustomerAddressCountryFormModel Country { get; set; }
+
+            public IList<ShopCountryServiceModel> Countries { get; set; } = new List<ShopCountryServiceModel>();
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -80,6 +105,17 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var firstName = user.FirstName;
             var lastName = user.LastName;
+            var address = new CustomerAddressFormModel()
+            {
+                Country = new CustomerAddressCountryFormModel()
+            };
+            
+            if (await _customerService.CustomerAddressExists(user.Id))
+            {
+                address = await _customerService.GetCustomerAddressFormModel(user.Id);
+            }
+
+            var countries = await _shopService.AllCountriesAsync();
 
             Username = userName;
 
@@ -87,7 +123,12 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 FirstName = firstName,
-                LastName = lastName
+                LastName = lastName,
+                Street = address.Street,
+                PostCode = address.PostCode,
+                City = address.City,
+                Country = address.Country,
+                Countries = new List<ShopCountryServiceModel>(countries)
             };
         }
 
@@ -143,6 +184,27 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            var address = new CustomerAddressFormModel()
+            {
+                Street = Input.Street,
+                PostCode = Input.PostCode,
+                City = Input.City,
+                Country = new CustomerAddressCountryFormModel()
+                {
+                    Id = Input.Country.Id,
+                    Name = Input.Country.Name
+                }
+            };
+
+            if (await _customerService.CustomerAddressExists(user.Id))
+            {
+                await _customerService.EditCustomerAddressAsync(address, user.Id);
+            }
+            else
+            {
+                await _customerService.CreateCustomerAddressAsync(address, user.Id);
             }
 
             await _signInManager.RefreshSignInAsync(user);

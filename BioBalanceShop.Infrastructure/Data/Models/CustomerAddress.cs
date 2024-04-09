@@ -27,38 +27,34 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// Customer address street name
         /// </summary>
-        [Required]
         [MaxLength(StreetMaxLength)]
         [Comment("Customer address street name")]
-        public string Street { get; set; } = string.Empty;
+        public string? Street { get; set; } = string.Empty;
 
         /// <summary>
         /// Customer address post code
         /// </summary>
-        [Required]
         [MaxLength(PostCodeMaxLength)]
         [Comment("Customer address post code")]
-        public string PostCode { get; set; } = string.Empty;
+        public string? PostCode { get; set; } = string.Empty;
 
         /// <summary>
         /// Customer address city
         /// </summary>
-        [Required]
         [MaxLength(CityMaxLength)]
         [Comment("Customer address city")]
-        public string City { get; set; } = string.Empty;
+        public string? City { get; set; } = string.Empty;
 
         /// <summary>
         /// Customer address country identificator
         /// </summary>
-        [Required]
         [Comment("Customer address country identificator")]
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
         /// <summary>
         /// Customer address country
         /// </summary>
         [ForeignKey(nameof(CountryId))]
-        public Country Country { get; set; } = null!;
+        public Country? Country { get; set; } = null!;
     }
 }

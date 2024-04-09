@@ -52,7 +52,7 @@ namespace BioBalanceShop.Controllers
 
             var cart = GetOrCreateCart();
 
-            if (cart == null)
+            if (cart == null || cart.Items.Count() == 0)
             {
                 return RedirectToAction("Index", "Cart");
             }

@@ -48,6 +48,10 @@
             <div class="form-group">
                 <label asp-for="Customer.Country.Id">Country:</label>
                 <select asp-for="Customer.Country.Id" class="form-control">
+                    @if (String.IsNullOrEmpty(Model.Customer.Country.Name))
+                    {
+                        <option value="" selected></option>
+                    }
                     @foreach (var country in Model.Customer.Countries)
                     {
                         if (@country.Name == Model.Customer.Country.Name)

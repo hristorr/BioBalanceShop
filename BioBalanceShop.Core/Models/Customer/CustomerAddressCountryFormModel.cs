@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BioBalanceShop.Core.Models.Shared
+namespace BioBalanceShop.Core.Models.Customer
 {
-    public class ShopCountryServiceModel
+    public class CustomerAddressCountryFormModel
     {
         [Display(Name = "Country")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; } = string.Empty;
+
     }
 }
