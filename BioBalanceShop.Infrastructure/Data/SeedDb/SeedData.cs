@@ -531,6 +531,8 @@ public class SeedData
         GreenNourishCompleteOrderItem = new OrderItem()
         {
             Id = 1,
+            Title = "Green Nourish Complete",
+            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN105_front.png",
             Quantity = 1,
             Price = 12.00M,
             CurrencyId = 2,
@@ -540,6 +542,8 @@ public class SeedData
         AppleCiderVinegarComplexOrderItem = new OrderItem()
         {
             Id = 2,
+            Title = "Apple Cider Vinegar Complex",
+            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ACV-120_front.png",
             Quantity = 1,
             Price = 6.00M,
             CurrencyId = 2,

@@ -12,10 +12,10 @@ namespace System.Linq
 {
     public static class IQueryableOrderExtension
     {
-        public static IQueryable<OrderServiceModel> ProjectToOrderServiceModel(this IQueryable<Order> orders)
+        public static IQueryable<OrderAllServiceModel> ProjectToOrderServiceModel(this IQueryable<Order> orders)
         {
             return orders
-                .Select(o => new OrderServiceModel()
+                .Select(o => new OrderAllServiceModel()
                 {
                     Id = o.Id,
                     OrderNumber = o.OrderNumber,
@@ -29,7 +29,7 @@ namespace System.Linq
                         CurrencySymbol = o.Currency.Symbol,
                         CurrencyIsSymbolPrefix = o.Currency.IsSymbolPrefix
                     },
-                    OrderItemsCount = o.OrderItems.Count()
+                    OrderItemsCount = o.OrderItems.Sum(o => o.Quantity)
                 });
         }
     }

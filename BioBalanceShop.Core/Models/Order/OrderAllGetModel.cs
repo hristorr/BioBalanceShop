@@ -27,6 +27,6 @@ namespace BioBalanceShop.Core.Models.Order
 
         public IEnumerable<OrderStatus> OrderStatuses { get; set; } = null!;
 
-        public IEnumerable<OrderServiceModel> Orders { get; set; } = new List<OrderServiceModel>();
+        public IEnumerable<OrderAllServiceModel> Orders { get; set; } = new List<OrderAllServiceModel>();
     }
 }

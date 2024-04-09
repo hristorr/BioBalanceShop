@@ -11,6 +11,6 @@ namespace BioBalanceShop.Core.Models.Order
     {
         public int TotalOrdersCount { get; set; }
 
-        public IEnumerable<OrderServiceModel> Orders { get; set; } = new List<OrderServiceModel>();
+        public IEnumerable<OrderAllServiceModel> Orders { get; set; } = new List<OrderAllServiceModel>();
     }
 }

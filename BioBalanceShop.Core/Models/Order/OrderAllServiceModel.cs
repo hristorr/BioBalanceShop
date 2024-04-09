@@ -12,7 +12,7 @@ using BioBalanceShop.Core.Models._Base;
 
 namespace BioBalanceShop.Core.Models.Order
 {
-    public class OrderServiceModel
+    public class OrderAllServiceModel
     {
         /// <summary>
         /// Order identificator

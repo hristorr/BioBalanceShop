@@ -28,16 +28,6 @@ namespace BioBalanceShop.Controllers
             _logger = logger;
         }
 
-
-        //[Authorize(Roles = CustomerRole)]
-        //[HttpGet]
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-
-        [Authorize(Roles = CustomerRole)]
         [HttpGet]
         public async Task<IActionResult> MyOrders([FromQuery] OrderAllGetModel model)
         {
@@ -53,10 +43,20 @@ namespace BioBalanceShop.Controllers
             model.Orders = orders.Orders;
             model.OrderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
 
-            //await _productService.AllCategoryNamesAsync();
-
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id, bool addedToCart = false)
+        {
+            var model = await _orderService.GetOrderByIdAsync(id);
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            return View(model);
+        }
     }
 }

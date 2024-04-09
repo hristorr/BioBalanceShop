@@ -15,6 +15,7 @@ using static BioBalanceShop.Infrastructure.Constants.DataConstants;
 using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Order;
+using BioBalanceShop.Core.Models._Base;
 
 namespace BioBalanceShop.Core.Services
 {
@@ -49,17 +50,7 @@ namespace BioBalanceShop.Core.Services
             {
                 string normalizedSearchTerm = searchTerm.ToLower();
 
-                //string input = "Value2";
-
-                //MyEnum enumValue;
-                //if (Enum.TryParse(input, out enumValue))
-                //{
-                //    if (Enum.IsDefined(typeof(MyEnum), enumValue))
-                //    {
-                //    }
-                //}
-
-                        ordersToShow = ordersToShow
+                ordersToShow = ordersToShow
                     .Where(o => o.OrderNumber.ToLower().Contains(normalizedSearchTerm));
             }
 
@@ -182,6 +173,65 @@ namespace BioBalanceShop.Core.Services
                 .Select(o => int.Parse(o.OrderNumber.Substring(2)))
                 .Take(1)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id)
+        {
+            var order = await _repository
+                .AllReadOnly<Order>()
+                .Where(o => o.Id == id)
+                .Select(o => new OrderDetailsServiceModel()
+                {
+                    Id = o.Id,
+                    OrderNumber = o.OrderNumber,
+                    OrderDate = o.OrderDate,
+                    Status = o.Status,
+                    Amount = o.Amount,
+                    ShippingFee = o.ShippingFee,
+                    TotalAmount = o.TotalAmount,
+                    Currency = new ShopCurrencyServiceModel()
+                    {
+                        Id = o.Currency.Id,
+                        CurrencyCode = o.Currency.Code,
+                        CurrencySymbol = o.Currency.Symbol,
+                        CurrencyIsSymbolPrefix = o.Currency.IsSymbolPrefix
+                    },
+                    OrderAddress = new OrderAddressDetailsModel()
+                    {
+                        Id = o.OrderAddress.Id,
+                        Street = o.OrderAddress.Street,
+                        PostCode = o.OrderAddress.PostCode,
+                        City = o.OrderAddress.City,
+                        Country = o.OrderAddress.Country.Name
+                    },
+                    OrderRecipient = new OrderRecipientDetailsModel()
+                    {
+                        Id = o.OrderRecipient.Id,
+                        FirstName = o.OrderRecipient.FirstName,
+                        LastName = o.OrderRecipient.LastName,
+                        PhoneNumber = o.OrderRecipient.PhoneNumber,
+                        EmailAddress = o.OrderRecipient.EmailAddress
+                    },
+                })
+                .FirstOrDefaultAsync();
+
+            order.OrderItems = await GetOrderItemsByOrderId(id);
+            return order;
+        }
+
+        public async Task<IEnumerable<OrderItemDetailsModel>> GetOrderItemsByOrderId(int id)
+        {
+            return await _repository.AllReadOnly<Order>()
+                .Where(o => o.Id == id)
+                .SelectMany(o => o.OrderItems.Select(oi => new OrderItemDetailsModel()
+                {
+                    Id = oi.Id,
+                    Title = oi.Title,
+                    ImageUrl = oi.ImageUrl,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }))
+                .ToListAsync();
         }
     }
 }

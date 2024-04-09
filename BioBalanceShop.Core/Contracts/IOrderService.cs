@@ -27,5 +27,9 @@ namespace BioBalanceShop.Core.Contracts
             int currentPage = 1,
             int ordersPerPage = 1, 
             string? userId = null);
+
+        Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id);
+
+        Task<IEnumerable<OrderItemDetailsModel>> GetOrderItemsByOrderId(int id);
     }
 }
