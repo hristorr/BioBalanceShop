@@ -4,7 +4,7 @@ using static BioBalanceShop.Core.Constants.RoleConstants;
 
 namespace BioBalanceShop.Controllers
 {
-    [Authorize(Roles = AdminRole)]
+    [Authorize]
     public class BaseController : Controller
     {
 

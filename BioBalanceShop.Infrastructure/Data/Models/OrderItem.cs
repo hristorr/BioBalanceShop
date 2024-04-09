@@ -25,6 +25,22 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public bool IsActive { get; set; } = true;
 
         /// <summary>
+        /// Order item name
+        /// </summary>
+        [Required]
+        [MaxLength(TitleMaxLength)]
+        [Comment("Order item name")]
+        public string Title { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Order item image URL
+        /// </summary>
+        [Required]
+        [MaxLength(ImageUrlMaxLength)]
+        [Comment("Order item image URL")]
+        public string ImageUrl { get; set; } = string.Empty;
+
+        /// <summary>
         /// Order item quantity
         /// </summary>
         [Required]

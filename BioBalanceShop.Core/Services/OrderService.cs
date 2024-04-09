@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using Microsoft.AspNetCore.Identity;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants;
+using BioBalanceShop.Core.Models.Product;
+using BioBalanceShop.Core.Enumerations;
+using BioBalanceShop.Core.Models.Order;
 
 namespace BioBalanceShop.Core.Services
 {
@@ -19,13 +22,81 @@ namespace BioBalanceShop.Core.Services
     {
         private readonly IRepository _repository;
         private readonly ICustomerService _customerService;
+        private readonly IShopService _shopService;
 
         public OrderService(
             IRepository repository,
-            ICustomerService customerService)
+            ICustomerService customerService,
+            IShopService shopService)
         {
             _repository = repository;
             _customerService = customerService;
+            _shopService = shopService;
+        }
+
+        public async Task<OrderQueryServiceModel> AllAsync(OrderStatus? orderStatus = 0, string? searchTerm = null, OrderSorting sorting = OrderSorting.OrderDateDescending, int currentPage = 1, int ordersPerPage = 1, string? userId = null)
+        {
+            var ordersToShow = _repository.AllReadOnly<Order>()
+                .Where(o => o.CustomerId != null && o.Customer.UserId == userId);
+
+            if (orderStatus != 0)
+            {
+                ordersToShow = ordersToShow
+                    .Where(o => o.Status == orderStatus);
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                //string input = "Value2";
+
+                //MyEnum enumValue;
+                //if (Enum.TryParse(input, out enumValue))
+                //{
+                //    if (Enum.IsDefined(typeof(MyEnum), enumValue))
+                //    {
+                //    }
+                //}
+
+                        ordersToShow = ordersToShow
+                    .Where(o => o.OrderNumber.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            ordersToShow = sorting switch
+            {
+                OrderSorting.OrderDateDescending => ordersToShow
+                    .OrderByDescending(o => o.OrderDate),
+                OrderSorting.OrderDateAscending => ordersToShow
+                .OrderBy(o => o.OrderDate),
+                OrderSorting.AmountAscending => ordersToShow
+                    .OrderBy(o => o.TotalAmount),
+                OrderSorting.AmountDescending => ordersToShow
+                    .OrderByDescending(o => o.TotalAmount),
+                _ => ordersToShow
+                    .OrderByDescending(o => o.OrderDate)
+            };
+
+            var orders = await ordersToShow
+                .Skip((currentPage - 1) * ordersPerPage)
+                .Take(ordersPerPage)
+                .ProjectToOrderServiceModel()
+                .ToListAsync();
+
+            int totalOrders = await ordersToShow.CountAsync();
+
+            var currency = await _shopService.GetShopCurrency();
+
+            foreach (var order in orders)
+            {
+                order.Currency = currency;
+            }
+
+            return new OrderQueryServiceModel()
+            {
+                Orders = orders,
+                TotalOrdersCount = totalOrders
+            };
         }
 
         public async Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId)
@@ -60,7 +131,9 @@ namespace BioBalanceShop.Core.Services
 
             foreach (var product in productsInCart.Items)
             {
-                orderItems.Add(new OrderItem() { 
+                orderItems.Add(new OrderItem() {
+                    Title = product.Title,
+                    ImageUrl = product.ImageURL,
                     Quantity = product.QuantityToOrder,
                     Price = product.Price,
                     CurrencyId = product.Currency.Id
@@ -96,26 +169,13 @@ namespace BioBalanceShop.Core.Services
             return orderNumber;
         }
 
-        private string GenerateOrderNumber(int lastOrderNumber)
+        public string GenerateOrderNumber(int lastOrderNumber)
         {
             lastOrderNumber++;
             return "PO" + lastOrderNumber.ToString("D6");
         }
 
-        //private async Task<int> GetLastOrderNumberAsync()
-        //{
-        //    return await _repository.AllReadOnly<Order>()
-        //        .Select(o => new
-        //        {
-        //            PoNumber = int.Parse(o.OrderNumber.Substring(2))
-        //        })
-        //        .OrderByDescending(o => o.PoNumber)
-        //        .Take(1)
-        //        .Select(o => o.PoNumber)
-        //        .FirstOrDefaultAsync();
-        //}
-
-        private async Task<int> GetLastOrderNumberAsync()
+        public async Task<int> GetLastOrderNumberAsync()
         {
             return await _repository.AllReadOnly<Order>()
                 .OrderByDescending(o => o.OrderNumber)

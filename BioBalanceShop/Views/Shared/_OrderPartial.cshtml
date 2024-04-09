@@ -1,0 +1,65 @@
+﻿@model OrderServiceModel
+
+<head>
+    <style>
+        .orders-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.order {
+    background-color: #214f21;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    width: calc(33.33% - 20px); /* Three orders per row */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.order:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@@media screen and (max-width: 768px) {
+    .order {
+        width: calc(50% - 20px); /* Two orders per row on smaller screens */
+    }
+}
+
+@@media screen and (max-width: 480px) {
+    .order {
+        width: calc(100% - 20px); /* Single order per row on even smaller screens */
+    }
+}
+
+    </style>
+</head>
+
+<div @* class="col-md-4" *@>
+        <a asp-controller="Order" asp-action="Details" asp-route-id="@Model.Id">
+            @*             <img class="card-img-top" src="@Model.ImageUrl" alt="Product Image"> *@
+            <div class="orders-container text-center">
+                <div class="order">
+                    <h3>Order ID: @Model.OrderNumber</h3>
+                    <p>Order Date: @Model.OrderDate.ToShortDateString()</p>
+                    <p>Total Amount: 
+                        @if (Model.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Currency.CurrencySymbol
+                        }
+                        @String.Format("{0:f2}", Model.TotalAmount)
+                        @if (!Model.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Currency.CurrencySymbol
+                        }
+                    </p>
+                    <p>Order Status: @Model.Status</p>
+                    <p>Order Items: @Model.OrderItemsCount items</p>
+                </div>
+            </div>
+        </a>
+</div>
