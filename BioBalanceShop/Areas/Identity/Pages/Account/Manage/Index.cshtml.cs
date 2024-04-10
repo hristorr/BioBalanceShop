@@ -18,6 +18,7 @@ using BioBalanceShop.Core.Models.Customer;
 using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models.Shared;
 using Stripe.Tax;
+using static BioBalanceShop.Core.Constants.RoleConstants;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
 {
@@ -109,7 +110,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
             {
                 Country = new CustomerAddressCountryFormModel()
             };
-            
+
             if (await _customerService.CustomerAddressExists(user.Id))
             {
                 address = await _customerService.GetCustomerAddressFormModel(user.Id);
@@ -161,7 +162,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
-            
+
             var userName = User.FindFirstValue(UserFullNameClaim);
             var userClaims = await _userManager.GetClaimsAsync(user);
             var currentUserFullNameClaim = userClaims.FirstOrDefault(c => c.Value == userName);
@@ -186,25 +187,29 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var address = new CustomerAddressFormModel()
+            if ((this.User?.Identity?.IsAuthenticated ?? false) && (this.User.IsInRole(CustomerRole)))
             {
-                Street = Input.Street,
-                PostCode = Input.PostCode,
-                City = Input.City,
-                Country = new CustomerAddressCountryFormModel()
+                var address = new CustomerAddressFormModel()
                 {
-                    Id = Input.Country.Id,
-                    Name = Input.Country.Name
-                }
-            };
+                    Street = Input.Street,
+                    PostCode = Input.PostCode,
+                    City = Input.City,
+                    Country = new CustomerAddressCountryFormModel()
+                    {
+                        Id = Input.Country.Id,
+                        Name = Input.Country.Name
+                    }
+                };
 
-            if (await _customerService.CustomerAddressExists(user.Id))
-            {
-                await _customerService.EditCustomerAddressAsync(address, user.Id);
-            }
-            else
-            {
-                await _customerService.CreateCustomerAddressAsync(address, user.Id);
+                if (await _customerService.CustomerAddressExists(user.Id))
+                {
+                    await _customerService.EditCustomerAddressAsync(address, user.Id);
+                }
+                else
+                {
+                    await _customerService.CreateCustomerAddressAsync(address, user.Id);
+                }
+
             }
 
             await _signInManager.RefreshSignInAsync(user);
