@@ -12,6 +12,13 @@ namespace BioBalanceShop.Infrastructure.Data.Models
     public class ApplicationUser : IdentityUser
     {
         /// <summary>
+        /// Indicator if user exists
+        /// </summary>
+        [Required]
+        [Comment("Indicator if user exists")]
+        public bool IsActive { get; set; } = true;
+
+        /// <summary>
         /// User first name
         /// </summary>
         [MaxLength(NameMaxLength)]

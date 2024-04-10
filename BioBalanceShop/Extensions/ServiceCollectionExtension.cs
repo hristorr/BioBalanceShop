@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

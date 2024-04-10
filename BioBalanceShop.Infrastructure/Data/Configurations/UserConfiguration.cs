@@ -15,6 +15,8 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.HasQueryFilter(u => u.IsActive);
+
             var data = new SeedData();
 
             builder.HasData(new ApplicationUser[] {
