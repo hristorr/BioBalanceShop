@@ -16,6 +16,7 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 builder.Services.AddApplicationServices();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -39,8 +40,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
-app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+            name: "areas",
+            pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}"
+    );
+
+    endpoints.MapDefaultControllerRoute();
+    endpoints.MapRazorPages();
+});
 
 await app.CreateRolesAsync();
 
