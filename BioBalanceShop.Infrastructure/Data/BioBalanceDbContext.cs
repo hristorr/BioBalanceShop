@@ -41,6 +41,7 @@ namespace BioBalanceShop.Infrastructure.Data
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ShopConfiguration());
+            builder.ApplyConfiguration(new UserClaimsConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
 
             base.OnModelCreating(builder);
