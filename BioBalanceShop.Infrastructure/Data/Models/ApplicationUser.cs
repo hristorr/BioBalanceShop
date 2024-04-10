@@ -33,5 +33,6 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [PersonalData]
         [Comment("User last name")]
         public string? LastName { get; set; } = string.Empty;
+
     }
 }

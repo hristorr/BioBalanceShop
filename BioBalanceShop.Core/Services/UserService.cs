@@ -1,5 +1,7 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Admin.User;
+using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -68,5 +70,84 @@ namespace BioBalanceShop.Core.Services
             return result;
         }
 
+        public async Task<UserQueryServiceModel> AllAsync(string? role = null, string? searchTerm = null, UserSorting sorting = UserSorting.Newest, int currentPage = 1, int usersPerPage = 1)
+        {
+            //var usersToShow = _repository.AllReadOnly<ApplicationUser>();
+            var usersToShow = await GetAllUsersAsync();
+
+            if (role != null)
+            {
+                usersToShow = usersToShow
+                    .Where(u => u.Roles.Contains(role));
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+                usersToShow = usersToShow
+                    .Where(u => (u.UserName.ToLower().Contains(normalizedSearchTerm) ||
+                                u.Email.ToLower().Contains(normalizedSearchTerm) ||
+                                u.FirstName.ToLower().Contains(normalizedSearchTerm) ||
+                                u.LastName.ToLower().Contains(normalizedSearchTerm) ||
+                                u.PhoneNumber.ToLower().Contains(normalizedSearchTerm)));
+            }
+
+            usersToShow = sorting switch
+            {
+                UserSorting.Newest => usersToShow
+                    .OrderByDescending(u => u.Id),
+                UserSorting.Oldest => usersToShow
+                .OrderBy(u => u.Id),
+                UserSorting.UserNameAscending => usersToShow
+                .OrderBy(u => u.UserName),
+                UserSorting.UserNameDescending => usersToShow
+                .OrderByDescending(u => u.UserName),
+                UserSorting.FirstNameAscending => usersToShow
+                .OrderBy(u => u.FirstName),
+                UserSorting.FirstNameDescending => usersToShow
+                .OrderByDescending(u => u.FirstName),
+                UserSorting.LastNameAscending => usersToShow
+                .OrderBy(u => u.LastName),
+                UserSorting.LastNameDescending => usersToShow
+                .OrderByDescending(u => u.LastName),
+                _ => usersToShow
+                    .OrderByDescending(h => h.Id)
+            };
+
+            var users = usersToShow
+                .Skip((currentPage - 1) * usersPerPage)
+                .Take(usersPerPage)
+            //.ProjectToUserServiceModel()
+                .ToList();
+
+            int totalUsers = usersToShow.Count();
+
+            return new UserQueryServiceModel()
+            {
+                Users = users,
+                TotalUsersCount = totalUsers
+            };
+        }
+
+        public async Task<IEnumerable<string>> GetAllDistinctRoles()
+        {
+            var users = await _userManager.Users.ToListAsync();
+
+            var distinctRoles = new HashSet<string>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                foreach (var role in roles)
+                {
+                    if (!distinctRoles.Contains(role))
+                    {
+                        distinctRoles.Add(role);
+                    }
+                }
+            }
+
+            return distinctRoles;
+        }
     }
 }

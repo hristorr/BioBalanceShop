@@ -1,0 +1,29 @@
+﻿@model UserServiceModel
+
+<tr>
+    <td>
+        <label>@Model.UserName</label>
+    </td>
+    <td>
+        <label>@Model.Email</label>
+    </td>
+    <td>
+        <label>@Model.FirstName</label>
+    </td>
+    <td>
+        <label>@Model.LastName</label>
+    </td>
+    <td>
+        <label>@Model.PhoneNumber</label>
+    </td>
+    <td>
+        @if (Model.IsAdmin)
+        {
+            <label>✔</label>
+        }
+        else
+        {
+            <label class="text-center">❌</label>
+        }
+    </td>
+</tr>
