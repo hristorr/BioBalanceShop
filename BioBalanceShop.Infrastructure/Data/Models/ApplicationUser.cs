@@ -34,5 +34,11 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Comment("User last name")]
         public string? LastName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Date when user was created
+        /// </summary>
+        [Required]
+        [Comment("Date when user was created")]
+        public DateTime CreatedDate { get; set; }
     }
 }

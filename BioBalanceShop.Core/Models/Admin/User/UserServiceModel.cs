@@ -26,6 +26,8 @@ namespace BioBalanceShop.Core.Models.Admin.User
         [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; } = string.Empty;
 
+        public DateTime CreatedDate { get; set; }
+
         public IEnumerable<string> Roles { get; set; } = new List<string>();
 
         public bool IsAdmin => Roles.Contains(AdminRole);

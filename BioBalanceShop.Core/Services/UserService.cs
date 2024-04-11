@@ -47,6 +47,7 @@ namespace BioBalanceShop.Core.Services
                     LastName = user.LastName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
+                    CreatedDate = DateTime.Now,
                     Roles = roles.ToList()
                 };
 
@@ -95,9 +96,9 @@ namespace BioBalanceShop.Core.Services
             usersToShow = sorting switch
             {
                 UserSorting.Newest => usersToShow
-                    .OrderByDescending(u => u.Id),
+                    .OrderByDescending(u => u.CreatedDate),
                 UserSorting.Oldest => usersToShow
-                .OrderBy(u => u.Id),
+                .OrderBy(u => u.CreatedDate),
                 UserSorting.UserNameAscending => usersToShow
                 .OrderBy(u => u.UserName),
                 UserSorting.UserNameDescending => usersToShow
@@ -111,7 +112,7 @@ namespace BioBalanceShop.Core.Services
                 UserSorting.LastNameDescending => usersToShow
                 .OrderByDescending(u => u.LastName),
                 _ => usersToShow
-                    .OrderByDescending(u => u.Id)
+                    .OrderByDescending(u => u.CreatedDate)
             };
 
             var users = usersToShow

@@ -218,6 +218,7 @@ public class SeedData
             EmailConfirmed = true,
             FirstName = "Admin",
             LastName = "User",
+            CreatedDate = DateTime.Now
         };
 
         AdminUserClaim = new IdentityUserClaim<string>()
@@ -241,6 +242,7 @@ public class SeedData
             EmailConfirmed = true,
             FirstName = "Ivan",
             LastName = "Ivanov",
+            CreatedDate = DateTime.Now
         };
 
         CustomerUserClaim = new IdentityUserClaim<string>()

@@ -140,6 +140,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.CreatedDate = DateTime.Now;
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
