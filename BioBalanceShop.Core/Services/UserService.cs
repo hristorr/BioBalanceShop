@@ -111,7 +111,7 @@ namespace BioBalanceShop.Core.Services
                 UserSorting.LastNameDescending => usersToShow
                 .OrderByDescending(u => u.LastName),
                 _ => usersToShow
-                    .OrderByDescending(h => h.Id)
+                    .OrderByDescending(u => u.Id)
             };
 
             var users = usersToShow
@@ -148,6 +148,17 @@ namespace BioBalanceShop.Core.Services
             }
 
             return distinctRoles;
+        }
+
+        public async Task DeleteUserByIdAsync(string userId)
+        {
+            var user = await _repository.GetByIdAsync<ApplicationUser>(userId);
+
+            if (user != null)
+            {
+                user.IsActive = false;
+                await _repository.SaveChangesAsync();
+            }
         }
     }
 }

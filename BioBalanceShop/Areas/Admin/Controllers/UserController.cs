@@ -56,5 +56,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            await _userService.DeleteUserByIdAsync(id);
+
+            return RedirectToAction(nameof(All));
+        }
+
     }
 }

@@ -26,4 +26,10 @@
             <label class="text-center">❌</label>
         }
     </td>
+    <td>
+        <a asp-controller="Seminar" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Edit</a>
+    </td>
+    <td>
+        <button class="btn btn-danger mb-2 w-100 p-3 fw-bold openModalBtn" data-user="@Model.UserName" data-id="@Model.Id">Delete</button>
+    </td>
 </tr>

@@ -23,5 +23,7 @@ namespace BioBalanceShop.Core.Contracts
           int usersPerPage = 1);
 
         Task<IEnumerable<string>> GetAllDistinctRoles();
+
+        Task DeleteUserByIdAsync(string userId);
     }
 }
