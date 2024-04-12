@@ -1,43 +1,32 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models.Admin.User;
 using BioBalanceShop.Core.Models.Product;
+using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.Claims;
 using static BioBalanceShop.Core.Constants.AdminConstants;
+using static BioBalanceShop.Core.Constants.RoleConstants;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
 {
     public class UserController : AdminBaseController
     {
         private readonly IUserService _userService;
-        private readonly IMemoryCache _memoryCache;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public UserController(
             IUserService userService,
-            IMemoryCache memoryCache)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userService = userService;
-            _memoryCache = memoryCache;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
-
-        //public async Task<IActionResult> All()
-        //{
-        //    var model = memoryCache.Get<IEnumerable<UserServiceModel>>(UsersCacheKey);
-
-        //    if (model == null || model.Any() == false)
-        //    {
-        //        model = await userService.GetAllUsersAsync();
-
-        //        var cacheOptions = new MemoryCacheEntryOptions()
-        //            .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-
-        //        memoryCache.Set(UsersCacheKey, model, cacheOptions);
-        //    }
-
-        //    return View(model);
-        //}
-
 
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] UserAllGetModel model)
@@ -51,7 +40,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
 
             model.TotalUsersCount = users.TotalUsersCount;
             model.Users = users.Users;
-            model.Roles = await _userService.GetAllDistinctRoles();
+            model.Roles = await _userService.GetAllRoles();
 
             return View(model);
         }
@@ -64,5 +53,46 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            UserFormModel model = await _userService.GetUserByIdAsync(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var modelUser = await _userManager.FindByIdAsync(model.Id);
+
+            var modelUserName = $"{modelUser.FirstName} {modelUser.LastName}";
+            var modelUserClaims = await _userManager.GetClaimsAsync(modelUser);
+            var modelUserFullNameClaim = modelUserClaims.FirstOrDefault(c => c.Value == modelUserName);
+            var newFullNameClaim = new Claim(UserFullNameClaim, $"{model.FirstName} {model.LastName}");
+
+            await _userService.EditUserAsync(model);
+
+            await _userManager.ReplaceClaimAsync(modelUser, modelUserFullNameClaim, newFullNameClaim);
+
+            if (currentUser != null && await _userManager.IsInRoleAsync(currentUser, AdminRole) == false)
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            if (currentUser.Id == model.Id)
+            {
+                await _signInManager.RefreshSignInAsync(currentUser);
+            }
+            
+            return RedirectToAction(nameof(All));
+        }
     }
 }

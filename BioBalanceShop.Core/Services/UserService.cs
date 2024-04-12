@@ -130,26 +130,26 @@ namespace BioBalanceShop.Core.Services
             };
         }
 
-        public async Task<IEnumerable<string>> GetAllDistinctRoles()
-        {
-            var users = await _userManager.Users.ToListAsync();
+        //public async Task<IEnumerable<string>> GetAllDistinctRoles()
+        //{
+        //    var users = await _userManager.Users.ToListAsync();
 
-            var distinctRoles = new HashSet<string>();
+        //    var distinctRoles = new HashSet<string>();
 
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                foreach (var role in roles)
-                {
-                    if (!distinctRoles.Contains(role))
-                    {
-                        distinctRoles.Add(role);
-                    }
-                }
-            }
+        //    foreach (var user in users)
+        //    {
+        //        var roles = await _userManager.GetRolesAsync(user);
+        //        foreach (var role in roles)
+        //        {
+        //            if (!distinctRoles.Contains(role))
+        //            {
+        //                distinctRoles.Add(role);
+        //            }
+        //        }
+        //    }
 
-            return distinctRoles;
-        }
+        //    return distinctRoles;
+        //}
 
         public async Task DeleteUserByIdAsync(string userId)
         {
@@ -160,6 +160,94 @@ namespace BioBalanceShop.Core.Services
                 user.IsActive = false;
                 await _repository.SaveChangesAsync();
             }
+        }
+
+        public async Task EditUserAsync(UserFormModel model)
+        {
+            //var userToEdit = await _repository.All<ApplicationUser>()
+            //    .Where(u => u.Id == userId)
+            //    .FirstOrDefaultAsync();
+
+            var userToEdit = await _userManager.FindByIdAsync(model.Id);
+
+            if (userToEdit  != null)
+            {
+                userToEdit.UserName = model.UserName;
+                userToEdit.FirstName = model.FirstName;
+                userToEdit.LastName = model.LastName;
+                userToEdit.Email = model.Email;
+                userToEdit.PhoneNumber = model.PhoneNumber;
+
+                if (!await _userManager.IsInRoleAsync(userToEdit, model.Role))
+                {
+                    //var currentUserRoles = await _userManager
+                    //    .GetRolesAsync(userToEdit);
+
+                    //var currentUserRole = string.Empty;
+
+                    //if (currentUserRoles != null)
+                    //{
+                    //    currentUserRole = currentUserRoles.FirstOrDefault();
+                    //}
+
+                    //var currentUserRole = await GetUserRole(userToEdit);
+
+                    var currentRoles = await _userManager.GetRolesAsync(userToEdit);
+                    await _userManager.RemoveFromRolesAsync(userToEdit, currentRoles);
+                    await _userManager.AddToRoleAsync(userToEdit, model.Role);
+                    //if (currentUserRole != model.Role)
+                    //{
+                    //    await _userManager.AddToRoleAsync(userToEdit, model.Role);
+                    //    await _userManager.RemoveFromRoleAsync(userToEdit, currentUserRole);
+                    //    await _repository.SaveChangesAsync();
+                    //}
+
+                    
+                    
+                }
+
+                await _userManager.UpdateAsync(userToEdit);
+            }
+        }
+        
+        public async Task<string> GetUserRole(ApplicationUser user)
+        {
+            //var currentUserRoles = await _userManager
+            //            .GetRolesAsync(user);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            //string currentRole = string.Empty; ;
+            //if (currentUserRoles != null)
+            //{
+            //    currentUserRole = currentUserRoles.First();
+            //}
+
+            return currentRoles.First();
+        }
+
+        public async Task<IEnumerable<string>> GetAllRoles()
+        {
+            return await _roleManager.Roles
+                .Select(r => r.Name)
+                .ToListAsync();
+        }
+
+        public async Task<UserFormModel> GetUserByIdAsync(string userId)
+        {
+            var user = await _repository.GetByIdAsync<ApplicationUser>(userId);
+
+            var model = new UserFormModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = await GetUserRole(user),
+                Roles = await GetAllRoles()
+            };
+
+            return model;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Admin.User;
 using BioBalanceShop.Core.Models.Product;
+using BioBalanceShop.Infrastructure.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,16 @@ namespace BioBalanceShop.Core.Contracts
           int currentPage = 1,
           int usersPerPage = 1);
 
-        Task<IEnumerable<string>> GetAllDistinctRoles();
+        //Task<IEnumerable<string>> GetAllDistinctRoles();
 
         Task DeleteUserByIdAsync(string userId);
+
+        Task EditUserAsync(UserFormModel model);
+
+        Task<UserFormModel> GetUserByIdAsync(string userId);
+
+        Task<string> GetUserRole(ApplicationUser user);
+
+        Task<IEnumerable<string>> GetAllRoles();
     }
 }
