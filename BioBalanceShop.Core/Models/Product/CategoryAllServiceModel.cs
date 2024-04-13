@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Product
 {
-    public class ProductAllGetCategoryModel
+    public class CategoryAllServiceModel
     {
         public int Id { get; set; }
 

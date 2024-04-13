@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Product
 {
-    public class ProductAllGetModel
+    public class ProductAllServiceModel
     {
         public int ProductsPerPage { get; } = 6;
 

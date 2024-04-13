@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Product
 {
-    public class ProductDetailsGetModel
+    public class ProductDetailsServiceModel
     {
         [Required]
         public int Id { get; set; }

@@ -1,4 +1,4 @@
-﻿@model ProductAllServiceModel
+﻿@model AdminProductAllServiceModel
 
 @{
     ViewBag.Title = "All Products";
@@ -32,8 +32,15 @@
                 <label asp-for="Sorting"></label>
                 <select asp-for="Sorting" class="form-control">
                     <option value="0">Newest</option>
-                    <option value="1">Lowest price first</option>
-                    <option value="2">Highest price first</option>
+                    <option value="1">Oldest</option>
+                    <option value="2">Lowest price</option>
+                    <option value="3">Highest price</option>
+                    <option value="4">Lowest stock quantity</option>
+                    <option value="5">Highest stock quantity</option>
+                    <option value="6">Product name ascending</option>
+                    <option value="7">Product name descending</option>
+                    <option value="8">Product code ascending</option>
+                    <option value="9">Product code descending</option>
                 </select>
             </div>
         </div>
@@ -92,8 +99,47 @@
 }
 
 <div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><label></label></th>
+                <th><label>Product code</label></th>
+                <th><label>Product name</label></th>
+                <th><label>Stock quantity</label></th>
+                <th><label>Unit Price</label></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <partial name="_ProductPartial" model="@product" />
+
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@* <div class="row">
     @foreach (var product in Model.Products)
     {
         <partial name="_ProductPartial" model="@product" />
     }
-</div>
+</div> *@
+
+<partial name="_ProductModalPartial" />
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $(".openModalBtn").click(function () {
+                var productId = $(this).data("id");
+                var productName = $(this).data("product");
+                $("#deleteProduct").attr("value", productId);
+                $("#productName").html(productName);
+                $("#modalConfirmDelete").modal('show');
+            });
+        });
+    </script>
+}

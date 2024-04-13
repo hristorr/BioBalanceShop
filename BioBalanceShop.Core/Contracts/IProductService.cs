@@ -23,11 +23,11 @@ namespace BioBalanceShop.Core.Contracts
 
         Task<bool> CategoryExistsAsync(int categoryId);
 
-        Task<IEnumerable<ProductAllGetCategoryModel>> AllCategoriesAsync();
+        Task<IEnumerable<CategoryAllServiceModel>> AllCategoriesAsync();
         
         Task<IEnumerable<string>> AllCategoryNamesAsync();
 
-        Task<ProductDetailsGetModel?> GetProductByIdAsync(int id);
+        Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id);
 
         Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity);
 

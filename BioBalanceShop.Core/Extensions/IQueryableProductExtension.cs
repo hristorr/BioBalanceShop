@@ -13,12 +13,12 @@ namespace System.Linq
         public static IQueryable<ProductServiceModel> ProjectToProductServiceModel(this IQueryable<Product> products)
         {
             return products
-                .Select(h => new ProductServiceModel()
+                .Select(p => new ProductServiceModel()
                 {
-                    Id = h.Id,
-                    Title = h.Title,
-                    ImageUrl = h.ImageUrl,
-                    Price = h.Price,
+                    Id = p.Id,
+                    Title = p.Title,
+                    ImageUrl = p.ImageUrl,
+                    Price = p.Price,
                 });
         }
     }

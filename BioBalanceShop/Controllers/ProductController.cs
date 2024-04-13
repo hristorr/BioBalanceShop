@@ -24,7 +24,7 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> All([FromQuery] ProductAllGetModel model)
+        public async Task<IActionResult> All([FromQuery] ProductAllServiceModel model)
         {
             var products = await _productService.AllAsync(
                 model.Category,

@@ -56,12 +56,14 @@ namespace BioBalanceShop.Core.Services
 
             productsToShow = sorting switch
             {
+                ProductSorting.Newest => productsToShow
+                  .OrderByDescending(p => p.Id),
                 ProductSorting.PriceAscending => productsToShow
                     .OrderBy(p => p.Price),
                 ProductSorting.PriceDescending => productsToShow
                     .OrderByDescending(p => p.Price),
                 _ => productsToShow
-                    .OrderByDescending(h => h.Id)
+                    .OrderByDescending(p => p.Id)
             };
 
             var products = await productsToShow
@@ -92,10 +94,10 @@ namespace BioBalanceShop.Core.Services
                 .AnyAsync(c => c.Id == categoryId);
         }
 
-        public async Task<IEnumerable<ProductAllGetCategoryModel>> AllCategoriesAsync()
+        public async Task<IEnumerable<CategoryAllServiceModel>> AllCategoriesAsync()
         {
             return await _repository.AllReadOnly<Category>()
-               .Select(c => new ProductAllGetCategoryModel()
+               .Select(c => new CategoryAllServiceModel()
                {
                    Id = c.Id,
                    Name = c.Name,
@@ -111,12 +113,12 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<ProductDetailsGetModel?> GetProductByIdAsync(int id)
+        public async Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id)
         {
             return await _repository
                 .AllReadOnly<Product>()
                 .Where(p => p.Id == id)
-                .Select(p => new ProductDetailsGetModel()
+                .Select(p => new ProductDetailsServiceModel()
                 {
                     Id = p.Id,
                     Title = p.Title,
@@ -171,5 +173,6 @@ namespace BioBalanceShop.Core.Services
                 })
                 .ToListAsync();
         }
+
     }
 }
