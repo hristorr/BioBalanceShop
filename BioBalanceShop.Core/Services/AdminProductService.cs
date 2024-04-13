@@ -104,6 +104,28 @@ namespace BioBalanceShop.Core.Services
             };
         }
 
+        public async Task CreateProductAsync(AdminProductCreateFormModel model, string userId)
+        {
+            var productToAdd = new Product()
+            {
+                Title = model.Title,
+                Subtitle = model.Subtitle,
+                Description = model.Description,
+                Ingredients = model.Ingredients,
+                ProductCode = model.ProductCode,
+                ImageUrl = model.ImageUrl,
+                Price = model.Price,
+                Quantity = model.Quantity,
+                CategoryId = model.CategoryId,
+                CreatedDate = DateTime.Now,
+                CreatedById = userId,
+                ShopId = 1
+            };
+
+            await _repository.AddAsync(productToAdd);
+            await _repository.SaveChangesAsync();
+        }
+
         public async Task DeleteProductByIdAsync(int productId)
         {
             var product = await _repository.GetByIdAsync<Product>(productId);
@@ -154,6 +176,12 @@ namespace BioBalanceShop.Core.Services
                     CategoryId = p.Category.Id
         })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> ProductCodeExistsAsync(string productCode)
+        {
+            return await _repository.AllReadOnly<Product>()
+                .AnyAsync(p => p.ProductCode == productCode);
         }
     }
 }

@@ -30,8 +30,11 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const int ImageUrlMaxLength = 500;
             public const int ImageUrlMinLength = 5;
 
-            public const int QuantityMaxRange = int.MaxValue;
-            public const int QuantityMinRange = 0;
+            public const string QuantityMaxRange = "99999";
+            public const string QuantityMinRange = "0";
+
+            public const string PriceMaxRange = "9999999";
+            public const string PriceMinRange = "0";
         }
 
         public static class CategoryData

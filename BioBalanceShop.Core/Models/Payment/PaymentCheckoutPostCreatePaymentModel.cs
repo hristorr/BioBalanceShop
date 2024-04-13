@@ -33,7 +33,8 @@ namespace BioBalanceShop.Core.Models.Payment
             PaymentAmountMinValue,
             PaymentAmountMaxValue,
             ConvertValueInInvariantCulture = true,
-            ErrorMessage = "Payment amount must be a positive number and less than {2}")]
+            ErrorMessage = RangeErrorMessage)]
+        [Display(Name = "Payment amount")]
         public decimal PaymentAmount { get; set; }
 
         /// <summary>
