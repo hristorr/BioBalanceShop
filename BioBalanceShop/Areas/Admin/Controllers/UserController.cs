@@ -48,8 +48,16 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            await _userService.DeleteUserByIdAsync(id);
+            var currentUser = await _userManager.GetUserAsync(User);
 
+            if (currentUser.Id == id)
+            {
+                await _userService.DeleteUserByIdAsync(id);
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            await _userService.DeleteUserByIdAsync(id);
             return RedirectToAction(nameof(All));
         }
 

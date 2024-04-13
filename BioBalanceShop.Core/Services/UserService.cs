@@ -221,5 +221,11 @@ namespace BioBalanceShop.Core.Services
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{userToAdd.FirstName} {userToAdd.LastName}"));
 
         }
+
+        public async Task<bool> UserIsActive(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user.IsActive;
+        }
     }
 }

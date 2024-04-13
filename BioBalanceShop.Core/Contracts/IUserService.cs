@@ -34,5 +34,7 @@ namespace BioBalanceShop.Core.Contracts
         Task<IEnumerable<string>> GetAllRoles();
 
         Task CreateUserAsync(UserCreateFormModel model);
+
+        Task<bool> UserIsActive(string userId);
     }
 }

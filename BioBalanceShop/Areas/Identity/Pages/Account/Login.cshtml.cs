@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using BioBalanceShop.Infrastructure.Data.Models;
 using static BioBalanceShop.Core.Constants.RoleConstants;
+using BioBalanceShop.Core.Contracts;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account
 {
@@ -23,14 +24,17 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager,   
+            UserManager<ApplicationUser> userManager,
+            IUserService userService,
             ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _userService = userService;
             _logger = logger;
         }
 
@@ -118,7 +122,8 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+               
+                if (result.Succeeded && await _userService.UserIsActive(Input.Email))
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     _logger.LogInformation("User logged in.");
