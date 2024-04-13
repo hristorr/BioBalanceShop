@@ -17,5 +17,13 @@ namespace BioBalanceShop.Core.Constants
         public const string UserMessageSuccess = "UserMessageSuccess";
 
         public const string UserMessageError = "UserMessageError";
+
+        public const string FormatErrorMessage = "Invalid {0} format";
+
+        public const string EmailFormatErrorMessage = "Invalid {0} format. Please enter a valid email address";
+
+        public const string PasswordFormatErrorMessage = "Invalid {0} format. {} must contain at least 1 digit, 1 uppercase letter, 1 lowercase letter and 1 non-alphanumeric character";
+
+        public const string PasswordConfirmErrorMessage = "The password and confirmation password do not match";
     }
 }

@@ -56,13 +56,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            UserFormModel model = await _userService.GetUserByIdAsync(id);
+            UserEditFormModel model = await _userService.GetUserByIdAsync(id);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UserFormModel model)
+        public async Task<IActionResult> Edit(UserEditFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,30 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             {
                 await _signInManager.RefreshSignInAsync(currentUser);
             }
-            
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            UserCreateFormModel model = new UserCreateFormModel();
+            model.Roles = await _userService.GetAllRoles();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(UserCreateFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Roles = await _userService.GetAllRoles();
+                return View(model);
+            }
+
+            await _userService.CreateUserAsync(model);
+
             return RedirectToAction(nameof(All));
         }
     }

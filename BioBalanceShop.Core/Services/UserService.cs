@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static BioBalanceShop.Core.Constants.RoleConstants;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 namespace BioBalanceShop.Core.Services
 {
@@ -47,7 +48,7 @@ namespace BioBalanceShop.Core.Services
                     LastName = user.LastName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = user.CreatedDate,
                     Roles = roles.ToList()
                 };
 
@@ -73,7 +74,6 @@ namespace BioBalanceShop.Core.Services
 
         public async Task<UserQueryServiceModel> AllAsync(string? role = null, string? searchTerm = null, UserSorting sorting = UserSorting.Newest, int currentPage = 1, int usersPerPage = 1)
         {
-            //var usersToShow = _repository.AllReadOnly<ApplicationUser>();
             var usersToShow = await GetAllUsersAsync();
 
             if (role != null)
@@ -118,7 +118,6 @@ namespace BioBalanceShop.Core.Services
             var users = usersToShow
                 .Skip((currentPage - 1) * usersPerPage)
                 .Take(usersPerPage)
-            //.ProjectToUserServiceModel()
                 .ToList();
 
             int totalUsers = usersToShow.Count();
@@ -129,27 +128,6 @@ namespace BioBalanceShop.Core.Services
                 TotalUsersCount = totalUsers
             };
         }
-
-        //public async Task<IEnumerable<string>> GetAllDistinctRoles()
-        //{
-        //    var users = await _userManager.Users.ToListAsync();
-
-        //    var distinctRoles = new HashSet<string>();
-
-        //    foreach (var user in users)
-        //    {
-        //        var roles = await _userManager.GetRolesAsync(user);
-        //        foreach (var role in roles)
-        //        {
-        //            if (!distinctRoles.Contains(role))
-        //            {
-        //                distinctRoles.Add(role);
-        //            }
-        //        }
-        //    }
-
-        //    return distinctRoles;
-        //}
 
         public async Task DeleteUserByIdAsync(string userId)
         {
@@ -162,12 +140,8 @@ namespace BioBalanceShop.Core.Services
             }
         }
 
-        public async Task EditUserAsync(UserFormModel model)
+        public async Task EditUserAsync(UserEditFormModel model)
         {
-            //var userToEdit = await _repository.All<ApplicationUser>()
-            //    .Where(u => u.Id == userId)
-            //    .FirstOrDefaultAsync();
-
             var userToEdit = await _userManager.FindByIdAsync(model.Id);
 
             if (userToEdit  != null)
@@ -180,30 +154,9 @@ namespace BioBalanceShop.Core.Services
 
                 if (!await _userManager.IsInRoleAsync(userToEdit, model.Role))
                 {
-                    //var currentUserRoles = await _userManager
-                    //    .GetRolesAsync(userToEdit);
-
-                    //var currentUserRole = string.Empty;
-
-                    //if (currentUserRoles != null)
-                    //{
-                    //    currentUserRole = currentUserRoles.FirstOrDefault();
-                    //}
-
-                    //var currentUserRole = await GetUserRole(userToEdit);
-
                     var currentRoles = await _userManager.GetRolesAsync(userToEdit);
                     await _userManager.RemoveFromRolesAsync(userToEdit, currentRoles);
                     await _userManager.AddToRoleAsync(userToEdit, model.Role);
-                    //if (currentUserRole != model.Role)
-                    //{
-                    //    await _userManager.AddToRoleAsync(userToEdit, model.Role);
-                    //    await _userManager.RemoveFromRoleAsync(userToEdit, currentUserRole);
-                    //    await _repository.SaveChangesAsync();
-                    //}
-
-                    
-                    
                 }
 
                 await _userManager.UpdateAsync(userToEdit);
@@ -212,14 +165,7 @@ namespace BioBalanceShop.Core.Services
         
         public async Task<string> GetUserRole(ApplicationUser user)
         {
-            //var currentUserRoles = await _userManager
-            //            .GetRolesAsync(user);
             var currentRoles = await _userManager.GetRolesAsync(user);
-            //string currentRole = string.Empty; ;
-            //if (currentUserRoles != null)
-            //{
-            //    currentUserRole = currentUserRoles.First();
-            //}
 
             return currentRoles.First();
         }
@@ -231,11 +177,11 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<UserFormModel> GetUserByIdAsync(string userId)
+        public async Task<UserEditFormModel> GetUserByIdAsync(string userId)
         {
             var user = await _repository.GetByIdAsync<ApplicationUser>(userId);
 
-            var model = new UserFormModel()
+            var model = new UserEditFormModel()
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -248,6 +194,32 @@ namespace BioBalanceShop.Core.Services
             };
 
             return model;
+        }
+
+        public async Task CreateUserAsync(UserCreateFormModel model)
+        {
+            var userToAdd = new ApplicationUser()
+            {
+                UserName = model.UserName,
+                NormalizedUserName = model.UserName.ToUpper(),
+                Email = model.Email,
+                NormalizedEmail = model.Email.ToUpper(),
+                CreatedDate = DateTime.Now,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber,
+            };
+
+            await _userManager.CreateAsync(userToAdd, model.Password);
+
+            if (!await _userManager.IsInRoleAsync(userToAdd, model.Role))
+            {
+                await _userManager.AddToRoleAsync(userToAdd, model.Role);
+            }
+
+            var user = await _userManager.FindByNameAsync(userToAdd.UserName);
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{userToAdd.FirstName} {userToAdd.LastName}"));
+
         }
     }
 }

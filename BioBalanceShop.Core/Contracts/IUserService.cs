@@ -23,16 +23,16 @@ namespace BioBalanceShop.Core.Contracts
           int currentPage = 1,
           int usersPerPage = 1);
 
-        //Task<IEnumerable<string>> GetAllDistinctRoles();
-
         Task DeleteUserByIdAsync(string userId);
 
-        Task EditUserAsync(UserFormModel model);
+        Task EditUserAsync(UserEditFormModel model);
 
-        Task<UserFormModel> GetUserByIdAsync(string userId);
+        Task<UserEditFormModel> GetUserByIdAsync(string userId);
 
         Task<string> GetUserRole(ApplicationUser user);
 
         Task<IEnumerable<string>> GetAllRoles();
+
+        Task CreateUserAsync(UserCreateFormModel model);
     }
 }

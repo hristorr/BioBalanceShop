@@ -45,6 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BioBalanceDbContext>();

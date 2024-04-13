@@ -9,7 +9,7 @@ using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUs
 
 namespace BioBalanceShop.Core.Models.Admin.User
 {
-    public class UserFormModel
+    public class UserEditFormModel
     {
         [Required]
         public string Id { get; set; } = null!;
