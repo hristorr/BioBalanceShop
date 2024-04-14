@@ -47,7 +47,7 @@ namespace BioBalanceShop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id, bool addedToCart = false)
+        public async Task<IActionResult> Details(int id)
         {
             var model = await _orderService.GetOrderByIdAsync(id);
 
