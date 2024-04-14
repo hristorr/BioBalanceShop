@@ -25,13 +25,6 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var model = await _adminShopSettingsService.AllShopSettingsAsync();
-
-            return View();
-        }
 
         [HttpGet]
         public async Task<IActionResult> Edit()
