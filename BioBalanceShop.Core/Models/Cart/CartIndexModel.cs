@@ -2,9 +2,9 @@
 
 namespace BioBalanceShop.Core.Models.Cart
 {
-    public class CartIndexGetModel
+    public class CartIndexModel
     {
-        public List<CartIndexGetProductModel> Items { get; set; } = new List<CartIndexGetProductModel>();
+        public List<CartIndexProductModel> Items { get; set; } = new List<CartIndexProductModel>();
 
         public decimal TotalPrice { get; set; }
 

@@ -83,7 +83,7 @@ namespace BioBalanceShop.Core.Services
             };
         }
 
-        public async Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId)
+        public async Task<string> CreateOrderAsync(CheckoutFormModel model, CartIndexModel productsInCart, string userId)
         {
             
             Payment payment = new Payment()

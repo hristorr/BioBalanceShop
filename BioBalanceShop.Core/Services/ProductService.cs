@@ -135,13 +135,13 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync()
+        public async Task<IEnumerable<HomeIndexProductModel>> GetLastFiveProductsAsync()
         {
             return await _repository
                 .AllReadOnly<Product>()
                 .OrderByDescending(p => p.Id)
                 .Take(5)
-                .Select(p => new HomeIndexGetProductModel()
+                .Select(p => new HomeIndexProductModel()
                 {
                     Id = p.Id,
                     Title = p.Title,

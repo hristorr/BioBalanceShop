@@ -53,7 +53,7 @@ namespace BioBalanceShop.Controllers
         public async Task<IActionResult> Index()
         {
             CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-            CartIndexGetModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+            CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
             productsInCart.TotalPrice = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
             var currency = await _shopService.GetShopCurrency();

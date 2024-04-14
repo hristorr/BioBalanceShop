@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
@@ -27,15 +28,15 @@ namespace BioBalanceShop.Core.Services
             _shopService = shopService;
         }
 
-        public async Task<CartIndexGetModel> GetCartProductsInfo(CartCookieModel cart)
+        public async Task<CartIndexModel> GetCartProductsInfo(CartCookieModel cart)
         {
-            CartIndexGetModel productsInCart = new CartIndexGetModel();
+            CartIndexModel productsInCart = new CartIndexModel();
 
             foreach (var item in cart.Items)
             {
                 if (await _productService.ExistsAsync(item.ProductId))
                 {
-                    CartIndexGetProductModel product = await GetProductFromCart(item.ProductId, item.Quantity);
+                    CartIndexProductModel product = await GetProductFromCart(item.ProductId, item.Quantity);
                     productsInCart.Items.Add(product);
                 }
             }
@@ -43,12 +44,12 @@ namespace BioBalanceShop.Core.Services
             return productsInCart;
         }
 
-        public async Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity)
+        public async Task<CartIndexProductModel?> GetProductFromCart(int id, int quantity)
         {
             return await _repository
                .AllReadOnly<Product>()
                .Where(p => p.Id == id)
-               .Select(p => new CartIndexGetProductModel()
+               .Select(p => new CartIndexProductModel()
                {
                    ProductId = p.Id,
                    Title = p.Title,
@@ -56,7 +57,7 @@ namespace BioBalanceShop.Core.Services
                    QuantityToOrder = quantity,
                    QuantityInStock = p.Quantity,
                    Price = p.Price,
-                   Currency = new CartIndexGetProductCurrencyModel()
+                   Currency = new ShopCurrencyServiceModel()
                    {
                        Id = p.Shop.Currency.Id,
                        CurrencySymbol = p.Shop.Currency.Symbol,

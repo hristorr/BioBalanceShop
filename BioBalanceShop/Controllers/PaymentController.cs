@@ -3,6 +3,7 @@ using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Core.Models.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
@@ -99,7 +100,7 @@ namespace BioBalanceShop.Controllers
                 try
                 {
                     var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-                    CartIndexGetModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+                    CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
                     string orderNumber = await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
 
@@ -143,7 +144,7 @@ namespace BioBalanceShop.Controllers
 
             var customer = await GeneratePaymentCheckoutGetCustomerModel();
             var order = await GeneratePaymentCheckoutGetOrderModel(cart);
-            PaymentCheckoutPostModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
+            CheckoutFormModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
 
             return View(checkoutModel);
         }
@@ -151,7 +152,7 @@ namespace BioBalanceShop.Controllers
         [AllowAnonymous]
         [HttpPost]
         [RequiresCookieConsent]
-        public async Task<IActionResult> Checkout(PaymentCheckoutPostModel model)
+        public async Task<IActionResult> Checkout(CheckoutFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -166,9 +167,9 @@ namespace BioBalanceShop.Controllers
         }
 
 
-        private async Task<PaymentCheckoutPostCustomerModel> GeneratePaymentCheckoutGetCustomerModel()
+        private async Task<CheckoutCustomerFormModel> GeneratePaymentCheckoutGetCustomerModel()
         {
-            var customer = new PaymentCheckoutPostCustomerModel();
+            var customer = new CheckoutCustomerFormModel();
 
             if (await _paymentService.ExistsAsync(User.Id()))
             {
@@ -176,18 +177,18 @@ namespace BioBalanceShop.Controllers
             }
             else
             {
-                customer.Country = new PaymentCheckoutPostCountryModel();
+                customer.Country = new ShopCountryServiceModel();
             }
                         
             customer.Countries = await _shopService.AllCountriesAsync();
             return customer;
         }
 
-        private async Task<PaymentCheckoutPostOrderModel> GeneratePaymentCheckoutGetOrderModel(CartCookieModel cart)
+        private async Task<CheckoutOrderFormModel> GeneratePaymentCheckoutGetOrderModel(CartCookieModel cart)
         {
-            CartIndexGetModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+            CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
-            var order = new PaymentCheckoutPostOrderModel();
+            var order = new CheckoutOrderFormModel();
             order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
             order.Currency = await _shopService.GetShopCurrency();
 
@@ -197,9 +198,9 @@ namespace BioBalanceShop.Controllers
             return order;
         }
 
-        private async Task<PaymentCheckoutPostModel> GeneratePaymentCheckoutGetModel(PaymentCheckoutPostCustomerModel customer, PaymentCheckoutPostOrderModel order)
+        private async Task<CheckoutFormModel> GeneratePaymentCheckoutGetModel(CheckoutCustomerFormModel customer, CheckoutOrderFormModel order)
         {
-            var checkoutModel = new PaymentCheckoutPostModel()
+            var checkoutModel = new CheckoutFormModel()
             {
                 Customer = customer,
                 Order = order

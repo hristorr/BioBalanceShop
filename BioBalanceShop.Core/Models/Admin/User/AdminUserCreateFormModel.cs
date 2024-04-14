@@ -9,7 +9,7 @@ using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUs
 
 namespace BioBalanceShop.Core.Models.Admin.User
 {
-    public class UserCreateFormModel
+    public class AdminUserCreateFormModel
     {
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(EmailMaxLength,

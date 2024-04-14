@@ -29,7 +29,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> All([FromQuery] UserAllGetModel model)
+        public async Task<IActionResult> All([FromQuery] AdminUserAllGetModel model)
         {
             var users = await _userService.AllAsync(
                 model.Role,
@@ -64,13 +64,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            UserEditFormModel model = await _userService.GetUserByIdAsync(id);
+            AdminUserEditFormModel model = await _userService.GetUserByIdAsync(id);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UserEditFormModel model)
+        public async Task<IActionResult> Edit(AdminUserEditFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -106,14 +106,14 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            UserCreateFormModel model = new UserCreateFormModel();
+            AdminUserCreateFormModel model = new AdminUserCreateFormModel();
             model.Roles = await _userService.GetAllRoles();
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserCreateFormModel model)
+        public async Task<IActionResult> Create(AdminUserCreateFormModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
-    public class PaymentCheckoutGetModel
+    public class CheckoutFormModel
     {
-        public PaymentCheckoutGetCustomerModel Customer { get; set; }
-        public PaymentCheckoutGetOrderModel Order { get; set; }
+        public CheckoutCustomerFormModel Customer { get; set; }
+        public CheckoutOrderFormModel Order { get; set; }
     }
 }

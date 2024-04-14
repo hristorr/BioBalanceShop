@@ -17,9 +17,9 @@ namespace BioBalanceShop.Core.Contracts
 
         void RemoveCookie(IResponseCookies httpResponse, string cookie);
 
-        void SaveOrderInfoInCookie(IResponseCookies httpResponse, PaymentCheckoutPostModel model);
+        void SaveOrderInfoInCookie(IResponseCookies httpResponse, CheckoutFormModel model);
 
-        PaymentCheckoutPostModel GetOrderInfoFromCookie(string? orderCookie);
+        CheckoutFormModel GetOrderInfoFromCookie(string? orderCookie);
 
         void SetConsentCookie(IResponseCookies httpResponse, string consentStatus);
 

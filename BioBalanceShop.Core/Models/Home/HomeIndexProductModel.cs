@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Home
 {
-    public class HomeIndexGetProductModel
+    public class HomeIndexProductModel
     {
         public int Id { get; set; }
 

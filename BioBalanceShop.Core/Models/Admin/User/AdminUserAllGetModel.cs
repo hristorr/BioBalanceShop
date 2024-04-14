@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Admin.User
 {
-    public class UserAllGetModel
+    public class AdminUserAllGetModel
     {
         public int UsersPerPage { get; } = 6;
 
@@ -26,6 +26,6 @@ namespace BioBalanceShop.Core.Models.Admin.User
 
         public IEnumerable<string> Roles { get; set; } = null!;
 
-        public IEnumerable<UserServiceModel> Users { get; set; } = new List<UserServiceModel>();
+        public IEnumerable<AdminUserServiceModel> Users { get; set; } = new List<AdminUserServiceModel>();
     }
 }

@@ -10,7 +10,7 @@ namespace BioBalanceShop.Core.Contracts
     public interface IPaymentService
     {
         Task<bool> ExistsAsync(string userId);
-        Task<PaymentCheckoutPostCustomerModel> GetCustomerInfoAsync(string userId);
-        Task CreatePaymentAsync(PaymentCheckoutPostCreatePaymentModel model);
+        Task<CheckoutCustomerFormModel> GetCustomerInfoAsync(string userId);
+        Task CreatePaymentAsync(PaymentServiceModel model);
     }
 }

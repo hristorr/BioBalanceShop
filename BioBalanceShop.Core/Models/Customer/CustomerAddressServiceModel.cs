@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BioBalanceShop.Core.Models.Shared;
 
-namespace BioBalanceShop.Core.Models.Payment
+namespace BioBalanceShop.Core.Models.Customer
 {
     public class CustomerAddressServiceModel
     {

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BioBalanceShop.Core.Models._Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Cart
 {
-    public class CartIndexGetProductModel
+    public class CartIndexProductModel
     {
         public int ProductId { get; set; }
 
@@ -16,6 +17,6 @@ namespace BioBalanceShop.Core.Models.Cart
 
         public decimal Price { get; set; }
 
-        public CartIndexGetProductCurrencyModel Currency { get; set; } = null!;
+        public ShopCurrencyServiceModel Currency { get; set; } = null!;
     }
 }

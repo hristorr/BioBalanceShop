@@ -30,9 +30,9 @@ namespace BioBalanceShop.Core.Services
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        public async Task<IEnumerable<UserServiceModel>> GetAllUsersAsync()
+        public async Task<IEnumerable<AdminUserServiceModel>> GetAllUsersAsync()
         {
-            var usersWithRolesAndNames = new List<UserServiceModel>();
+            var usersWithRolesAndNames = new List<AdminUserServiceModel>();
 
             var users = _userManager.Users.ToList();
 
@@ -40,7 +40,7 @@ namespace BioBalanceShop.Core.Services
             {
                 var roles = await _userManager.GetRolesAsync(user);
 
-                var userWithRolesAndNames = new UserServiceModel
+                var userWithRolesAndNames = new AdminUserServiceModel
                 {
                     Id = user.Id,
                     UserName = user.UserName,
@@ -72,7 +72,7 @@ namespace BioBalanceShop.Core.Services
             return result;
         }
 
-        public async Task<UserQueryServiceModel> AllAsync(string? role = null, string? searchTerm = null, UserSorting sorting = UserSorting.Newest, int currentPage = 1, int usersPerPage = 1)
+        public async Task<AdminUserQueryServiceModel> AllAsync(string? role = null, string? searchTerm = null, UserSorting sorting = UserSorting.Newest, int currentPage = 1, int usersPerPage = 1)
         {
             var usersToShow = await GetAllUsersAsync();
 
@@ -122,7 +122,7 @@ namespace BioBalanceShop.Core.Services
 
             int totalUsers = usersToShow.Count();
 
-            return new UserQueryServiceModel()
+            return new AdminUserQueryServiceModel()
             {
                 Users = users,
                 TotalUsersCount = totalUsers
@@ -140,7 +140,7 @@ namespace BioBalanceShop.Core.Services
             }
         }
 
-        public async Task EditUserAsync(UserEditFormModel model)
+        public async Task EditUserAsync(AdminUserEditFormModel model)
         {
             var userToEdit = await _userManager.FindByIdAsync(model.Id);
 
@@ -177,11 +177,11 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<UserEditFormModel> GetUserByIdAsync(string userId)
+        public async Task<AdminUserEditFormModel> GetUserByIdAsync(string userId)
         {
             var user = await _repository.GetByIdAsync<ApplicationUser>(userId);
 
-            var model = new UserEditFormModel()
+            var model = new AdminUserEditFormModel()
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -196,7 +196,7 @@ namespace BioBalanceShop.Core.Services
             return model;
         }
 
-        public async Task CreateUserAsync(UserCreateFormModel model)
+        public async Task CreateUserAsync(AdminUserCreateFormModel model)
         {
             var userToAdd = new ApplicationUser()
             {

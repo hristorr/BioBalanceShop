@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
-    public class PaymentCheckoutPostOrderModel
+    public class CheckoutOrderFormModel
     {
         public decimal OrderAmount { get; set; }
 
@@ -17,8 +17,6 @@ namespace BioBalanceShop.Core.Models.Payment
 
         [Display(Name = "Total Order Amount")]
         public decimal TotalOrderAmount => OrderAmount + ShippingFee;
-
-        //public string CurrencyCode { get; set; } = string.Empty;
 
         public ShopCurrencyServiceModel Currency { get; set; } = null!;
     }

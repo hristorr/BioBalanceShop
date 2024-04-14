@@ -8,7 +8,7 @@ using static BioBalanceShop.Core.Constants.RoleConstants;
 
 namespace BioBalanceShop.Core.Models.Admin.User
 {
-    public class UserServiceModel
+    public class AdminUserServiceModel
     {
         public string Id { get; set; }
 

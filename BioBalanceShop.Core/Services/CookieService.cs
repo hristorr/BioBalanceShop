@@ -51,7 +51,7 @@ namespace BioBalanceShop.Core.Services
             });
         }
 
-        public void SaveOrderInfoInCookie(IResponseCookies httpResponse, PaymentCheckoutPostModel model)
+        public void SaveOrderInfoInCookie(IResponseCookies httpResponse, CheckoutFormModel model)
         {
             string orderInfo = JsonConvert.SerializeObject(model);
             httpResponse.Append(OrderInfoCookie, orderInfo, new CookieOptions
@@ -62,9 +62,9 @@ namespace BioBalanceShop.Core.Services
             });
         }
 
-        public PaymentCheckoutPostModel GetOrderInfoFromCookie(string? orderCookie)
+        public CheckoutFormModel GetOrderInfoFromCookie(string? orderCookie)
         {
-            PaymentCheckoutPostModel orderInfo;
+            CheckoutFormModel orderInfo;
 
             if (string.IsNullOrEmpty(orderCookie))
             {
@@ -72,7 +72,7 @@ namespace BioBalanceShop.Core.Services
             }
             else
             {
-                orderInfo = JsonConvert.DeserializeObject<PaymentCheckoutPostModel>(orderCookie);
+                orderInfo = JsonConvert.DeserializeObject<CheckoutFormModel>(orderCookie);
             }
 
             return orderInfo;

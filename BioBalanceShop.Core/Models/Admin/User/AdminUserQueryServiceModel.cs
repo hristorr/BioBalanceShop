@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Admin.User
 {
-    public class UserQueryServiceModel
+    public class AdminUserQueryServiceModel
     {
         public int TotalUsersCount { get; set; }
 
-        public IEnumerable<UserServiceModel> Users { get; set; } = new List<UserServiceModel>();
+        public IEnumerable<AdminUserServiceModel> Users { get; set; } = new List<AdminUserServiceModel>();
     }
 }

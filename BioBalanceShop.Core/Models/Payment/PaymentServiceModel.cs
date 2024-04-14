@@ -16,7 +16,7 @@ namespace BioBalanceShop.Core.Models.Payment
     /// <summary>
     /// Create payment model
     /// </summary>
-    public class PaymentCheckoutPostCreatePaymentModel
+    public class PaymentServiceModel
     {
         /// <summary>
         /// Payment date

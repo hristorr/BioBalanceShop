@@ -9,8 +9,8 @@ namespace BioBalanceShop.Core.Contracts
 {
     public interface ICartService
     {
-        Task<CartIndexGetModel> GetCartProductsInfo(CartCookieModel cart);
-        Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity);
+        Task<CartIndexModel> GetCartProductsInfo(CartCookieModel cart);
+        Task<CartIndexProductModel?> GetProductFromCart(int id, int quantity);
         void UpdateProductsInCart(CartUpdateModel updateModel, CartCookieModel cart);
     }
 }
