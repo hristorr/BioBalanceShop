@@ -1,9 +1,6 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Services;
-using BioBalanceShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace BioBalanceShop.Controllers
 {

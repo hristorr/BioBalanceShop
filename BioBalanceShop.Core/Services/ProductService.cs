@@ -135,29 +135,6 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity)
-        {
-            return await _repository
-               .AllReadOnly<Product>()
-               .Where(p => p.Id == id)
-               .Select(p => new CartIndexGetProductModel()
-               {
-                   ProductId = p.Id,
-                   Title = p.Title,
-                   ImageURL = p.ImageUrl,
-                   QuantityToOrder = quantity,
-                   QuantityInStock = p.Quantity,
-                   Price = p.Price,
-                   Currency = new CartIndexGetProductCurrencyModel()
-                   {
-                       Id = p.Shop.Currency.Id,
-                       CurrencySymbol = p.Shop.Currency.Symbol,
-                       CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
-                   }
-               })
-               .FirstOrDefaultAsync();
-        }
-
         public async Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync()
         {
             return await _repository

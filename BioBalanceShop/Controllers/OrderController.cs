@@ -1,13 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models.Order;
-using BioBalanceShop.Core.Models.Payment;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static BioBalanceShop.Core.Constants.RoleConstants;
 using System.Security.Claims;
 
 namespace BioBalanceShop.Controllers

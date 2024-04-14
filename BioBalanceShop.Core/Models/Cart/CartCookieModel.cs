@@ -1,4 +1,4 @@
-﻿namespace BioBalanceShop.Models
+﻿namespace BioBalanceShop.Core.Models.Cart
 {
     public class CartCookieModel
     {

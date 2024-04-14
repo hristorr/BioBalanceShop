@@ -2,7 +2,6 @@
 using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace BioBalanceShop.Controllers
 {
@@ -57,7 +56,6 @@ namespace BioBalanceShop.Controllers
                 ViewBag.AddedToCartMessage = addedToCartMessage;
             }
             
-
             return View(model);
         }
     }

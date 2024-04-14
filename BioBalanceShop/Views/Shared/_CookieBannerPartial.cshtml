@@ -1,12 +1,6 @@
-﻿@{
-    var cookieConsent = Context.Request.Cookies["CookieConsent"];
-
-    if (cookieConsent != "accepted" && cookieConsent != "rejected")
-    {
-        <div id="cookie-banner">
-            <p>This website uses cookies to ensure you get the best experience.</p>
-            <a href="@Url.Action("SetCookieConsent", "Cookie", new { consent = "accept" })">Accept</a>
-            <a href="@Url.Action("SetCookieConsent", "Cookie", new { consent = "reject" })">Reject</a>
-        </div>
-    }
-}
+﻿<div id="cookie-banner" style="z-index:100">
+    <p>This website uses cookies to ensure you get the best experience.</p>
+    
+    <a href="@Url.Action("SetCookieConsent", "CookieBanner", new { consent = "accepted" })">Accept</a>
+    <a href="@Url.Action("SetCookieConsent", "CookieBanner", new { consent = "rejected" })">Reject</a>
+</div>
