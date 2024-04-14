@@ -12,8 +12,6 @@ namespace BioBalanceShop.Core.Constants
 
         public const string LengthMessage = "The value {0} must be between {2} and {1} characters long";
 
-        //public const string AmountRangeMessage = "{0} must be a positive number and less than {2}";
-
         public const string RangeErrorMessage = "{0} must not be a negaitve number and must be less than {2}";
 
         public const string UserMessageSuccess = "UserMessageSuccess";

@@ -76,13 +76,6 @@ namespace BioBalanceShop.Core.Services
 
             int totalOrders = await ordersToShow.CountAsync();
 
-            var currency = await _shopService.GetShopCurrency();
-
-            foreach (var order in orders)
-            {
-                order.Currency = currency;
-            }
-
             return new OrderQueryServiceModel()
             {
                 Orders = orders,

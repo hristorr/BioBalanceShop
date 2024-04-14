@@ -60,6 +60,9 @@ namespace BioBalanceShop.Infrastructure.Constants
 
             public const string AmountMinValue = "0";
             public const string AmountMaxValue = "999999";
+
+            public const string ShipppingFeeMinValue = "0";
+            public const string ShipppingFeeMaxValue = "100";
         }
 
         public static class AddressData

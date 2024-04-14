@@ -7,68 +7,69 @@
 <h1>Checkout</h1>
 
 <div class="row">
-    <h2>Customer Information</h2>
+    
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post">
-            <div class="form-group">
-                <label asp-for="Customer.FirstName"></label>
-                <input asp-for="Customer.FirstName" class="form-control" placeholder="First name...">
-                <span asp-validation-for="Customer.FirstName" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.LastName"></label>
-                <input asp-for="Customer.LastName" class="form-control" placeholder="Last name...">
-                <span asp-validation-for="Customer.LastName" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.Email"></label>
-                <textarea asp-for="Customer.Email" rows="4" class="form-control" placeholder="Email..."></textarea>
-                <span asp-validation-for="Customer.Email" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.PhoneNumber"></label>
-                <input asp-for="Customer.PhoneNumber" class="form-control" placeholder="Phone number...">
-                <span asp-validation-for="Customer.PhoneNumber" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.Street"></label>
-                <input asp-for="Customer.Street" class="form-control" placeholder="Street...">
-                <span asp-validation-for="Customer.Street" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.PostCode"></label>
-                <input asp-for="Customer.PostCode" class="form-control" placeholder="Post code...">
-                <span asp-validation-for="Customer.PostCode" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.City"></label>
-                <input asp-for="Customer.City" class="form-control" placeholder="City...">
-                <span asp-validation-for="Customer.City" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.Country.Id">Country:</label>
-                <select asp-for="Customer.Country.Id" class="form-control">
-                    @if (String.IsNullOrEmpty(Model.Customer.Country.Name))
-                    {
-                        <option value="" selected></option>
-                    }
-                    @foreach (var country in Model.Customer.Countries)
-                    {
-                        if (@country.Name == Model.Customer.Country.Name)
+            <div>
+                <h2>Customer Information</h2>
+                <div class="form-group">
+                    <label asp-for="Customer.FirstName"></label>
+                    <input asp-for="Customer.FirstName" class="form-control" placeholder="First name...">
+                    <span asp-validation-for="Customer.FirstName" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.LastName"></label>
+                    <input asp-for="Customer.LastName" class="form-control" placeholder="Last name...">
+                    <span asp-validation-for="Customer.LastName" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.Email"></label>
+                    <textarea asp-for="Customer.Email" rows="4" class="form-control" placeholder="Email..."></textarea>
+                    <span asp-validation-for="Customer.Email" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.PhoneNumber"></label>
+                    <input asp-for="Customer.PhoneNumber" class="form-control" placeholder="Phone number...">
+                    <span asp-validation-for="Customer.PhoneNumber" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.Street"></label>
+                    <input asp-for="Customer.Street" class="form-control" placeholder="Street...">
+                    <span asp-validation-for="Customer.Street" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.PostCode"></label>
+                    <input asp-for="Customer.PostCode" class="form-control" placeholder="Post code...">
+                    <span asp-validation-for="Customer.PostCode" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.City"></label>
+                    <input asp-for="Customer.City" class="form-control" placeholder="City...">
+                    <span asp-validation-for="Customer.City" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Customer.Country.Id">Country:</label>
+                    <select asp-for="Customer.Country.Id" class="form-control">
+                        @if (String.IsNullOrEmpty(Model.Customer.Country.Name))
                         {
-                            <option value="@country.Id" selected>@country.Name</option>
+                            <option value="" selected></option>
                         }
-                        else
+                        @foreach (var country in Model.Customer.Countries)
                         {
-                            <option value="@country.Id">@country.Name</option>
+                            if (@country.Name == Model.Customer.Country.Name)
+                            {
+                                <option value="@country.Id" selected>@country.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@country.Id">@country.Name</option>
+                            }
                         }
-                    }
-                </select>
-                <span asp-validation-for="Customer.Country.Id" class="small text-danger"></span>
+                    </select>
+                    <span asp-validation-for="Customer.Country.Id" class="small text-danger"></span>
+                </div>
             </div>
-
-            
-
+            <br />
             <div>
                 <h2>Order Information</h2>
                 <div class="form-group">
@@ -76,7 +77,7 @@
                     <input type="hidden" asp-for="Order.Currency.CurrencyCode" class="form-control" value="@Model.Order.Currency.CurrencyCode">
                 </div>
                 <div class="form-group">
-                    <label asp-for="Order.OrderAmount">Order Amount (without shipping fee):</label>
+                    <label asp-for="Order.OrderAmount">Items Total Amount:</label>
                     <input type="hidden" asp-for="Order.OrderAmount" value="@Model.Order.OrderAmount" class="form-control" />
                     <p>
                         @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
@@ -92,31 +93,37 @@
                     <span asp-validation-for="Order.OrderAmount" class="small text-danger"></span>
                 </div>
 
-                 <div class="form-group">
+                <div class="form-group">
                     <label asp-for="Order.ShippingFee">Shipping Fee:</label>
-                    <input asp-for="Order.ShippingFee" value="@if (Model.Order.Currency.CurrencyIsSymbolPrefix)
-            {
-                @Model.Order.Currency.CurrencySymbol
-            }
-            @String.Format("{0:f2}", Model.Order.ShippingFee)
-            @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
-            {
-                @Model.Order.Currency.CurrencySymbol
-            }" class="form-control" disabled>
+                    <input type="hidden" asp-for="Order.ShippingFee" value="@Model.Order.ShippingFee" class="form-control" />
+                    <p>
+                        @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Order.Currency.CurrencySymbol
+                        }
+                        @String.Format("{0:f2}", Model.Order.ShippingFee)
+                        @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Order.Currency.CurrencySymbol
+                        }
+                    </p>
                     <span asp-validation-for="Order.ShippingFee" class="small text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Order.TotalOrderAmount">Total Order Amount (including shipping fee):</label>
-                    <input asp-for="Order.TotalOrderAmount" value="@if (Model.Order.Currency.CurrencyIsSymbolPrefix)
-            {
-                @Model.Order.Currency.CurrencySymbol
-            }
-            @String.Format("{0:f2}", Model.Order.TotalOrderAmount)
-            @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
-            {
-                @Model.Order.Currency.CurrencySymbol
-            }" class="form-control" disabled>
+                    <label asp-for="Order.TotalOrderAmount">Total Order Amount:</label>
+                    <input type="hidden" asp-for="Order.TotalOrderAmount" value="@Model.Order.TotalOrderAmount" class="form-control" />
+                    <p>
+                        @if (Model.Order.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Order.Currency.CurrencySymbol
+                        }
+                        @String.Format("{0:f2}", Model.Order.TotalOrderAmount)
+                        @if (!Model.Order.Currency.CurrencyIsSymbolPrefix)
+                        {
+                            @Model.Order.Currency.CurrencySymbol
+                        }
+                    </p>
                     <span asp-validation-for="Order.TotalOrderAmount" class="small text-danger"></span>
                 </div>
 

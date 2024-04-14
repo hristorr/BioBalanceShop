@@ -15,6 +15,7 @@ using BioBalanceShop.Infrastructure.Data.Enumerations;
 using Microsoft.AspNetCore.Identity;
 using BioBalanceShop.Infrastructure.Data.Models;
 using static BioBalanceShop.Core.Constants.CookieConstants;
+using BioBalanceShop.Core.Models._Base;
 
 namespace BioBalanceShop.Controllers
 {
@@ -82,12 +83,20 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Charge()
+        public async Task<IActionResult> Charge()
         {
             var publishableKey = _configuration["StripeSettings:PublishableKey"];
             ViewBag.PublishableKey = publishableKey;
 
             var model = GetOrderInfoFromCookie();
+            var currency = await _shopService.GetShopCurrency();
+            model.Order.Currency = new ShopCurrencyServiceModel()
+            {
+                Id = currency.Id,
+                CurrencyCode = currency.CurrencyCode,
+                CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                CurrencySymbol = currency.CurrencySymbol
+            };
 
             return View(model);
 
@@ -136,7 +145,7 @@ namespace BioBalanceShop.Controllers
             {
                 Amount = (long)(totalAmount * 100), // replace with the actual amount in cents
                 Currency = currencyCode.ToLower(),
-                Description = "Example Charge",
+                Description = "BioBalance Payment",
                 Source = stripeToken,
                 ReceiptEmail = stripeEmail,
             };
