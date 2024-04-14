@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Address;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.AddressData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

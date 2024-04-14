@@ -33,23 +33,9 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int CurrencyId { get; set; }
 
         /// <summary>
-        /// Tax rate applied to shop products
+        /// Shipping fee rate applied to order amount
         /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax rate applied to shop products")]
-        public decimal? TaxRate { get; set; }
-
-        /// <summary>
-        /// Discount rate applied to shop products
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount rate applied to shop products")]
-        public decimal? DiscountRate { get; set; }
-
-        /// <summary>
-        /// Shipping fee rate applied to products in cart
-        /// </summary>
-        [Comment("Shipping fee rate applied to products in cart")]
+        [Comment("Shipping fee rate applied to order amount")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal? ShippingFeeRate { get; set; }
 
@@ -63,10 +49,5 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Products
         /// </summary>
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
-
-        /// <summary>
-        /// Customers
-        /// </summary>
-        public IEnumerable<Customer> Customers { get; set; } = new List<Customer>();
     }
 }

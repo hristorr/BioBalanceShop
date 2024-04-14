@@ -22,6 +22,131 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasComment("Date when user was created");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)")
+                        .HasComment("User first name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasComment("Indicator if user exists");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)")
+                        .HasComment("User last name");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "05d8e453-cd16-421b-9808-3878601c4fef",
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 566, DateTimeKind.Local).AddTicks(8586),
+                            Email = "admin@mail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Admin",
+                            IsActive = true,
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MAIL.COM",
+                            NormalizedUserName = "ADMIN@MAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM35VlVavnrxhFb669c/WQWQpOlN0UEVeSfENsrgEibRsYBdG685P5SgfFC1a9cVoQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "4c3b676e-7cf2-43d8-9fba-b1a095653028",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@mail.com"
+                        },
+                        new
+                        {
+                            Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e09b0b53-d6ca-400a-8eab-5f5ab525d7da",
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 574, DateTimeKind.Local).AddTicks(7595),
+                            Email = "customer@mail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Ivan",
+                            IsActive = true,
+                            LastName = "Ivanov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CUSTOMER@MAIL.COM",
+                            NormalizedUserName = "CUSTOMER@MAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMNLbGy2zwkbsLBS28ecOJFar7al0Dc9YJsPgTAhRZZCce7n70b/DNUBBY7cFOX2bw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "baa2216b-2c2f-41e6-b0ff-497dcd223db6",
+                            TwoFactorEnabled = false,
+                            UserName = "customer@mail.com"
+                        });
+                });
+
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -226,23 +351,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Customer address identificator");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)")
-                        .HasComment("Customer first name");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
                         .HasComment("Indicator if customer exists");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)")
-                        .HasComment("Customer last name");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int")
-                        .HasComment("Shop identificator");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -253,8 +364,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("ShopId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Customers");
@@ -264,10 +373,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         {
                             Id = 1,
                             AddressId = 1,
-                            FirstName = "Ivan",
                             IsActive = true,
-                            LastName = "Ivanov",
-                            ShopId = 1,
                             UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586"
                         });
                 });
@@ -282,12 +388,11 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
                         .HasComment("Customer address city");
 
-                    b.Property<int>("CountryId")
+                    b.Property<int?>("CountryId")
                         .HasColumnType("int")
                         .HasComment("Customer address country identificator");
 
@@ -296,13 +401,11 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasComment("Indicator if customer address exists");
 
                     b.Property<string>("PostCode")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)")
                         .HasComment("Customer address post code");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasComment("Customer address street name");
@@ -334,25 +437,21 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("Order amount excluding shipping fee");
+
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int")
                         .HasComment("Order currency identificator");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int")
                         .HasComment("Customer identificator");
-
-                    b.Property<decimal?>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Discount amount on order level");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
                         .HasComment("Indicator if order exists");
-
-                    b.Property<decimal>("NetPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Order net price");
 
                     b.Property<int>("OrderAddressId")
                         .HasColumnType("int")
@@ -368,11 +467,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasComment("Order number");
 
+                    b.Property<int>("OrderRecipientId")
+                        .HasColumnType("int")
+                        .HasComment("Order recipient identificator");
+
                     b.Property<int>("PaymentId")
                         .HasColumnType("int")
                         .HasComment("Payment identificator");
 
-                    b.Property<decimal?>("ShippingFee")
+                    b.Property<decimal>("ShippingFee")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Order shipping fee");
 
@@ -380,17 +483,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Order status");
 
-                    b.Property<decimal?>("TaxAmount")
+                    b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax amount on order level");
-
-                    b.Property<decimal>("TaxableAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Taxable amount including discount and shipping fees");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Order total price with tax");
+                        .HasComment("Order total amount including shipping fee");
 
                     b.HasKey("Id");
 
@@ -400,6 +495,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OrderAddressId");
 
+                    b.HasIndex("OrderRecipientId");
+
                     b.HasIndex("PaymentId");
 
                     b.ToTable("Orders");
@@ -408,19 +505,18 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            Amount = 18.00m,
                             CurrencyId = 2,
                             CustomerId = 1,
                             IsActive = true,
-                            NetPrice = 15.00m,
                             OrderAddressId = 1,
-                            OrderDate = new DateTime(2024, 3, 24, 16, 12, 20, 95, DateTimeKind.Local).AddTicks(5355),
-                            OrderNumber = "PO1234567",
+                            OrderDate = new DateTime(2024, 4, 11, 20, 38, 59, 435, DateTimeKind.Local).AddTicks(4547),
+                            OrderNumber = "PO000000",
+                            OrderRecipientId = 1,
                             PaymentId = 1,
-                            ShippingFee = 0.00m,
+                            ShippingFee = 1.80m,
                             Status = 1,
-                            TaxAmount = 3.00m,
-                            TaxableAmount = 15.00m,
-                            TotalPrice = 18.00m
+                            TotalAmount = 19.80m
                         });
                 });
 
@@ -486,17 +582,15 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Order item price before discounts and taxes");
-
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int")
                         .HasComment("Order item currency identificator");
 
-                    b.Property<decimal?>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Discount amount on order item level");
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasComment("Order item image URL");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
@@ -506,29 +600,19 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Order item order identificator");
 
-                    b.Property<decimal>("PriceBeforeTax")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
-                        .HasComment("Order item net price including discount before taxes");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasComment("Order item product identificator");
+                        .HasComment("Order item price");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
                         .HasComment("Order item quantity");
 
-                    b.Property<decimal?>("TaxAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax amount on order item level");
-
-                    b.Property<decimal?>("TaxRate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax rate on order item level");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Order item price including discounts and taxes");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasComment("Order item name");
 
                     b.HasKey("Id");
 
@@ -536,38 +620,79 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("OrderItems");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            BasePrice = 10.00m,
                             CurrencyId = 2,
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN105_front.png",
                             IsActive = true,
                             OrderId = 1,
-                            PriceBeforeTax = 10.00m,
-                            ProductId = 1,
+                            Price = 12.00m,
                             Quantity = 1,
-                            TaxAmount = 2.00m,
-                            TaxRate = 20m,
-                            TotalPrice = 12.00m
+                            Title = "Green Nourish Complete"
                         },
                         new
                         {
                             Id = 2,
-                            BasePrice = 5.00m,
                             CurrencyId = 2,
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ACV-120_front.png",
                             IsActive = true,
                             OrderId = 1,
-                            PriceBeforeTax = 5.00m,
-                            ProductId = 4,
+                            Price = 6.00m,
                             Quantity = 1,
-                            TaxAmount = 1.00m,
-                            TaxRate = 20m,
-                            TotalPrice = 6.00m
+                            Title = "Apple Cider Vinegar Complex"
+                        });
+                });
+
+            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.OrderRecipient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Order recipient identificator");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("EmailAddress")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasComment("Order recipient phone number");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)")
+                        .HasComment("Order recipient first name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasComment("Indicator if order recipient exists");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)")
+                        .HasComment("Order recipient last name");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)")
+                        .HasComment("Order recipient phone number");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderRecipients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EmailAddress = "customer@mail.com",
+                            FirstName = "Ivan",
+                            IsActive = true,
+                            LastName = "Ivanov",
+                            PhoneNumber = "+359883123456"
                         });
                 });
 
@@ -601,7 +726,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         {
                             Id = 1,
                             PaymentAmount = 18.00m,
-                            PaymentDate = new DateTime(2024, 3, 24, 16, 12, 20, 150, DateTimeKind.Local).AddTicks(1745),
+                            PaymentDate = new DateTime(2024, 4, 11, 20, 38, 59, 517, DateTimeKind.Local).AddTicks(7236),
                             PaymentStatus = 1
                         });
                 });
@@ -614,10 +739,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasComment("Product identificator");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Product price before discounts and taxes");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int")
@@ -638,24 +759,11 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(3000)")
                         .HasComment("Product description");
 
-                    b.Property<decimal?>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Discount amount on product level");
-
-                    b.Property<decimal?>("DiscountRate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Discount rate on product level");
-
-                    b.Property<string>("ImageBackUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasComment("Product image back URL");
-
-                    b.Property<string>("ImageFrontUrl")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
-                        .HasComment("Product image front URL");
+                        .HasComment("Product image URL");
 
                     b.Property<string>("Ingredients")
                         .IsRequired()
@@ -667,9 +775,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasComment("Indicator if product exists");
 
-                    b.Property<decimal>("PriceBeforeTax")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
-                        .HasComment("Product net price including discount before taxes");
+                        .HasComment("Product price");
 
                     b.Property<string>("ProductCode")
                         .IsRequired()
@@ -681,10 +789,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Product quantity");
 
-                    b.Property<decimal?>("ShippingFee")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Product shipping fee");
-
                     b.Property<int>("ShopId")
                         .HasColumnType("int")
                         .HasComment("Shop identificator");
@@ -695,23 +799,11 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasComment("Product subtitle");
 
-                    b.Property<decimal?>("TaxAmount")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax amount on product level");
-
-                    b.Property<decimal?>("TaxRate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax rate on product level");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
                         .HasComment("Product name");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Product price including discounts and taxes");
 
                     b.HasKey("Id");
 
@@ -727,222 +819,172 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            BasePrice = 10.00m,
                             CategoryId = 1,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4762),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5730),
                             Description = "This high-fibre organic foods blend contains over 35 food ingredients (including green foods, vegetables, fruits, berries, herbs, mushrooms and seeds) PLUS bio-active enzymes in a single serving (see below). Organic vegan nutrition made easy, with naturally high food form vitamin C content (for immune system support), as well as plant protein.\r\n\r\nAll of the organic foods in this blend are Soil Association certified and the ingredients come in concentrated powder form. A great all-round supplement to support immunity, digestion (bulk) and optimal nutrition.\r\n\r\nAs well as providing phyto-nutrients (such as chlorophyll), per 100g it provides 9.1g of plant protein, 59g of carbohydrate (with just 12.5g sugars) and 17.1g of fibre (making it a high-fibre food).\r\n\r\nSuitable for vegetarians and vegans.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/ROUND%20POT%20-%20Greenourish%20v3%20%28SN105%29%20on%203pp%20-%2017-6-2023_SECURI650_%20sideleft.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ROUND%20POT%20-%20Greenourish%20v3%20%28SN105%29%20on%203pp%20-%2017-6-2023_SECURI650_%20front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN105_front.png",
                             Ingredients = "Product ingredients (dried, powdered): Pre-Sprouted Activated BARLEY, Lucuma Fruit, Linseed (Flaxseed), WHEAT GRASS, Quinoa, BARLEY Grass, Apple, Acai Berry, Baobab Fruit Pulp, Seagreens® Kelp (Ascophyllum Nodosum), Spirulina, Turmeric, Alfalfa, Carrot, Bilberry Fruit, Spinach Leaf, BARLEY Grass Juice, WHEAT GRASS Juice, Beet, Acerola Cherry Extract, Chlorella (Broken Cell Wall), Nettle, Tomato, Bilberry Extract, Blueberry, Cranberry, Green Cabbage, Kale, Parsley, Kale Sprout, Broccoli Sprout, Reishi Mushroom, Cordyceps Mushroom, Shiitake Mushroom, Cauliflower Sprout, Maitake Mushroom, Enzyme Blend* (protease*, amylase*, bromelain*, cellulase*, lactase*, papain*, lipase*). * = Non organic ingredient",
                             IsActive = true,
-                            PriceBeforeTax = 10.00m,
+                            Price = 12.00m,
                             ProductCode = "SN105",
                             Quantity = 100,
                             ShopId = 1,
                             Subtitle = "Certified organic GreeNourish Complete is no ordinary green shake.",
-                            TaxAmount = 2.00m,
-                            TaxRate = 20m,
-                            Title = "Green Nourish Complete",
-                            TotalPrice = 12.00m
+                            Title = "Green Nourish Complete"
                         },
                         new
                         {
                             Id = 2,
-                            BasePrice = 15.00m,
                             CategoryId = 1,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4799),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5738),
                             Description = "MaxNourish is a 100% organic (Soil Association and EU organic certified) food supplement, with over 35 nutritious fruits, vegetables, sprouts, seeds and herbals PLUS bio-active enzymes (see below).\r\n\r\nWith some of the most nutrient-dense foods that Nature has to offer, it is an all-round multi-nutrient blend in easy-to-take capsules - no poorly-absorbed synthetic vitamins and minerals.\r\n\r\nQuickly and easily access organic and vegan nutrition on a daily basis with just this one product.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/MaxNourish%20v3%20%28MSFO%29%20-%20FP%203pp%20DEFAULT_FP200ML_back.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/MaxNourish%20v3%20%28MSFO%29%20-%20FP%203pp%20DEFAULT_FP200ML_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/MSFO_front.png",
                             Ingredients = "Product ingredients (dried, powdered): Capsule Shell: Hydroxypropyl Methylcellulose (HPMC)*, Pre-Sprouted Activated BARLEY Powder (Hordeum vulgare), Lucuma Fruit Powder (Pouteria lucuma), Linseed (Flaxseed) Powder (Linum usitatissimum), WHEAT GRASS Powder (Triticum aestivum), Quinoa Powder (Chenopodium quinoa), BARLEY Grass Powder (Hordeum vulgare), Acai Berry Powder (Euterpe oleracea), Baobab Pulp Powder (Adansonia digitata), Seagreens® Kelp Powder (Ascophyllum Nodosum), Spirulina Powder (Arthrospira platensis), Turmeric Powder (Curcuma longa), Apple Powder (Malus Sylvestris), Alfalfa Powder (Medicago sativa), Carrot Powder (Daucus carota), Bilberry Fruit Powder (Vaccinium myrtillus), Spinach Leaf Powder (Spinacia oleracea), BARLEY Grass Juice Powder (Hordeum vulgare), WHEAT GRASS Juice Powder (Triticum aestivum), Beetroot Powder (Beta vulgaris), Acerola Cherry Extract (Malphigia glabra), Chlorella vulgaris (Broken Cell Wall) Powder, Nettle Leaf Powder (Urtica dioica), Tomato Powder (Lycopersicum esculentum), Bilberry Extract (Vaccinium myrtillus), Blueberry Powder (Vaccinium sp.), Cranberry Powder (Vaccinium macrocarpon), Green Cabbage Powder (Brassica oleracea), Kale Powder (Brassica oleracea acephala), Parsley Powder (Carum petroselinum), Kale Sprout Powder (Brassica oleracea acephala), Broccoli Sprout Powder (Brassica oleracea italica), Reishi Mushroom Powder (Ganoderma Lucidum), Cordyceps Mushroom Powder (Cordyceps militaris), Shiitake Mushroom Powder (Lentinula edodes), Cauliflower Sprout Powder (Brassica oleracea botrytis), Maitake Mushroom Powder (Grifola frondosa), Enzyme Blend* (protease*, amylase*, bromelain*, cellulase*, lactase*, papain*, lipase*) * = Non organic ingredient.",
                             IsActive = true,
-                            PriceBeforeTax = 15.00m,
+                            Price = 18.00m,
                             ProductCode = "MSFO",
                             Quantity = 150,
                             ShopId = 1,
                             Subtitle = "Organic fruit, vegetable and herbal blend (in capsules)",
-                            TaxAmount = 3.00m,
-                            TaxRate = 20m,
-                            Title = "MaxNourish",
-                            TotalPrice = 18.00m
+                            Title = "MaxNourish"
                         },
                         new
                         {
                             Id = 3,
-                            BasePrice = 8.00m,
                             CategoryId = 2,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4933),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5741),
                             Description = "Acai Immuno Defence is a high-potency formulation, which combines Brazilian acai berry with a range of other beneficial ingredients, including vitamins, minerals and herbs (such as zinc, vitamin B6, biotin, organic Moringa oleifera, beetroot, resveratrol and more - see below). \r\n\r\nThis superfood combination provides support for immunity, energy, bones, hair, skin, nails and more. It also contains polyphenolic anthocyanin compounds, as well as vitamins, minerals and ellagic acid.\r\n\r\nPopular with slimmers, athletes, diabetics and those looking to support their immunity, general health and well-being.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/Acai%20Immuno%20Defence%20v2%20%28SN099B%29%20-%20FP%203pp%20DEFAULT_FP200ML_back.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/Acai%20Immuno%20Defence%20v2%20%28SN099B%29%20-%20FP%203pp%20DEFAULT_FP200ML_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN099B_front.png",
                             Ingredients = "Product ingredients: Stoneground Brown Rice Flour (Oryza Sativa), Organic Moringa Oleifera Powder, Capsule Shell: Hydroxypropyl Methylcellulose (HPMC), Beetroot (Beta vulgaris) Extract, Acai Berry (Euterpe Oleracea Martius) Extract, Rice Extract (Oryza Sativa), Pomegranate Seed (Punica Granatum) Extract, Resveratrol from Japanese Knotweed (Polygonum Cuspidatum) Extract, Zinc (Zinc Citrate), Vitamin B6 (Pyridoxine Hydrochloride), Grape Seed (Vitis Vinifera) Extract, Vitamin B7 (as Biotin Pure).",
                             IsActive = true,
-                            PriceBeforeTax = 8.00m,
+                            Price = 9.60m,
                             ProductCode = "SN099B",
                             Quantity = 220,
                             ShopId = 1,
                             Subtitle = "Acai berry immunity complex",
-                            TaxAmount = 1.60m,
-                            TaxRate = 20m,
-                            Title = "Acai Immuno Defence",
-                            TotalPrice = 9.60m
+                            Title = "Acai Immuno Defence"
                         },
                         new
                         {
                             Id = 4,
-                            BasePrice = 5.00m,
                             CategoryId = 2,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4940),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5745),
                             Description = "Apple Cider Vinegar Complex is a herbal weight management and digestive health combination.\r\n\r\nThis food supplement has been formulated with a specialist blend of synergistic herbs and nutrients.\r\n\r\nEach capsule combines 400mg of apple cider vinegar powder with cayenne, ginger root, turmeric, green tea leaf, organic black pepper and chromium.\r\n\r\nChromium is scientifically proven to contribute to normal macronutrient metabolism and to the maintenance of normal blood glucose levels.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/Apple%20Cider%20Vinegar%20v1%20%28ACV-120%29%20-%20FP%203pp%20DEFAULT_FP200ML_back.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/Apple%20Cider%20Vinegar%20v1%20%28ACV-120%29%20-%20FP%203pp%20DEFAULT_FP200ML_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ACV-120_front.png",
                             Ingredients = "Product ingredients: Apple Cider Vinegar Powder (Malus Sylvestris), Stoneground Brown Rice Flour (Oryza Sativa), Capsule Shell: Hydroxypropyl Methylcellulose (HPMC), Rice Concentrate (Oryza Sativa), Rice Extract (Oryza Sativa), Cayenne Pepper Extract (Capsicum Annuum), Ginger Root Extract (Zingiber Officinale), Black Pepper Powder (Piper Nigrum), Turmeric Root Extract (Curcuma Longa), Green Tea Leaf Extract (Camellia Sinensis), Chromium Picolinate.",
                             IsActive = true,
-                            PriceBeforeTax = 5.00m,
+                            Price = 6.00m,
                             ProductCode = "ACV-120",
                             Quantity = 180,
                             ShopId = 1,
                             Subtitle = "Apple cider vinegar powder plus herbs",
-                            TaxAmount = 1.00m,
-                            TaxRate = 20m,
-                            Title = "Apple Cider Vinegar Complex",
-                            TotalPrice = 6.00m
+                            Title = "Apple Cider Vinegar Complex"
                         },
                         new
                         {
                             Id = 5,
-                            BasePrice = 18.00m,
                             CategoryId = 3,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4945),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5749),
                             Description = "A premium quality chocolate-flavoured whey protein powder, derived from a blend of concentrate and isolate.\r\n\r\nProviding 22g of protein and just 1.6g of fat per 30g serving, this formula contains only the highest grade hormone-free milk, sourced from EU and British cows - no GMOs, artificial colours, flavours, sweeteners or added sugar (stevia is used).\r\n\r\nAs well as providing an excellent nutritional (and amino acid) profile, we have ensured that using WheyNourish is a tasty, hassle-free experience. It can be used before or after exercise, or at any time of day as a protein-rich, muscle building and appetite curbing snack.",
-                            ImageBackUrl = "",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/%28WPP600C%29_PONT1500_%20front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/WPP600C_front.png",
                             Ingredients = "Product ingredients: Whey Protein Concentrate (MILK); Whey Protein Isolate (MILK, SOY lecithin); Cocoa (Theobroma cacao) Powder; Flavouring; Stabiliser (Xanthan Gum); Sweetener: Stevia Leaf Extract (Steviol glycosides).",
                             IsActive = true,
-                            PriceBeforeTax = 18.00m,
+                            Price = 21.60m,
                             ProductCode = "WPP600C",
                             Quantity = 300,
                             ShopId = 1,
                             Subtitle = "From whey concentrate and isolate",
-                            TaxAmount = 3.60m,
-                            TaxRate = 20m,
-                            Title = "WheyNourish (Chocolate Flavour)",
-                            TotalPrice = 21.60m
+                            Title = "WheyNourish (Chocolate Flavour)"
                         },
                         new
                         {
                             Id = 6,
-                            BasePrice = 17.50m,
                             CategoryId = 3,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4952),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5753),
                             Description = "PeaNourish is a high quality pea protein powder (from snap peas), blended with a range of other foods and herbs for added nutritional value - chicory root, green tea leaf, dandelion root, spirulina and acai berry (see below).\r\n\r\nThis green protein shake mix contains a concentrated level of pea protein, from the 6% found in fresh peas up to around 80%, and is therefore high in protein (over 18g per serving). It is also low in carbohydrates, high in fibre, easily digestible (no bloating), hypo-allergenic and suitable for vegetarians and vegans.\r\n\r\nPea protein is a natural vegetable-source protein, which offers an excellent amino acid profile. It is also valued for its high digestibility (90-95%), low potential for allergic responses and reasonable price. It is particularly popular because it has a sweet taste and a texture which mixes well in liquid solutions.\r\n\r\nUnlike many other pea protein powders on the market, PeaNourish contains no hexane, toxic chemicals or added 'nasties', which are often used during the pea protein extraction process. Our pea protein is extracted using only water, pressure and then flocculation.",
-                            ImageBackUrl = "",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/%28PP500%29_PONT1500_%20front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/PP500_front.png",
                             Ingredients = "Product ingredients: Pea Protein (Pisum sativum) Isolate, Fibre (Chicory Root (Cichorium intybus) Extract), Green Tea Leaf (Camellia Sinensis) Extract, Dandelion Root (Taraxacum officinale) Powder, Spirulina Powder (Arthrospira platensis), Acai Berry (Euterpe Oleracae Martius) Extract, Stabiliser (Xanthan Gum), Sweetener: Stevia Leaf Extract (Steviol glycosides).",
                             IsActive = true,
-                            PriceBeforeTax = 17.50m,
+                            Price = 21.00m,
                             ProductCode = "PP500",
                             Quantity = 98,
                             ShopId = 1,
                             Subtitle = "High quality protein PLUS phytonutrients",
-                            TaxAmount = 3.50m,
-                            TaxRate = 20m,
-                            Title = "PeaNourish",
-                            TotalPrice = 21.00m
+                            Title = "PeaNourish"
                         },
                         new
                         {
                             Id = 7,
-                            BasePrice = 12.50m,
                             CategoryId = 4,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4957),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5758),
                             Description = "ProBio MAX is a vegan, multi-strain combination of 8 live cultures, providing 20 billion viable organisms per capsule (see below).\r\n\r\nWith no added dairy, sugars, artificial flavourings or colourings, this food supplement provides an alternative to sugary yoghurts and yoghurt drinks containing live cultures. In fact, it provides the equivalent of 40 tubs of probiotic yoghurt, but without the dairy, sugar, fat and calories.\r\n\r\nMicro-encapsulated for acid resistance, this live bacteria biotic has been specifically formulated for natural health practitioners who treat digestive and intestinal disorders. It is ideal for use following antibiotics, travelling abroad and colonic hydrotherapy treatment.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/ProBio%20MAX%20v1%20%28PBMAX30%29%20-%20FP%203pp%20DEFAULT_FP200ML_back.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ProBio%20MAX%20v2%20%28PBMAX30%29%20-%20FP%203pp%20DEFAULT_FP200ML_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/PBMAX30_front.png",
                             Ingredients = "Product ingredients: Capsule Shell: Hydroxypropyl Methylcellulose (HMPC); Brown Rice Flour (Oryza Sativa); Bio-Live Bacteria Blend: Lactobacillus rhamnosus, Lactobacillus casei, Lactobacillus acidophillus, Bifidobacterium infantis, Streptococcus thermophilus, Bifdobacterium breve, Bifidobacterium longum, Lactobacillus bulgaricus; Rice Extract (Oryza Sativa).",
                             IsActive = true,
-                            PriceBeforeTax = 12.50m,
+                            Price = 15.00m,
                             ProductCode = "PBMAX30",
                             Quantity = 54,
                             ShopId = 1,
                             Subtitle = "A practitioner-strength, multi-strain live culture combination",
-                            TaxAmount = 2.50m,
-                            TaxRate = 20m,
-                            Title = "ProBio MAX",
-                            TotalPrice = 15.00m
+                            Title = "ProBio MAX"
                         },
                         new
                         {
                             Id = 8,
-                            BasePrice = 7.00m,
                             CategoryId = 4,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4963),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5762),
                             Description = "NaturaC is a combination food state vitamin C supplement, derived from some of nature’s richest sources of this important vitamin: Acerola cherry, rosehip, blackcurrant, parsley leaf and elderberry.\r\n\r\nThe natural food ingredients included in this supplement are more easily recognised by the body, facilitating absorption and utilisation - no artificial vitamin C (ascorbic acid). As such, the vitamin C is retained for longer; not rapidly eliminated.\r\n\r\nThis food supplement offers ideal support for: the immune system, collagen formation, blood vessels, bones, cartilage, gums, skin, teeth, energy-yielding metabolism, the nervous system, the protection of cells from oxidative stress, the reduction of tiredness and fatigue, the regeneration of the reduced form of vitamin E and iron absorption.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/NaturaC%20v1%20%28SS360%29%20-%20FP%203pp%20DEFAULT_FP200ML_back.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/NaturaC%20v1%20%28SS360%29%20-%20FP%203pp%20DEFAULT_FP200ML_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SS360_front.png",
                             Ingredients = "Product ingredients: Acerola Cherry Extract ((Malphigia glabra) (25% Vitamin C)), Capsule Shell: Hydroxypropyl Methylcellulose (HPMC), Anti-caking Agent: Microcrystalline Cellulose, Parsley Leaf Powder (Petroselinum sativum), Blackcurrant Extract (Ribes Nigrum L.), Rice Extract (Oryza Sativa), Elderberry Extract (Sambucus Nigra L.), Rosehip Extract (Rosa Canina).",
                             IsActive = true,
-                            PriceBeforeTax = 7.00m,
+                            Price = 8.40m,
                             ProductCode = "SS360",
                             Quantity = 112,
                             ShopId = 1,
                             Subtitle = "Food form vitamin C",
-                            TaxAmount = 1.40m,
-                            TaxRate = 20m,
-                            Title = "NaturaC",
-                            TotalPrice = 8.40m
+                            Title = "NaturaC"
                         },
                         new
                         {
                             Id = 9,
-                            BasePrice = 8.50m,
                             CategoryId = 5,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4969),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5766),
                             Description = "MEALtime (Vanilla Flavour) is a dairy-free, gluten-free and vegan meal shake and protein powder (non-GM soya protein isolate) that has been fortified with vitamins and minerals.\r\n\r\nHigh in protein (over 72g per 100g), low in fat (0.0g saturated fat per 100g) and with no artificial sweeteners, this vanilla flavoured daily shake is also high in dietary fibre from chicory root extract.\r\n\r\nTasty and filling, MEALtime (Vanilla Flavour) makes for the ideal in-between meals shake. It can even be used as a tasty, guilt-free dessert - only 87 calories per serving!",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/ROUND%20POT%20-%20MEALtime%20vanilla%20v5%20%28SN049%29%20-%203pp%20Default%2018-6-2023_DUMA1000_sideleft.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ROUND%20POT%20-%20MEALtime%20vanilla%20v5%20%28SN049%29%20-%203pp%20Default%2018-6-2023_DUMA1000_front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN049_front.png",
                             Ingredients = "Product ingredients: SOY (Glycina Maxima) Protein Isolate (SOY); Fibre (Chicory Root (Cichorium intybus) Extract); Natural Flavour; Maltodextrin; Vitamin and Mineral Blend: ((Potassium Chloride, Magnesium Citrate, Vitamin C (Ascorbic Acid), Ferrous Citrate, Zinc Citrate, Copper Citrate, Vitamin E (DL-Alpha-Tocopheryl Acetate), Vitamin B3 (Niacin), Vitamin A (Acetate), Vitamin B12 (Cyanocobalamin), Vitamin B2 (Riboflavin), Vitamin B6 (Pyridoxine Hydrochloride), Vitamin B1 (Thiamine), Folic Acid (Folacin), Potassium Iodide)); Sweetener: Stevia Leaf Extract (Steviol glycosides).",
                             IsActive = true,
-                            PriceBeforeTax = 8.50m,
+                            Price = 10.20m,
                             ProductCode = "SN049",
                             Quantity = 88,
                             ShopId = 1,
                             Subtitle = "Dairy and gluten-free meal shake",
-                            TaxAmount = 1.70m,
-                            TaxRate = 20m,
-                            Title = "MEALtime (Vanilla Flavour)",
-                            TotalPrice = 10.20m
+                            Title = "MEALtime (Vanilla Flavour)"
                         },
                         new
                         {
                             Id = 10,
-                            BasePrice = 7.50m,
                             CategoryId = 5,
                             CreatedById = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            CreatedDate = new DateTime(2024, 3, 24, 16, 12, 20, 171, DateTimeKind.Local).AddTicks(4974),
+                            CreatedDate = new DateTime(2024, 4, 11, 20, 38, 59, 534, DateTimeKind.Local).AddTicks(5828),
                             Description = "Fibre & Full is an all-in-one dietary fibre based bowel support and weight loss supplement in a tasty, easy-to-take powder form.\r\n\r\nWith a special combination of psyllium husks, sugar beet fibre, glucommanan, L-Glutamine, prebiotics, bacterial cultures, herbs and stevia leaf extract (see more below), the variety of nutrients and high fibre content of this shake make it ideal for long-term use, as well as part of a cleanse and detox programme or weight management programme.\r\n\r\nSpecifically formulated to contribute to healthy weight loss in the context of an energy-restricted diet, normal blood cholesterol levels, as well as a healthy, varied and balanced diet. Sugar beet fibre, in particular, contributes to an increase in faecal bulk and may have a beneficial physiological effect for people who want to improve or maintain a normal bowel function.",
-                            ImageBackUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/additional/ROUND%20POT%20-%20Fibre%20%26%20Full%20v4%20%28SN040%29%20on%203pp%20Default_SECURI650_%20sideleft.png",
-                            ImageFrontUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/ROUND%20POT%20-%20Fibre%20%26%20Full%20v4%20%28SN040%29%20on%203pp%20Default_SECURI650_%20front.png",
+                            ImageUrl = "https://www.dropshipwebhosting.co.uk/image/data/product/main/SN040_front.png",
                             Ingredients = "Product ingredients: Psyllium Whole Husks Powder (Plantago ovata); Glucomannan Powder (Amorphophallus Konjac); Sugar Beet Fibre Powder (Beta Vulgaris); L-Glutamine Powder; Inulin Powder (Fructo-oligosaccharides); Fennel Seed Powder (Foeniculum Vulgare); Peppermint Leaf Powder (Mentha Piperita); Ginger Root Powder (Zingiber officinale); Bacteria Blend: Lactobacillus Acidophilus, Bifidobacterium Bifidum; Sweetener: Stevia Leaf Extract (Steviol glycosides).",
                             IsActive = true,
-                            PriceBeforeTax = 7.50m,
+                            Price = 9.00m,
                             ProductCode = "SN040",
                             Quantity = 133,
                             ShopId = 1,
                             Subtitle = "High dietary fibre, bulk and weight loss blend",
-                            TaxAmount = 1.50m,
-                            TaxRate = 20m,
-                            Title = "Fibre & Full",
-                            TotalPrice = 9.00m
+                            Title = "Fibre & Full"
                         });
                 });
 
@@ -959,21 +1001,13 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Shop currency identificator");
 
-                    b.Property<decimal?>("DiscountRate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Discount rate applied to shop products");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
                         .HasComment("Indicator if shop exists");
 
                     b.Property<decimal?>("ShippingFeeRate")
                         .HasColumnType("decimal(18,2)")
-                        .HasComment("Shipping fee rate applied to products in cart");
-
-                    b.Property<decimal?>("TaxRate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Tax rate applied to shop products");
+                        .HasComment("Shipping fee rate applied to order amount");
 
                     b.HasKey("Id");
 
@@ -1015,22 +1049,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "03f649d4-5366-4680-97d0-a90777f42356",
-                            ConcurrencyStamp = "402bc40c-6b7b-48f3-a1f7-d057a1ac8e16",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53",
-                            ConcurrencyStamp = "5b05df46-6866-43a1-87e8-c7f5fa363d5f",
-                            Name = "customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1058,105 +1076,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "af2a0655-5954-4412-9396-8b301ba7c8a7",
-                            Email = "admin@mail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@MAIL.COM",
-                            NormalizedUserName = "ADMIN@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDA+9BkuOICjOMmoHVjNCVFDuXRJ81XD3/N4DP85Ny9zL9NLtoeWM0aCaNzTZc8cgg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "be6ad4fa-f340-4bdc-9346-1949f50681dc",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@mail.com"
-                        },
-                        new
-                        {
-                            Id = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "531f2732-80cc-4650-b91c-e8a39bd35adb",
-                            Email = "customer@mail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CUSTOMER@MAIL.COM",
-                            NormalizedUserName = "CUSTOMER@MAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKDR94vsINgK1EI/KAdVS1gb9HDIfw3dwFktY+Awde7s9KwEA01MYvAyZ/PKzGGmEg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "cfbb5fd7-108e-4d7f-9d59-9ea375391042",
-                            TwoFactorEnabled = false,
-                            UserName = "customer@mail.com"
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -1180,6 +1099,22 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "user:fullname",
+                            ClaimValue = "Admin User",
+                            UserId = "02c32793-47c7-4f3b-9487-d91c2a0e4345"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "user:fullname",
+                            ClaimValue = "Ivan Ivanov",
+                            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -1219,18 +1154,6 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "02c32793-47c7-4f3b-9487-d91c2a0e4345",
-                            RoleId = "03f649d4-5366-4680-97d0-a90777f42356"
-                        },
-                        new
-                        {
-                            UserId = "c4f1530f-2727-4bc8-9de3-075fc7420586",
-                            RoleId = "ca7cd2a7-6e5f-4e74-9df1-3b6b5fb25r53"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -1260,21 +1183,13 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Shop", "Shop")
-                        .WithMany("Customers")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
-
-                    b.Navigation("Shop");
 
                     b.Navigation("User");
                 });
@@ -1284,8 +1199,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Country", "Country")
                         .WithMany("CustomerAddresses")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Country");
                 });
@@ -1301,12 +1215,17 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BioBalanceShop.Infrastructure.Data.Models.OrderAddress", "OrderAddress")
                         .WithMany()
                         .HasForeignKey("OrderAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.OrderRecipient", "OrderRecipient")
+                        .WithMany()
+                        .HasForeignKey("OrderRecipientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1321,6 +1240,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("OrderAddress");
+
+                    b.Navigation("OrderRecipient");
 
                     b.Navigation("Payment");
                 });
@@ -1350,17 +1271,9 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Currency");
 
                     b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
@@ -1371,7 +1284,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "CreatedBy")
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1412,7 +1325,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1421,7 +1334,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1436,7 +1349,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1445,7 +1358,7 @@ namespace BioBalanceShop.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BioBalanceShop.Infrastructure.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1481,15 +1394,8 @@ namespace BioBalanceShop.Infrastructure.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Product", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
             modelBuilder.Entity("BioBalanceShop.Infrastructure.Data.Models.Shop", b =>
                 {
-                    b.Navigation("Customers");
-
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Product;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -66,19 +66,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public string Ingredients { get; set; } = string.Empty;
 
         /// <summary>
-        /// Product image front URL
+        /// Product image URL
         /// </summary>
         [Required]
         [MaxLength(ImageUrlMaxLength)]
-        [Comment("Product image front URL")]
-        public string ImageFrontUrl { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Product image back URL
-        /// </summary>
-        [MaxLength(ImageUrlMaxLength)]
-        [Comment("Product image back URL")]
-        public string? ImageBackUrl { get; set; } = string.Empty;
+        [Comment("Product image URL")]
+        public string ImageUrl { get; set; } = string.Empty;
 
         /// <summary>
         /// Product quantity
@@ -88,63 +81,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Product price before discounts and taxes
+        /// Product price
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Product price before discounts and taxes")]
-        public decimal BasePrice { get; set; }
-
-        /// <summary>
-        /// Discount rate on product level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount rate on product level")]
-        public decimal? DiscountRate { get; set; }
-
-        /// <summary>
-        /// Discount amount on product level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount amount on product level")]
-        public decimal? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// Product shipping fee
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Product shipping fee")]
-        public decimal? ShippingFee { get; set; }
-
-        /// <summary>
-        /// Product net price including discount before taxes
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Product net price including discount before taxes")]
-        public decimal PriceBeforeTax { get; set; }
-
-        /// <summary>
-        /// Tax rate on product level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax rate on product level")]
-        public decimal? TaxRate { get; set; }
-
-        /// <summary>
-        /// Tax amount on product level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax amount on product level")]
-        public decimal? TaxAmount { get; set; }
-
-        /// <summary>
-        /// Product price including discounts and taxes
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Product price including discounts and taxes")]
-        public decimal TotalPrice { get; set; }
+        [Comment("Product price")]
+        public decimal Price { get; set; }
 
         /// <summary>
         /// Product category identificator
@@ -184,17 +126,12 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Product creator
         /// </summary>
         [ForeignKey(nameof(CreatedById))]
-        public IdentityUser CreatedBy { get; set; } = null!;
+        public ApplicationUser CreatedBy { get; set; } = null!;
 
         /// <summary>
         /// Shop
         /// </summary>
         [ForeignKey(nameof(ShopId))]
         public Shop Shop { get; set; } = null!;
-
-        /// <summary>
-        /// Order items
-        /// </summary>
-        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

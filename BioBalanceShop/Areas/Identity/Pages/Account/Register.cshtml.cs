@@ -21,28 +21,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using static BioBalanceShop.Core.Constants.RoleConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
+using BioBalanceShop.Core.Contracts;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly BioBalanceDbContext _context;
+        private readonly ICustomerService _customerService;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            BioBalanceDbContext context)
+            BioBalanceDbContext context,
+            ICustomerService customerService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -52,6 +58,7 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _customerService = customerService;
         }
 
         /// <summary>
@@ -106,6 +113,16 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+            public string LastName { get; set; }
         }
 
 
@@ -123,6 +140,9 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.CreatedDate = DateTime.Now;
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var resultCreateUser = await _userManager.CreateAsync(user, Input.Password);
@@ -130,27 +150,22 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
 
                 if (resultCreateUser.Succeeded)
                 {
-                    var roleName = "customer";
-                    var roleExists = await _roleManager.RoleExistsAsync(roleName);
+                    var roleExists = await _roleManager.RoleExistsAsync(CustomerRole);
 
                     if (roleExists)
                     {
-                        resultAddToRole = await _userManager.AddToRoleAsync(user, roleName);
+                        resultAddToRole = await _userManager.AddToRoleAsync(user, CustomerRole);
 
-                        await _userManager.AddToRoleAsync(user, roleName);
+                        await _userManager.AddToRoleAsync(user, CustomerRole);
                         if (resultAddToRole.Succeeded)
                         {
                             _logger.LogInformation("User created a new account with password.");
+
+                            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{user.FirstName} {user.LastName}"));
+
                             var userId = await _userManager.GetUserIdAsync(user);
 
-                            var customer = new Customer()
-                            {
-                                UserId = userId,
-                                ShopId = 1
-                            };
-
-                            await _context.AddAsync(customer);
-                            await _context.SaveChangesAsync();
+                            await _customerService.CreateCustomerAsync(userId);
 
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -191,27 +206,27 @@ namespace BioBalanceShop.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Currency;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.CurrencyData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {

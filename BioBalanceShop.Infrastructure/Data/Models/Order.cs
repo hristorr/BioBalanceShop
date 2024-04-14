@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.Order;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
 {
@@ -34,7 +34,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [MaxLength(OrderNumberMaxLength)]
         [Comment("Order number")]
         public string OrderNumber { get; set; } = string.Empty;
-
+             
         /// <summary>
         /// Order date
         /// </summary>
@@ -51,49 +51,28 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public OrderStatus Status { get; set; }
 
         /// <summary>
-        /// Order net price
+        /// Order amount excluding shipping fee
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order net price")]
-        public decimal NetPrice { get; set; }
+        [Comment("Order amount excluding shipping fee")]
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// Order shipping fee
         /// </summary>
+        [Required]
         [Column(TypeName = "decimal(18, 2)")]
         [Comment("Order shipping fee")]
-        public decimal? ShippingFee { get; set; }
+        public decimal ShippingFee { get; set; }
 
         /// <summary>
-        /// Discount amount on order level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Discount amount on order level")]
-        public decimal? DiscountAmount { get; set; }
-
-        /// <summary>
-        /// Taxable amount including discount and shipping fees
+        /// Order total amount including shipping fee
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Taxable amount including discount and shipping fees")]
-        public decimal TaxableAmount { get; set; }
-
-        /// <summary>
-        /// Tax amount on order level
-        /// </summary>
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Tax amount on order level")]
-        public decimal? TaxAmount { get; set; }
-
-        /// <summary>
-        /// Order total price with tax
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        [Comment("Order total price with tax")]
-        public decimal TotalPrice { get; set; }
+        [Comment("Order total amount including shipping fee")]
+        public decimal TotalAmount { get; set; }
 
         /// <summary>
         /// Order currency identificator
@@ -105,9 +84,8 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// <summary>
         /// Customer identificator
         /// </summary>
-        [Required]
         [Comment("Customer identificator")]
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         /// <summary>
         /// Order address identificator
@@ -124,6 +102,13 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public int PaymentId { get; set; }
 
         /// <summary>
+        /// Order recipient identificator
+        /// </summary>
+        [Required]
+        [Comment("Order recipient identificator")]
+        public int OrderRecipientId { get; set; }
+
+        /// <summary>
         /// Order currency
         /// </summary>
         [ForeignKey(nameof(CurrencyId))]
@@ -133,7 +118,7 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         /// Customer
         /// </summary>
         [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; } = null!;
+        public Customer? Customer { get; set; } = null!;
 
         /// <summary>
         /// Order address
@@ -148,8 +133,14 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         public Payment Payment { get; set; } = null!;
 
         /// <summary>
+        /// Order recipient
+        /// </summary>
+        [ForeignKey(nameof(OrderRecipientId))]
+        public OrderRecipient OrderRecipient { get; set; } = null!;
+
+        /// <summary>
         /// Order items
         /// </summary>
-        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public IList<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
