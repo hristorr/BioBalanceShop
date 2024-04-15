@@ -22,6 +22,12 @@ namespace BioBalanceShop.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _productService.GetLastFiveProductsAsync();
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
             return View(model);
         }
 

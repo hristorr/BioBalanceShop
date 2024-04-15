@@ -40,14 +40,14 @@ namespace BioBalanceShop.Core.Services
 
         public async Task<CheckoutCustomerFormModel> GetCustomerInfoAsync(string userId)
         {
-            var customer = await _repository.AllReadOnly<Customer>()
-                .Where(c => c.UserId == userId)
+            var customer = await _repository.AllReadOnly<ApplicationUser>()
+                .Where(c => c.Id == userId)
                 .Select(c => new CheckoutCustomerFormModel()
                 {
-                    FirstName = c.User.FirstName,
-                    LastName = c.User.LastName,
-                    Email = c.User.Email,
-                    PhoneNumber = c.User.PhoneNumber,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Email = c.Email,
+                    PhoneNumber = c.PhoneNumber,
                     Country = new ShopCountryServiceModel()
                 })
                 .FirstAsync();

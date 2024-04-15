@@ -37,14 +37,7 @@
         </div>
     </footer>
 
-    @{
-        var cookieConsent = Context.Request.Cookies[ConsentCookie];
-
-        if (cookieConsent != "accepted" && cookieConsent != "rejected")
-        {
-            <partial name="_CookieBannerPartial" />
-        }
-    }
+    <partial name="_CookieBannerPartial" />
    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

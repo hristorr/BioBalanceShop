@@ -1,5 +1,6 @@
 ﻿using BioBalanceShop.Attributes;
 using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,40 +32,58 @@ namespace BioBalanceShop.Controllers
         [RequiresCookieConsent]
         public IActionResult AddToCart(int productId, int quantity)
         {
-            CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-
-            cart.AddProduct(productId, quantity);
-            _cookieService.SetCartCookie(Response.Cookies, cart);
-
-            if (quantity == 1)
+            try
             {
-                TempData["AddedToCartMessage"] = $"{quantity} product successfully added to cart";
-            }
-            else
-            {
-                TempData["AddedToCartMessage"] = $"{quantity} products successfully added to cart";
-            }
+                CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
-            return RedirectToAction("Details", "Product", new { id = productId });
+                cart.AddProduct(productId, quantity);
+                _cookieService.SetCartCookie(Response.Cookies, cart);
+
+                if (quantity == 1)
+                {
+                    TempData["AddedToCartMessage"] = $"{quantity} product successfully added to cart";
+                }
+                else
+                {
+                    TempData["AddedToCartMessage"] = $"{quantity} products successfully added to cart";
+                }
+
+                return RedirectToAction("Details", "Product", new { id = productId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CartConroller/AddToCart/Post");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
+            
         }
 
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-            CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
-
-            productsInCart.TotalPrice = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
-            var currency = await _shopService.GetShopCurrency();
-
-            if (currency != null)
+            try
             {
-                productsInCart.CurrencySymbol = currency.CurrencySymbol;
-                productsInCart.CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix;
-            }         
+                CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
+                CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
-            return View(productsInCart);
+                productsInCart.TotalPrice = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
+                var currency = await _shopService.GetShopCurrency();
+
+                if (currency != null)
+                {
+                    productsInCart.CurrencySymbol = currency.CurrencySymbol;
+                    productsInCart.CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix;
+                }
+
+                return View(productsInCart);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CartConroller/Index/Get");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
+            
         }
 
         [AllowAnonymous]
@@ -72,12 +91,21 @@ namespace BioBalanceShop.Controllers
         [RequiresCookieConsent]
         public IActionResult UpdateCart(CartUpdateModel updateModel)
         {
-            CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
+            try
+            {
+                CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
-            _cartService.UpdateProductsInCart(updateModel, cart);
-            _cookieService.SetCartCookie(Response.Cookies, cart);
+                _cartService.UpdateProductsInCart(updateModel, cart);
+                _cookieService.SetCartCookie(Response.Cookies, cart);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CartConroller/UpdateCart/Post");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
+            
         }
     }
 }

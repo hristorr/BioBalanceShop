@@ -1,16 +1,10 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Admin.User;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
@@ -144,7 +138,7 @@ namespace BioBalanceShop.Core.Services
         {
             var userToEdit = await _userManager.FindByIdAsync(model.Id);
 
-            if (userToEdit  != null)
+            if (userToEdit != null)
             {
                 userToEdit.UserName = model.UserName;
                 userToEdit.FirstName = model.FirstName;
@@ -157,12 +151,26 @@ namespace BioBalanceShop.Core.Services
                     var currentRoles = await _userManager.GetRolesAsync(userToEdit);
                     await _userManager.RemoveFromRolesAsync(userToEdit, currentRoles);
                     await _userManager.AddToRoleAsync(userToEdit, model.Role);
+
+                    if (model.Role == CustomerRole)
+                    {
+                        userToEdit.Customer = new Customer()
+                        {
+                            UserId = userToEdit.Id,
+                            Address = new CustomerAddress()
+                            {
+                                Country = new Country()
+                            }
+                        };
+
+                    }
+
                 }
 
                 await _userManager.UpdateAsync(userToEdit);
             }
         }
-        
+
         public async Task<string> GetUserRole(ApplicationUser user)
         {
             var currentRoles = await _userManager.GetRolesAsync(user);

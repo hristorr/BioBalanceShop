@@ -28,8 +28,10 @@ namespace BioBalanceShop.Core.Contracts
             int ordersPerPage = 1, 
             string? userId = null);
 
-        Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id);
+        Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id, string userId);
 
         Task<IEnumerable<OrderItemDetailsModel>> GetOrderItemsByOrderId(int id);
+
+        Task<string?> GetUserIdByOrderIdAsync(int id);
     }
 }

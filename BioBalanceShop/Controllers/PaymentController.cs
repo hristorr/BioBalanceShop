@@ -1,5 +1,6 @@
 ﻿using BioBalanceShop.Attributes;
 using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Core.Models.Payment;
@@ -49,56 +50,66 @@ namespace BioBalanceShop.Controllers
         [RequiresCookieConsent]
         public async Task<IActionResult> Charge()
         {
-            var publishableKey = _configuration[StripeSettings.PublishableKey];
-            ViewBag.PublishableKey = publishableKey;
-
-            var model = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
-            var currency = await _shopService.GetShopCurrency();
-            model.Order.Currency = new ShopCurrencyServiceModel()
+            try
             {
-                Id = currency.Id,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
-                CurrencySymbol = currency.CurrencySymbol
-            };
+                var publishableKey = _configuration[StripeSettings.PublishableKey];
+                ViewBag.PublishableKey = publishableKey;
 
-            return View(model);
+                var model = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
+
+                var currency = await _shopService.GetShopCurrency();
+                model.Order.Currency = new ShopCurrencyServiceModel()
+                {
+                    Id = currency.Id,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                    CurrencySymbol = currency.CurrencySymbol
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Charge/Get");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
+
         }
 
         [IgnoreAntiforgeryToken]
         [AllowAnonymous]
         [HttpPost]
         [RequiresCookieConsent]
-        public async Task<IActionResult> Charge(string stripeToken, string stripeEmail)
+        public async Task<IActionResult> Charge(string stripeToken)
         {
-            StripeConfiguration.ApiKey = _configuration[StripeSettings.SecretKey];
-
-            var orderInfo = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
-
-            decimal totalAmount = orderInfo.Order.TotalOrderAmount;
-            var currencyCode = orderInfo.Order.Currency.CurrencyCode;
-
-            if (currencyCode == null)
+            if (string.IsNullOrEmpty(stripeToken))
             {
-                throw new Exception("Internal server error");
+                return BadRequest();
             }
 
-            var options = new ChargeCreateOptions
+            try
             {
-                Amount = (long)(totalAmount * 100),
-                Currency = currencyCode.ToLower(),
-                Description = "BioBalance Payment",
-                Source = stripeToken,
-                ReceiptEmail = stripeEmail,
-            };
+                StripeConfiguration.ApiKey = _configuration[StripeSettings.SecretKey];
 
-            var service = new ChargeService();
-            Charge charge = service.Create(options);
+                var orderInfo = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
 
-            if (charge.Status == "succeeded")
-            {
-                try
+                decimal totalAmount = orderInfo.Order.TotalOrderAmount;
+                var currencyCode = orderInfo.Order.Currency.CurrencyCode;
+
+                var options = new ChargeCreateOptions
                 {
+                    Amount = (long)(totalAmount * 100),
+                    Currency = currencyCode.ToLower(),
+                    Description = "BioBalance Payment",
+                    Source = stripeToken,
+                };
+
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+
+                if (charge.Status == "succeeded")
+                {
+
                     var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
                     CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
@@ -108,23 +119,23 @@ namespace BioBalanceShop.Controllers
                     {
                         ViewBag.OrderNumber = orderNumber;
                     }
+
+                    _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
+                    _cookieService.RemoveCookie(Response.Cookies, OrderInfoCookie);
+
+                    ViewBag.CustomerFirstName = orderInfo.Customer.FirstName;
+
+                    return View("PaymentSuccess");
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "PaymentController/Charge/CreatePaymentAsync");
-                    throw new Exception("Internal Server Error");
+                    return View("PaymentFailed");
                 }
-
-                _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
-                _cookieService.RemoveCookie(Response.Cookies, OrderInfoCookie);
-
-                ViewBag.CustomerFirstName = orderInfo.Customer.FirstName;
-
-                return View("PaymentSuccess");
             }
-            else
+            catch (Exception ex)
             {
-                return View("PaymentFailed");
+                _logger.LogError(ex, "PaymentConroller/Charge/Post");
+                throw new PaymentErrorException("There was a problem with the payment. Please try again.");
             }
         }
 
@@ -132,21 +143,29 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
-            var publishableKey = _configuration[StripeSettings.PublishableKey];
-            ViewBag.PublishableKey = publishableKey;
-
-            var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-
-            if (cart == null || cart.Items.Count() == 0)
+            try
             {
-                return RedirectToAction("Index", "Cart");
+                var publishableKey = _configuration[StripeSettings.PublishableKey];
+                ViewBag.PublishableKey = publishableKey;
+
+                var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
+
+                if (cart == null || cart.Items.Count() == 0)
+                {
+                    return RedirectToAction("Index", "Cart");
+                }
+
+                var customer = await GeneratePaymentCheckoutGetCustomerModel();
+                var order = await GeneratePaymentCheckoutGetOrderModel(cart);
+                CheckoutFormModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
+
+                return View(checkoutModel);
             }
-
-            var customer = await GeneratePaymentCheckoutGetCustomerModel();
-            var order = await GeneratePaymentCheckoutGetOrderModel(cart);
-            CheckoutFormModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
-
-            return View(checkoutModel);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Checkout/Get");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
         }
 
         [AllowAnonymous]
@@ -156,14 +175,30 @@ namespace BioBalanceShop.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Customer.Countries = await _shopService.AllCountriesAsync();
-                model.Order.Currency = await _shopService.GetShopCurrency();
-                return View(model);
+                try
+                {
+                    model.Customer.Countries = await _shopService.AllCountriesAsync();
+                    model.Order.Currency = await _shopService.GetShopCurrency();
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "PaymentConroller/Checkout/Post");
+                    throw new InternalServerErrorException("Internal Server Error");
+                }
             }
 
-            _cookieService.SaveOrderInfoInCookie(Response.Cookies, model);
+            try
+            {
+                _cookieService.SaveOrderInfoInCookie(Response.Cookies, model);
 
-            return RedirectToAction(nameof(Charge));
+                return RedirectToAction(nameof(Charge));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Checkout/Post");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
         }
 
 
@@ -179,7 +214,7 @@ namespace BioBalanceShop.Controllers
             {
                 customer.Country = new ShopCountryServiceModel();
             }
-                        
+
             customer.Countries = await _shopService.AllCountriesAsync();
             return customer;
         }

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using static BioBalanceShop.Core.Constants.MessageConstants;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
     public class CheckoutFormModel
     {
+        [Required(ErrorMessage = RequiredMessage)]
         public CheckoutCustomerFormModel Customer { get; set; }
+
+        [Required(ErrorMessage = RequiredMessage)]
         public CheckoutOrderFormModel Order { get; set; }
     }
 }

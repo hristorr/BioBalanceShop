@@ -1,51 +1,65 @@
 ﻿using BioBalanceShop.Core.Models.Shared;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderRecipientData;
 using static BioBalanceShop.Core.Constants.MessageConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.AddressData;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
     public class CheckoutCustomerFormModel
     {
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLength,
+            MinimumLength = NameMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLength,
+            MinimumLength = NameMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
         [EmailAddress]
+        [StringLength(EmailMaxLength,
+            MinimumLength = EmailMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Email Address")]
         public string Email { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [Phone]
         [StringLength(PhoneMaxLength, 
             MinimumLength = PhoneMinLength, 
             ErrorMessage = LengthMessage)]
-        [Phone]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(StreetMaxLength,
+            MinimumLength = StreetMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Street")]
         public string Street { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(PostCodeMaxLength,
+            MinimumLength = PostCodeMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Post code")]
         public string PostCode { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(CityMaxLength,
+            MinimumLength = CityMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "City")]
         public string City { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
         [Display(Name = "Country")]
         public ShopCountryServiceModel Country { get; set; } = null!;
 

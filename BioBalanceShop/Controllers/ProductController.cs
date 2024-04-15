@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,18 +26,26 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] ProductAllServiceModel model)
         {
-            var products = await _productService.AllAsync(
+            try
+            {
+                var products = await _productService.AllAsync(
                 model.Category,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
                 model.ProductsPerPage);
 
-            model.TotalProductsCount = products.TotalProductsCount;
-            model.Products = products.Products;
-            model.Categories = await _productService.AllCategoryNamesAsync();
+                model.TotalProductsCount = products.TotalProductsCount;
+                model.Products = products.Products;
+                model.Categories = await _productService.AllCategoryNamesAsync();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ProductConroller/All/Get");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
         }
 
         [AllowAnonymous]

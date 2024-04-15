@@ -1,15 +1,8 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Enumerations;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.PaymentData;
 using static BioBalanceShop.Core.Constants.MessageConstants;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.CurrencyData;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.PaymentData;
 
 namespace BioBalanceShop.Core.Models.Payment
 {
@@ -19,16 +12,9 @@ namespace BioBalanceShop.Core.Models.Payment
     public class PaymentServiceModel
     {
         /// <summary>
-        /// Payment date
-        /// </summary>
-        [Required(ErrorMessage = RequiredMessage)]
-        public DateTime PaymentDate { get; set; }
-
-        /// <summary>
         /// Payment amount
         /// </summary>
         [Required(ErrorMessage = RequiredMessage)]
-        [Column(TypeName = "decimal(18, 2)")]
         [Range(typeof(decimal),
             PaymentAmountMinValue,
             PaymentAmountMaxValue,
@@ -42,7 +28,6 @@ namespace BioBalanceShop.Core.Models.Payment
         /// </summary>
         [Required(ErrorMessage = RequiredMessage)]
         [EnumDataType(typeof(PaymentStatus))]
-        [Comment("Payment status")]
         public PaymentStatus PaymentStatus { get; set; }
 
         /// <summary>
@@ -51,7 +36,6 @@ namespace BioBalanceShop.Core.Models.Payment
         [Required(ErrorMessage = RequiredMessage)]
         [MaxLength(CurrencyCodeMaxLength)]
         [RegularExpression(CurrencyCodeRegexPattern)]
-        [Comment("Payment currency code")]
         public string CurrencyCode { get; set; } = string.Empty;
     }
 }

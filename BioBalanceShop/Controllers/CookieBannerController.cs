@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BioBalanceShop.Core.Constants.CookieConstants;
@@ -22,31 +23,29 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public IActionResult SetCookieConsent(string consent)
         {
-            _cookieService.SetConsentCookie(Response.Cookies, consent);
-
-            //if (consent == "accept")
-            //{
-                
-            //    //Response.Cookies.Append("CookieConsent", "accepted", new CookieOptions
-            //    //{
-            //    //    Expires = DateTimeOffset.UtcNow.AddDays(365),
-            //    //    HttpOnly = true,
-            //    //    Secure = true
-            //    //});
-            //}
-            //else
-            if (consent == "rejected")
+            try
             {
-                foreach (var cookie in Request.Cookies.Keys)
+                _cookieService.SetConsentCookie(Response.Cookies, consent);
+
+                if (consent == "rejected")
                 {
-                    if (cookie != ConsentCookie)
+                    foreach (var cookie in Request.Cookies.Keys)
                     {
-                        Response.Cookies.Delete(cookie);
+                        if (cookie != ConsentCookie)
+                        {
+                            Response.Cookies.Delete(cookie);
+                        }
                     }
                 }
-            }
 
-            return RedirectToAction("Index", "Home"); // Redirect to home page or any other page
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CookieBannerConroller/SetCookieConsent/Get");
+                throw new InternalServerErrorException("Internal Server Error");
+            }
+            
         }
 
         [AllowAnonymous]

@@ -109,8 +109,6 @@ namespace BioBalanceShop.Core.Services
                 CountryId = model.Customer.Country.Id
             };
 
-            //Add order items
-
             List<OrderItem> orderItems = new List<OrderItem>();
 
             foreach (var product in productsInCart.Items)
@@ -140,7 +138,6 @@ namespace BioBalanceShop.Core.Services
                 OrderRecipient = orderRecipient,
                 OrderItems = orderItems
             };
-
             
             if (userId != null)
             {
@@ -168,11 +165,11 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id)
+        public async Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id, string userId)
         {
             var order = await _repository
                 .AllReadOnly<Order>()
-                .Where(o => o.Id == id)
+                .Where(o => o.Id == id && o.Customer.UserId == userId)
                 .Select(o => new OrderDetailsServiceModel()
                 {
                     Id = o.Id,
@@ -225,6 +222,15 @@ namespace BioBalanceShop.Core.Services
                     Price = oi.Price
                 }))
                 .ToListAsync();
+        }
+
+        public async Task<string?> GetUserIdByOrderIdAsync(int id)
+        {
+            return await _repository
+           .AllReadOnly<Order>()
+           .Where(o => o.Id == id)
+           .Select(o => o.Customer.UserId)
+           .FirstOrDefaultAsync();  
         }
     }
 }

@@ -40,5 +40,10 @@ namespace BioBalanceShop.Infrastructure.Data.Models
         [Required]
         [Comment("Date when user was created")]
         public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Customer
+        /// </summary>
+        public Customer? Customer { get; set; }
     }
 }

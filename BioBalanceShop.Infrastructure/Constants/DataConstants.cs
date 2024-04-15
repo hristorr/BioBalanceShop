@@ -95,20 +95,6 @@ namespace BioBalanceShop.Infrastructure.Constants
             public const string EmailRegexPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
         }
 
-        public static class OrderRecipientData
-        {
-            public const int NameMaxLength = 25;
-            public const int NameMinLength = 2;
-
-            public const int PhoneMaxLength = 15;
-            public const int PhoneMinLength = 5;
-            public const string PhoneRegexPattern = @"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$";
-
-            public const int EmailMaxLength = 30;
-            public const int EmailMinLength = 6;
-            public const string EmailRegexPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
-        }
-
         public static class CurrencyData
         {
             public const int CurrencyCodeMaxLength = 3;
