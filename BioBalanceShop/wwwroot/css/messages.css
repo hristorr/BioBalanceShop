@@ -1,0 +1,11 @@
+﻿img.img-thumbnail {
+    border: none!important;
+    max-width: 350px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+.shopMsg {
+    color: #214f21;

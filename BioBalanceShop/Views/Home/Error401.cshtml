@@ -1,5 +1,9 @@
 ﻿﻿@{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "401 Unauthorized";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/messages.css" asp-append-version="true" />
 }
 
 <div class="row">
@@ -8,11 +12,11 @@
         <br>
         <div class="row">
             <div class="col-10">
-                <img src="~/images/401AccessDenied.png" alt="401 Access Denied image" class="img-thumbnail">
-                <div class="text-left h4">
-                    <p>Oops, you don't have access here.</p>
+                <img src="~/images/401AccessDenied.png" alt="401 Access Denied image" class="img-thumbnail" />
+                <div class="text-center">
+                    <h4 class="shopMsg">Oops... you don't have access to this page</h4>
                 </div>
-                <div class="text-left h4">  Go back to <a asp-controller="Home" asp-action="Index">Home</a> Page</div>
+                <div class="text-center"><a asp-action="Index" asp-controller="Home" class="btn btn-primary btn-lg">Continue Shopping</a></div>
             </div>
         </div>
     </div>
