@@ -15,6 +15,9 @@ namespace BioBalanceShop.Infrastructure.Data.Configuration
         {
             builder.HasQueryFilter(p => p.IsActive);
 
+            builder.HasIndex(p => p.ProductCode)
+                .IsUnique();
+
             builder.HasOne(p => p.Shop)
                 .WithMany(s => s.Products)
                 .HasForeignKey(p => p.ShopId)
