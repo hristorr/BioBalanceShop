@@ -1,11 +1,4 @@
-﻿using BioBalanceShop.Core.Models.Order;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BioBalanceShop.Core.Models.Admin.Order
+﻿namespace BioBalanceShop.Core.Models.Admin.Order
 {
     public class AdminOrderQueryServiceModel
     {

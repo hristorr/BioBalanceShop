@@ -15,21 +15,40 @@ namespace BioBalanceShop.Core.Models.Admin.User
         public string Id { get; set; } = null!;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(EmailMaxLength,
+            MinimumLength = EmailMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Username")]
         public string UserName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLength,
+            MinimumLength = NameMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(NameMaxLength,
+            MinimumLength = NameMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(EmailMaxLength,
+            MinimumLength = EmailMinLength,
+            ErrorMessage = LengthMessage)]
+        [RegularExpression(EmailRegexPattern,
+            ErrorMessage = EmailFormatErrorMessage)]
         [Display(Name = "Email")]
         public string Email { get; set; } = string.Empty;
 
+        [StringLength(PhoneMaxLength,
+           MinimumLength = PhoneMinLength,
+           ErrorMessage = LengthMessage)]
+        [RegularExpression(PhoneRegexPattern,
+           ErrorMessage = FormatErrorMessage)]
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; } = string.Empty;
 

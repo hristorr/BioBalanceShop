@@ -1,7 +1,4 @@
-﻿using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Order
 {
@@ -10,30 +7,30 @@ namespace BioBalanceShop.Core.Models.Order
         /// <summary>
         /// Order item identificator
         /// </summary>
-        [Comment("Order item identificator")]
         public int Id { get; set; }
 
         /// <summary>
         /// Order item name
         /// </summary>
-        [Comment("Order item name")]
+        [Display(Name = "Product name")]
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Order item image URL
         /// </summary>
-        [Comment("Order item image URL")]
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = string.Empty;
 
         /// <summary>
         /// Order item quantity
         /// </summary>
+        [Display(Name = "Quantity")]
         public int Quantity { get; set; }
 
         /// <summary>
         /// Order item price
         /// </summary>
-        [Comment("Order item price")]
+        [Display(Name = "Unit price")]
         public decimal Price { get; set; }
     }
 }

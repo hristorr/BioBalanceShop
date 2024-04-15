@@ -1,13 +1,6 @@
 ﻿using BioBalanceShop.Core.Models._Base;
-using BioBalanceShop.Core.Models.Order;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static BioBalanceShop.Core.Constants.MessageConstants;
 
 namespace BioBalanceShop.Core.Models.Admin.Order
@@ -22,7 +15,6 @@ namespace BioBalanceShop.Core.Models.Admin.Order
         /// <summary>
         /// Order number
         /// </summary>
-        [Comment("Order number")]
         public string? OrderNumber { get; set; } = string.Empty;
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace BioBalanceShop.Core.Contracts
 
         Task EditUserAsync(AdminUserEditFormModel model);
 
-        Task<AdminUserEditFormModel> GetUserByIdAsync(string userId);
+        Task<AdminUserEditFormModel?> GetUserByIdAsync(string userId);
 
         Task<string> GetUserRole(ApplicationUser user);
 

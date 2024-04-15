@@ -33,5 +33,7 @@ namespace BioBalanceShop.Core.Contracts
         Task<IEnumerable<OrderItemDetailsModel>> GetOrderItemsByOrderId(int id);
 
         Task<string?> GetUserIdByOrderIdAsync(int id);
+
+        Task<bool> ExistsAsync(int id);
     }
 }

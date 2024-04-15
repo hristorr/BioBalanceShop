@@ -11,6 +11,7 @@ using Stripe;
 using System.Security.Claims;
 using static BioBalanceShop.Core.Constants.CookieConstants;
 using static BioBalanceShop.Infrastructure.Constants.ConfigurationConstants;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -71,7 +72,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Charge/Get");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
 
         }
@@ -164,7 +165,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Checkout/Get");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
         }
 
@@ -184,7 +185,7 @@ namespace BioBalanceShop.Controllers
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "PaymentConroller/Checkout/Post");
-                    throw new InternalServerErrorException("Internal Server Error");
+                    throw new InternalServerErrorException(InternalServerErrorMessage);
                 }
             }
 
@@ -197,7 +198,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Checkout/Post");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
         }
 

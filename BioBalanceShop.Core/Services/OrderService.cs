@@ -232,5 +232,11 @@ namespace BioBalanceShop.Core.Services
            .Select(o => o.Customer.UserId)
            .FirstOrDefaultAsync();  
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _repository.AllReadOnly<Order>()
+                .AnyAsync(o => o.Id == id);
+        }
     }
 }

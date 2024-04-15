@@ -67,6 +67,19 @@ namespace BioBalanceShop.Core.Services
                .FirstOrDefaultAsync();
         }
 
+        public void AddProductToCart(CartCookieModel cart, int productId, int quantity)
+        {
+            var prodInCart = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (prodInCart != null)
+            {
+                prodInCart.Quantity += quantity;
+            }
+            else
+            {
+                cart.Items.Add(new CartItemCookieModel { ProductId = productId, Quantity = quantity });
+            }
+        }
+
         public void UpdateProductsInCart(CartUpdateModel updateModel, CartCookieModel cart)
         {
             foreach (var kvp in updateModel.ProductQuantities)

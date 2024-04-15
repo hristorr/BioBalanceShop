@@ -144,5 +144,11 @@ namespace BioBalanceShop.Core.Services
             order.Status = status;
             await _repository.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _repository.AllReadOnly<Order>()
+                .AnyAsync(o => o.Id == id);
+        }
     }
 }

@@ -5,6 +5,7 @@ using BioBalanceShop.Core.Models.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BioBalanceShop.Core.Constants.CookieConstants;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -36,7 +37,7 @@ namespace BioBalanceShop.Controllers
             {
                 CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
-                cart.AddProduct(productId, quantity);
+                _cartService.AddProductToCart(cart, productId, quantity);
                 _cookieService.SetCartCookie(Response.Cookies, cart);
 
                 if (quantity == 1)
@@ -53,7 +54,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CartConroller/AddToCart/Post");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
             
         }
@@ -81,7 +82,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CartConroller/Index/Get");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
             
         }
@@ -103,7 +104,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CartConroller/UpdateCart/Post");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
             
         }

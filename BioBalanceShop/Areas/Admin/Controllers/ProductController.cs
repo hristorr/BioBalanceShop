@@ -1,13 +1,13 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Admin.Product;
-using BioBalanceShop.Core.Models.Admin.User;
-using BioBalanceShop.Core.Models.Product;
-using BioBalanceShop.Core.Services;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
+using static BioBalanceShop.Core.Constants.MessageConstants;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
 {
@@ -36,98 +36,129 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] AdminProductAllServiceModel model)
         {
-            var products = await _adminProductService.AllAsync(
+            try
+            {
+                var products = await _adminProductService.AllAsync(
                 model.Category,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
                 model.ProductsPerPage);
 
-            model.TotalProductsCount = products.TotalProductsCount;
-            model.Products = products.Products;
-            model.Categories = await _productService.AllCategoryNamesAsync();
+                model.TotalProductsCount = products.TotalProductsCount;
+                model.Products = products.Products;
+                model.Categories = await _productService.AllCategoryNamesAsync();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ProductController/All/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _adminProductService.DeleteProductByIdAsync(id);
+            try
+            {
+                if (!await _productService.ExistsAsync(id))
+                {
+                    return BadRequest();
+                }
 
-            return RedirectToAction(nameof(All));
+                await _adminProductService.DeleteProductByIdAsync(id);
+
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ProductController/DeleteConfirmed/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            AdminProductEditFormModel? model = await _adminProductService.GetProductByIdAsync(id);
-
-            if (model == null)
+            try
             {
-                return BadRequest();
+                if (!await _productService.ExistsAsync(id))
+                {
+                    return BadRequest();
+                }
+
+                AdminProductEditFormModel? model = await _adminProductService.GetProductByIdAsync(id);
+
+                model.Categories = await _productService.AllCategoriesAsync();
+                var currency = await _shopService.GetShopCurrency();
+                model.Currency = new ShopCurrencyServiceModel()
+                {
+                    Id = currency.Id,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                    CurrencySymbol = currency.CurrencySymbol
+                };
+
+                return View(model);
             }
-
-            model.Categories = await _productService.AllCategoriesAsync();
-            var currency = await _shopService.GetShopCurrency();
-            model.Currency = new ShopCurrencyServiceModel()
+            catch (Exception ex)
             {
-                Id = currency.Id,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
-                CurrencySymbol = currency.CurrencySymbol
-            };
-
-            return View(model);
+                _logger.LogError(ex, "Admin/ProductController/Edit/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminProductEditFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                model.Categories = await _productService.AllCategoriesAsync();
-                var currency = await _shopService.GetShopCurrency();
-                model.Currency = new ShopCurrencyServiceModel()
+                if (!await _productService.ExistsAsync(model.Id))
                 {
-                    Id = currency.Id,
-                    CurrencyCode = currency.CurrencyCode,
-                    CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
-                    CurrencySymbol = currency.CurrencySymbol
-                };
+                    return BadRequest();
+                }
 
-                return View(model);
+                if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode))
+                {
+                    ModelState.AddModelError(nameof(model.ProductCode), ProductCodeExistsErrorMessage);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model.Categories = await _productService.AllCategoriesAsync();
+                    var currency = await _shopService.GetShopCurrency();
+                    model.Currency = new ShopCurrencyServiceModel()
+                    {
+                        Id = currency.Id,
+                        CurrencyCode = currency.CurrencyCode,
+                        CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                        CurrencySymbol = currency.CurrencySymbol
+                    };
+
+                    return View(model);
+                }
+
+                await _adminProductService.EditProductAsync(model);
+
+                return RedirectToAction(nameof(All), "Product");
             }
-
-            await _adminProductService.EditProductAsync(model);
-
-            return RedirectToAction(nameof(All), "Product");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ProductController/Edit/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            AdminProductCreateFormModel model = new AdminProductCreateFormModel();
-            
-            model.Categories = await _productService.AllCategoriesAsync();
-            
-            var currency = await _shopService.GetShopCurrency();
-            model.Currency = new ShopCurrencyServiceModel()
+            try
             {
-                Id = currency.Id,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
-                CurrencySymbol = currency.CurrencySymbol
-            };
+                AdminProductCreateFormModel model = new AdminProductCreateFormModel();
 
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(AdminProductCreateFormModel model)
-        {
-            if (!ModelState.IsValid)
-            {
                 model.Categories = await _productService.AllCategoriesAsync();
 
                 var currency = await _shopService.GetShopCurrency();
@@ -141,16 +172,48 @@ namespace BioBalanceShop.Areas.Admin.Controllers
 
                 return View(model);
             }
-
-            if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode))
+            catch (Exception ex)
             {
-                return BadRequest();
+                _logger.LogError(ex, "Admin/ProductController/Create/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
-
-            await _adminProductService.CreateProductAsync(model, User.Id());
-
-            return RedirectToAction(nameof(All));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(AdminProductCreateFormModel model)
+        {
+            try
+            {
+                if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode))
+                {
+                    ModelState.AddModelError(nameof(model.ProductCode), ProductCodeExistsErrorMessage);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model.Categories = await _productService.AllCategoriesAsync();
+
+                    var currency = await _shopService.GetShopCurrency();
+                    model.Currency = new ShopCurrencyServiceModel()
+                    {
+                        Id = currency.Id,
+                        CurrencyCode = currency.CurrencyCode,
+                        CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                        CurrencySymbol = currency.CurrencySymbol
+                    };
+
+                    return View(model);
+                }
+
+                await _adminProductService.CreateProductAsync(model, User.Id());
+
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ProductController/Create/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
+        }
     }
 }

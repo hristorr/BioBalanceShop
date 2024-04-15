@@ -6,9 +6,9 @@ namespace BioBalanceShop.Core.Models.Payment
     public class CheckoutFormModel
     {
         [Required(ErrorMessage = RequiredMessage)]
-        public CheckoutCustomerFormModel Customer { get; set; }
+        public CheckoutCustomerFormModel Customer { get; set; } = null!;
 
         [Required(ErrorMessage = RequiredMessage)]
-        public CheckoutOrderFormModel Order { get; set; }
+        public CheckoutOrderFormModel Order { get; set; } = null!;
     }
 }

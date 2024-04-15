@@ -185,7 +185,7 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<AdminUserEditFormModel> GetUserByIdAsync(string userId)
+        public async Task<AdminUserEditFormModel?> GetUserByIdAsync(string userId)
         {
             var user = await _repository.GetByIdAsync<ApplicationUser>(userId);
 

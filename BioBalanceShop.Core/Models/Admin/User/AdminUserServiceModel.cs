@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 
 namespace BioBalanceShop.Core.Models.Admin.User
@@ -13,7 +8,7 @@ namespace BioBalanceShop.Core.Models.Admin.User
         public string Id { get; set; }
 
         [Display(Name = "Username")]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
         [Display(Name = "First Name")]
         public string? FirstName { get; set; } = string.Empty;

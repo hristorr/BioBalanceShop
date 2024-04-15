@@ -30,7 +30,7 @@ namespace BioBalanceShop.Core.Services
         public async Task<bool> ExistsAsync(int id)
         {
             return await _repository.AllReadOnly<Product>()
-                .AnyAsync(h => h.Id == id);
+                .AnyAsync(p => p.Id == id);
         }
 
         public async Task<ProductQueryServiceModel> AllAsync(string? category = null, string? searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 1)

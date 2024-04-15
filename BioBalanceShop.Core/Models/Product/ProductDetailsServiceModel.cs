@@ -1,45 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Product
 {
     public class ProductDetailsServiceModel
     {
-        [Required]
         public int Id { get; set; }
 
-        [Required]
+        [Display(Name = "Product name")]
         public string Title { get; set; } = string.Empty;
 
-        [Required]
+        [Display(Name = "Subtitle")]
         public string Subtitle { get; set; } = string.Empty;
 
-        [Required]
+        [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
 
-        [Required]
+        [Display(Name = "Ingredients")]
         public string Ingredients { get; set; } = string.Empty;
 
-        [Required]
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = string.Empty;
 
-        [Required]
+        [Display(Name = "Price")]
         public decimal Price { get; set; }
 
-        [Required]
+        [Display(Name = "Quantity")]
         public int QuantityToOrder { get; set; }
 
-        [Required]
         public int QuantityInStock { get; set; }
 
-        [Required]
         public string CurrencySymbol { get; set; } = string.Empty;
 
-        [Required]
         public bool CurrencyIsSymbolPrefix { get; set; }
     }
 }

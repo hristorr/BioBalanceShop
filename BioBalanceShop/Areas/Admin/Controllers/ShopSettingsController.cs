@@ -1,8 +1,10 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Admin.ShopSettings;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
 {
@@ -29,34 +31,51 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
-            var model = await _adminShopSettingsService.AllShopSettingsAsync();
-            model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
-
-            string? updatedShopSettingsMessage = TempData["ShopSettingsUpdatedMessage"] as string;
-
-            if (!string.IsNullOrEmpty(updatedShopSettingsMessage))
+            try
             {
-                ViewBag.ShopSettingsUpdatedMessage = updatedShopSettingsMessage;
-            }
+                var model = await _adminShopSettingsService.AllShopSettingsAsync();
+                model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
 
-            return View(model);
+                string? updatedShopSettingsMessage = TempData["ShopSettingsUpdatedMessage"] as string;
+
+                if (!string.IsNullOrEmpty(updatedShopSettingsMessage))
+                {
+                    ViewBag.ShopSettingsUpdatedMessage = updatedShopSettingsMessage;
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminShopSettingsFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
+                if (!ModelState.IsValid)
+                {
+                    model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
 
-                return View(model);
+                    return View(model);
+
+                }
+
+                await _adminShopSettingsService.EditShopSettingsAsync(model);
+
+                TempData["ShopSettingsUpdatedMessage"] = "Successfully updated shop settings";
+
+                return RedirectToAction(nameof(Edit));
             }
-
-            await _adminShopSettingsService.EditShopSettingsAsync(model);
-
-            TempData["ShopSettingsUpdatedMessage"] = "Successfully updated shop settings";
-
-            return RedirectToAction(nameof(Edit));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
     }
 }

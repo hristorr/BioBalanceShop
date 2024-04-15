@@ -11,6 +11,8 @@ namespace BioBalanceShop.Core.Contracts
     {
         Task<CartIndexModel> GetCartProductsInfo(CartCookieModel cart);
         Task<CartIndexProductModel?> GetProductFromCart(int id, int quantity);
+
+        void AddProductToCart(CartCookieModel cart, int productId, int quantity);
         void UpdateProductsInCart(CartUpdateModel updateModel, CartCookieModel cart);
     }
 }

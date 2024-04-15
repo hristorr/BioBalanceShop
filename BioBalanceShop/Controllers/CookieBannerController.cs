@@ -3,6 +3,7 @@ using BioBalanceShop.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BioBalanceShop.Core.Constants.CookieConstants;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -43,7 +44,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CookieBannerConroller/SetCookieConsent/Get");
-                throw new InternalServerErrorException("Internal Server Error");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
             
         }

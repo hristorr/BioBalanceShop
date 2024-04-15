@@ -1,12 +1,11 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Admin.User;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
-using static BioBalanceShop.Core.Constants.AdminConstants;
+using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
@@ -17,113 +16,180 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger _logger;
 
         public UserController(
             IUserService userService,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<ProductController> logger)
         {
             _userService = userService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] AdminUserAllGetModel model)
         {
-            var users = await _userService.AllAsync(
+            try
+            {
+                var users = await _userService.AllAsync(
                 model.Role,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
                 model.UsersPerPage);
 
-            model.TotalUsersCount = users.TotalUsersCount;
-            model.Users = users.Users;
-            model.Roles = await _userService.GetAllRoles();
+                model.TotalUsersCount = users.TotalUsersCount;
+                model.Users = users.Users;
+                model.Roles = await _userService.GetAllRoles();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/UserController/All/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-
-            if (currentUser.Id == id)
+            if (await _userManager.FindByIdAsync(id) == null)
             {
-                await _userService.DeleteUserByIdAsync(id);
-                await _signInManager.SignOutAsync();
-                return RedirectToAction("Login", "Account", new { area = "Identity" });
+                return BadRequest();
             }
 
-            await _userService.DeleteUserByIdAsync(id);
-            return RedirectToAction(nameof(All));
+            try
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+
+                if (currentUser.Id == id)
+                {
+                    await _userService.DeleteUserByIdAsync(id);
+                    await _signInManager.SignOutAsync();
+                    return RedirectToAction("Login", "Account", new { area = "Identity" });
+                }
+
+                await _userService.DeleteUserByIdAsync(id);
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/UserController/DeleteConfirmed/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            AdminUserEditFormModel model = await _userService.GetUserByIdAsync(id);
+            try
+            {
+                AdminUserEditFormModel model = await _userService.GetUserByIdAsync(id);
 
-            return View(model);
+                if (model == null)
+                {
+                    return BadRequest();
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/UserController/Edit/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminUserEditFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
+                var modelUser = await _userManager.FindByIdAsync(model.Id);
+
+                if (modelUser == null)
+                {
+                    return BadRequest();
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var currentUser = await _userManager.GetUserAsync(User);
+
+                var modelUserName = $"{modelUser.FirstName} {modelUser.LastName}";
+                var modelUserClaims = await _userManager.GetClaimsAsync(modelUser);
+                var modelUserFullNameClaim = modelUserClaims.FirstOrDefault(c => c.Value == modelUserName);
+                var newFullNameClaim = new Claim(UserFullNameClaim, $"{model.FirstName} {model.LastName}");
+
+                await _userService.EditUserAsync(model);
+
+                await _userManager.ReplaceClaimAsync(modelUser, modelUserFullNameClaim, newFullNameClaim);
+
+                if (currentUser != null && await _userManager.IsInRoleAsync(currentUser, AdminRole) == false)
+                {
+                    await _signInManager.SignOutAsync();
+                    return RedirectToAction("Login", "Account", new { area = "Identity" });
+                }
+
+                if (currentUser.Id == model.Id)
+                {
+                    await _signInManager.RefreshSignInAsync(currentUser);
+                }
+
+                return RedirectToAction(nameof(All));
             }
-
-            var currentUser = await _userManager.GetUserAsync(User);
-            var modelUser = await _userManager.FindByIdAsync(model.Id);
-
-            var modelUserName = $"{modelUser.FirstName} {modelUser.LastName}";
-            var modelUserClaims = await _userManager.GetClaimsAsync(modelUser);
-            var modelUserFullNameClaim = modelUserClaims.FirstOrDefault(c => c.Value == modelUserName);
-            var newFullNameClaim = new Claim(UserFullNameClaim, $"{model.FirstName} {model.LastName}");
-
-            await _userService.EditUserAsync(model);
-
-            await _userManager.ReplaceClaimAsync(modelUser, modelUserFullNameClaim, newFullNameClaim);
-
-            if (currentUser != null && await _userManager.IsInRoleAsync(currentUser, AdminRole) == false)
+            catch (Exception ex)
             {
-                await _signInManager.SignOutAsync();
-                return RedirectToAction("Login", "Account", new { area = "Identity" });
+                _logger.LogError(ex, "Admin/UserController/Edit/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
             }
-
-            if (currentUser.Id == model.Id)
-            {
-                await _signInManager.RefreshSignInAsync(currentUser);
-            }
-
-            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            AdminUserCreateFormModel model = new AdminUserCreateFormModel();
-            model.Roles = await _userService.GetAllRoles();
+            try
+            {
+                AdminUserCreateFormModel model = new AdminUserCreateFormModel();
+                model.Roles = await _userService.GetAllRoles();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/UserController/Create/Get");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(AdminUserCreateFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                model.Roles = await _userService.GetAllRoles();
-                return View(model);
+                if (!ModelState.IsValid)
+                {
+                    model.Roles = await _userService.GetAllRoles();
+                    return View(model);
+                }
+
+                await _userService.CreateUserAsync(model);
+
+                return RedirectToAction(nameof(All));
             }
-
-            await _userService.CreateUserAsync(model);
-
-            return RedirectToAction(nameof(All));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/UserController/Create/Post");
+                throw new InternalServerErrorException(InternalServerErrorMessage);
+            }
         }
     }
 }

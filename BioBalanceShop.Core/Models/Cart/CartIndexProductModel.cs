@@ -1,5 +1,4 @@
 ﻿using BioBalanceShop.Core.Models._Base;
-using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Cart
 {

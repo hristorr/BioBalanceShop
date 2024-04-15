@@ -24,5 +24,7 @@ namespace BioBalanceShop.Core.Contracts
         Task<IEnumerable<AdminOrderItemDetailsModel>> GetOrderItemsByOrderIdAsync(int id);
 
         Task UpdateOrderStatus(int orderId, OrderStatus status);
+
+        Task<bool> ExistsAsync(int id);
     }
 }

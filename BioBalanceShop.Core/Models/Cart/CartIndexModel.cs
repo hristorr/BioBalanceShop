@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Features;
-
-namespace BioBalanceShop.Core.Models.Cart
+﻿namespace BioBalanceShop.Core.Models.Cart
 {
     public class CartIndexModel
     {
