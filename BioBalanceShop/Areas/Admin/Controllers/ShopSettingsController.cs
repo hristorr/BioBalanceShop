@@ -1,10 +1,8 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Admin.ShopSettings;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
 {
@@ -48,7 +46,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -62,7 +60,6 @@ namespace BioBalanceShop.Areas.Admin.Controllers
                     model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
 
                     return View(model);
-
                 }
 
                 await _adminShopSettingsService.EditShopSettingsAsync(model);
@@ -74,7 +71,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }

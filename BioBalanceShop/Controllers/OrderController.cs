@@ -1,13 +1,10 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Order;
-using BioBalanceShop.Core.Services;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -49,22 +46,21 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "OrderConroller/MyOrders/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            if (await _orderService.GetUserIdByOrderIdAsync(id) != User.Id())
-            {
-                return Unauthorized();
-            }
-
             if (!await _orderService.ExistsAsync(id))
             {
                 return BadRequest();
+            }
+
+            if (await _orderService.GetUserIdByOrderIdAsync(id) != User.Id())
+            {
+                return Unauthorized();
             }
 
             var model = await _orderService.GetOrderByIdAsync(id, User.Id());

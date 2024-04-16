@@ -1,11 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Admin.User;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 using static BioBalanceShop.Core.Constants.RoleConstants;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
@@ -51,7 +49,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/UserController/All/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -80,48 +78,40 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/UserController/DeleteConfirmed/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            try
-            {
-                AdminUserEditFormModel model = await _userService.GetUserByIdAsync(id);
+            AdminUserEditFormModel? model = await _userService.GetUserByIdAsync(id);
 
-                if (model == null)
-                {
-                    return BadRequest();
-                }
-
-                return View(model);
-            }
-            catch (Exception ex)
+            if (model == null)
             {
-                _logger.LogError(ex, "Admin/UserController/Edit/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return BadRequest();
             }
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminUserEditFormModel model)
         {
+            var modelUser = await _userManager.FindByIdAsync(model.Id);
+
+            if (modelUser == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             try
             {
-                var modelUser = await _userManager.FindByIdAsync(model.Id);
-
-                if (modelUser == null)
-                {
-                    return BadRequest();
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
                 var currentUser = await _userManager.GetUserAsync(User);
 
                 var modelUserName = $"{modelUser.FirstName} {modelUser.LastName}";
@@ -149,7 +139,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/UserController/Edit/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -166,7 +156,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/UserController/Create/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -188,7 +178,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/UserController/Create/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }

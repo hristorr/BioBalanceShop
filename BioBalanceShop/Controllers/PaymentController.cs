@@ -8,10 +8,10 @@ using BioBalanceShop.Core.Models.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
+using Stripe.Issuing;
 using System.Security.Claims;
 using static BioBalanceShop.Core.Constants.CookieConstants;
 using static BioBalanceShop.Infrastructure.Constants.ConfigurationConstants;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -72,9 +72,8 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Charge/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
         }
 
         [IgnoreAntiforgeryToken]
@@ -85,26 +84,24 @@ namespace BioBalanceShop.Controllers
         {
             if (string.IsNullOrEmpty(stripeToken))
             {
-                return BadRequest();
+                return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
             }
 
             try
             {
                 var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-                CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+                CartIndexModel? productsInCart = await _cartService.GetCartProductsInfo(cart);
 
                 foreach (var item in productsInCart.Items)
                 {
                     if (!await _productService.ExistsAsync(item.ProductId))
                     {
-                        _logger.LogError($"{item.Title} could not be found: PaymentController/Charge/Post");
-                        throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} could not be found. Please update your cart and try again.");
+                        return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
                     }
 
                     if (item.QuantityToOrder > item.QuantityInStock)
                     {
-                        _logger.LogError($"{item.Title} out of stock: PaymentController/Charge/Post");
-                        throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} is no longer available. Please update your cart and try again.");
+                        return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
                     }
                 }
 
@@ -133,8 +130,7 @@ namespace BioBalanceShop.Controllers
                         var result = await _productService.UpdateProductQuantityInStock(item.ProductId, item.QuantityToOrder);
                         if (result == false)
                         {
-                            _logger.LogError($"{item.Title} out of stock: PaymentController/Charge/Post");
-                            throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} is no longer available. Please update your cart and try again.");
+                            return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
                         }
                     }
 
@@ -159,8 +155,9 @@ namespace BioBalanceShop.Controllers
             }
             catch (Exception ex)
             {
+                _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
                 _logger.LogError(ex, "PaymentConroller/Charge/Post");
-                throw new PaymentErrorException("There was a problem with the payment. Please try again.");
+                return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status500InternalServerError });
             }
         }
 
@@ -189,7 +186,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Checkout/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -198,23 +195,16 @@ namespace BioBalanceShop.Controllers
         [RequiresCookieConsent]
         public async Task<IActionResult> Checkout(CheckoutFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                try
+                if (!ModelState.IsValid)
                 {
+
                     model.Customer.Countries = await _shopService.AllCountriesAsync();
                     model.Order.Currency = await _shopService.GetShopCurrency();
                     return View(model);
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "PaymentConroller/Checkout/Post");
-                    throw new InternalServerErrorException(InternalServerErrorMessage);
-                }
-            }
 
-            try
-            {
                 _cookieService.SaveOrderInfoInCookie(Response.Cookies, model);
 
                 return RedirectToAction(nameof(Charge));
@@ -222,7 +212,7 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PaymentConroller/Checkout/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 

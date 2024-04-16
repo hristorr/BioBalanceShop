@@ -1,12 +1,10 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Admin.Product;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 using static BioBalanceShop.Core.Constants.MessageConstants;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
@@ -54,21 +52,20 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/All/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!await _productService.ExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
-                if (!await _productService.ExistsAsync(id))
-                {
-                    return BadRequest();
-                }
-
                 await _adminProductService.DeleteProductByIdAsync(id);
 
                 return RedirectToAction(nameof(All));
@@ -76,20 +73,20 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/DeleteConfirmed/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            if (!await _productService.ExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
-                if (!await _productService.ExistsAsync(id))
-                {
-                    return BadRequest();
-                }
-
                 AdminProductEditFormModel? model = await _adminProductService.GetProductByIdAsync(id);
 
                 model.Categories = await _productService.AllCategoriesAsync();
@@ -107,20 +104,19 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/Edit/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminProductEditFormModel model)
         {
+            if (!await _productService.ExistsAsync(model.Id))
+            {
+                return BadRequest();
+            }
             try
             {
-                if (!await _productService.ExistsAsync(model.Id))
-                {
-                    return BadRequest();
-                }
-
                 if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode, model.Id))
                 {
                     ModelState.AddModelError(nameof(model.ProductCode), ProductCodeExistsErrorMessage);
@@ -148,7 +144,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/Edit/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -175,7 +171,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/Create/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -212,7 +208,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/ProductController/Create/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }

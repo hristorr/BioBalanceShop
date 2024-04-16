@@ -3,6 +3,7 @@ using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,18 @@ namespace BioBalanceShop.Core.Services
         private readonly IRepository _repository;
         private readonly IProductService _productService;
         private readonly IShopService _shopService;
+        private readonly ICookieService _cookieService;
 
         public CartService(
             IRepository repository,
             IProductService productService,
-            IShopService shopService)
+            IShopService shopService,
+            ICookieService cookieService)
         {
             _repository = repository;
             _productService = productService;
             _shopService = shopService;
+            _cookieService = cookieService;
         }
 
         public async Task<CartIndexModel> GetCartProductsInfo(CartCookieModel cart)
@@ -34,11 +38,15 @@ namespace BioBalanceShop.Core.Services
 
             foreach (var item in cart.Items)
             {
-                if (await _productService.ExistsAsync(item.ProductId))
+                if (!await _productService.ExistsAsync(item.ProductId))
                 {
-                    CartIndexProductModel product = await GetProductFromCart(item.ProductId, item.Quantity);
-                    productsInCart.Items.Add(product);
+                    cart.Items.RemoveAll(item => item.ProductId == item.ProductId);
+                    
+                    throw new Exception("Product not found");
                 }
+
+                CartIndexProductModel product = await GetProductFromCart(item.ProductId, item.Quantity);
+                productsInCart.Items.Add(product);
             }
 
             return productsInCart;

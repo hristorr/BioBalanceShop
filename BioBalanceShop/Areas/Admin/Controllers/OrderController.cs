@@ -1,11 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Admin.Order;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Areas.Admin.Controllers
 {
@@ -48,21 +46,21 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Admin/OrderController/All/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                _logger.LogError(ex, "Admin/OrderController/EditStatus/Post/All/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> EditStatus(int id)
         {
+            if (!await _adminOrderService.ExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
-                if (!await _adminOrderService.ExistsAsync(id))
-                {
-                    return BadRequest();
-                }
-
                 var model = await _adminOrderService.GetOrderByIdAsync(id);
                 model.OrderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
 
@@ -71,25 +69,25 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/OrderController/EditStatus/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> EditStatus(AdminOrderDetailsServiceModel model)
         {
+            if (!await _adminOrderService.ExistsAsync(model.Id))
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             try
             {
-                if (!await _adminOrderService.ExistsAsync(model.Id))
-                {
-                    return BadRequest();
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
                 await _adminOrderService.UpdateOrderStatus(model.Id, model.Status);
 
                 return RedirectToAction(nameof(All));
@@ -97,7 +95,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Admin/OrderController/EditStatus/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }

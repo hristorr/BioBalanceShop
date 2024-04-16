@@ -1,11 +1,9 @@
 ﻿using BioBalanceShop.Attributes;
 using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Exceptions;
 using BioBalanceShop.Core.Models.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BioBalanceShop.Core.Constants.CookieConstants;
-using static BioBalanceShop.Core.Constants.ExceptionErrorMessages;
 
 namespace BioBalanceShop.Controllers
 {
@@ -39,8 +37,14 @@ namespace BioBalanceShop.Controllers
 
                 _cartService.AddProductToCart(cart, productId, quantity);
                 _cookieService.SetCartCookie(Response.Cookies, cart);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CartConroller/AddToCart/Post");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
-                if (quantity == 1)
+            if (quantity == 1)
                 {
                     TempData["AddedToCartMessage"] = $"{quantity} product successfully added to cart";
                 }
@@ -50,13 +54,6 @@ namespace BioBalanceShop.Controllers
                 }
 
                 return RedirectToAction("Details", "Product", new { id = productId });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "CartConroller/AddToCart/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
-            }
-            
         }
 
         [AllowAnonymous]
@@ -82,9 +79,8 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CartConroller/Index/Get");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            
         }
 
         [AllowAnonymous]
@@ -104,9 +100,8 @@ namespace BioBalanceShop.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CartConroller/UpdateCart/Post");
-                throw new InternalServerErrorException(InternalServerErrorMessage);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            
         }
     }
 }

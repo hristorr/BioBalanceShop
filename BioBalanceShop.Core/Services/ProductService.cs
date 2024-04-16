@@ -139,6 +139,7 @@ namespace BioBalanceShop.Core.Services
         {
             return await _repository
                 .AllReadOnly<Product>()
+                .Where(p => p.Quantity > 0)
                 .OrderByDescending(p => p.Id)
                 .Take(5)
                 .Select(p => new HomeIndexProductModel()
