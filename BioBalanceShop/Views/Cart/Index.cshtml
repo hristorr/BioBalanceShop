@@ -1,4 +1,4 @@
-﻿    @model CartIndexModel
+﻿@model CartIndexModel
 
 @{
     ViewBag.Title = "Cart";
@@ -8,55 +8,45 @@
 @if (Model.Items.Any())
 {
     <form asp-controller="Cart" asp-action="UpdateCart" method="Post">
-    <table>
-        <thead>
-            <tr>
-                <th colspan="2">Product</th>
-                <th>Quantity</th>
-                <th colspan="2">Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td><img src="@item.ImageURL" alt="ProductImage" width="100" height="100" /></td>
-                    <td>@item.Title</td>
-                    <td><input name="productQuantities[@item.ProductId]" type="number" max="@item.QuantityInStock" min="1" value="@item.QuantityToOrder" /></td>
-                    <td>
-                        @if (item.Currency.CurrencyIsSymbolPrefix)
-                        {
-                            @item.Currency.CurrencySymbol
-                        }
-                        @String.Format("{0:f2}", item.Price * item.QuantityToOrder)
-                            @if (!item.Currency.CurrencyIsSymbolPrefix)
-                        {
-                            @item.Currency.CurrencySymbol
-                        }
-                    </td>
-                    <td><input type="checkbox" name="RemovedProductIds" value="@item.ProductId" /> Remove</td>
-                </tr>
-            }
-            <tr>
-                <th>Total Price:</th>
-                <td>
-                    @if (Model.CurrencyIsSymbolPrefix)
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><label></label></th>
+                        <th><label>Product</label></th>
+                        <th><label>Unit Price</label></th>
+                        <th><label>Quantity </label></th>
+                        <th><label>Total Price</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
                     {
-                        @Model.CurrencySymbol
+                        <partial name="_CartItemPartial" model="@item" />
                     }
-                    @String.Format("{0:f2}", Model.TotalPrice)
-                    @if (!Model.CurrencyIsSymbolPrefix)
-                    {
-                        @Model.CurrencySymbol
-                    }
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <input type="submit" value="Update Cart" class="btn btn-primary" />
+                    <tr>
+                        <th>Order Total Price:</th>
+                        <td>
+                            @if (Model.CurrencyIsSymbolPrefix)
+                            {
+                                @Model.CurrencySymbol
+                            }
+                            @String.Format("{0:f2}", Model.TotalPrice)
+                            @if (!Model.CurrencyIsSymbolPrefix)
+                            {
+                                @Model.CurrencySymbol
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <input type="submit" value="Update Cart" class="btn btn-primary" />
+        </div>
     </form>
-    <div>
-        <input type="button" value="Proceed to Checkout" onclick="location.href='@Url.Action("Checkout", "Payment")'" />
+    <div class="text-center">
+        <input class="btn btn-primary mt-3" value="Proceed to Checkout" onclick="location.href='@Url.Action("Checkout", "Payment")'" />
     </div>
 }
 else

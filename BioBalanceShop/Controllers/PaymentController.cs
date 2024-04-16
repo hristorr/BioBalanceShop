@@ -90,6 +90,24 @@ namespace BioBalanceShop.Controllers
 
             try
             {
+                var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
+                CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+
+                foreach (var item in productsInCart.Items)
+                {
+                    if (!await _productService.ExistsAsync(item.ProductId))
+                    {
+                        _logger.LogError($"{item.Title} could not be found: PaymentController/Charge/Post");
+                        throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} could not be found. Please update your cart and try again.");
+                    }
+
+                    if (item.QuantityToOrder > item.QuantityInStock)
+                    {
+                        _logger.LogError($"{item.Title} out of stock: PaymentController/Charge/Post");
+                        throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} is no longer available. Please update your cart and try again.");
+                    }
+                }
+
                 StripeConfiguration.ApiKey = _configuration[StripeSettings.SecretKey];
 
                 var orderInfo = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
@@ -110,9 +128,15 @@ namespace BioBalanceShop.Controllers
 
                 if (charge.Status == "succeeded")
                 {
-
-                    var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
-                    CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
+                    foreach (var item in productsInCart.Items)
+                    {
+                        var result = await _productService.UpdateProductQuantityInStock(item.ProductId, item.QuantityToOrder);
+                        if (result == false)
+                        {
+                            _logger.LogError($"{item.Title} out of stock: PaymentController/Charge/Post");
+                            throw new PaymentErrorException($"An error occurred while processing your order. {item.Title} is no longer available. Please update your cart and try again.");
+                        }
+                    }
 
                     string orderNumber = await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
 

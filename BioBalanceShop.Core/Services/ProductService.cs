@@ -151,5 +151,19 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> UpdateProductQuantityInStock(int productId, int orderedQuantity)
+        {
+            var productToUpdate = await _repository.GetByIdAsync<Product>(productId);
+
+            if (orderedQuantity > productToUpdate.Quantity)
+            {
+                return false;
+            }
+
+            productToUpdate.Quantity -= orderedQuantity;
+            await _repository.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

@@ -183,5 +183,11 @@ namespace BioBalanceShop.Core.Services
             return await _repository.AllReadOnly<Product>()
                 .AnyAsync(p => p.ProductCode == productCode);
         }
+
+        public async Task<bool> ProductCodeExistsAsync(string productCode, int productId)
+        {
+            return await _repository.AllReadOnly<Product>()
+                .AnyAsync(p => p.ProductCode == productCode && p.Id != productId);
+        }
     }
 }

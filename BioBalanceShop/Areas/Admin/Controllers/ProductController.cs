@@ -121,7 +121,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
                     return BadRequest();
                 }
 
-                if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode))
+                if (await _adminProductService.ProductCodeExistsAsync(model.ProductCode, model.Id))
                 {
                     ModelState.AddModelError(nameof(model.ProductCode), ProductCodeExistsErrorMessage);
                 }

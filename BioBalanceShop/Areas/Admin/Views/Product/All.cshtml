@@ -117,19 +117,10 @@
             @foreach (var product in Model.Products)
             {
                 <partial name="_ProductPartial" model="@product" />
-
             }
         </tbody>
     </table>
 </div>
-
-
-@* <div class="row">
-    @foreach (var product in Model.Products)
-    {
-        <partial name="_ProductPartial" model="@product" />
-    }
-</div> *@
 
 <partial name="_ProductModalPartial" />
 
