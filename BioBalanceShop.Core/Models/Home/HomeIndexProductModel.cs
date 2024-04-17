@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BioBalanceShop.Core.Contracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Home
 {
-    public class HomeIndexProductModel
+    public class HomeIndexProductModel : IProductModel
     {
         public int Id { get; set; }
 

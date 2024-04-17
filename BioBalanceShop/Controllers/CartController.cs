@@ -4,6 +4,7 @@ using BioBalanceShop.Core.Models.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BioBalanceShop.Core.Constants.CookieConstants;
+using BioBalanceShop.Core.Extensions;
 
 namespace BioBalanceShop.Controllers
 {
@@ -12,25 +13,42 @@ namespace BioBalanceShop.Controllers
         private readonly IShopService _shopService;
         private readonly ICookieService _cookieService;
         private readonly ICartService _cartService;
+        private readonly IProductService _productService;
         private readonly ILogger _logger;
 
         public CartController(
             IShopService shopService,
             ICookieService cookieService,
             ICartService cartService,
+            IProductService productService,
             ILogger<CartController> logger)
         {
             _shopService = shopService;
             _cookieService = cookieService;
             _cartService = cartService;
+            _productService = productService;
             _logger = logger;
         }
 
         [AllowAnonymous]
         [HttpPost]
         [RequiresCookieConsent]
-        public IActionResult AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToCart(int productId, int quantity, string productInfo)
         {
+            var model = await _productService.GetProductByIdAsync(productId);
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                if (productInfo != model.GetProductInfo())
+                {
+                    return BadRequest();
+                }
+            }
+
             try
             {
                 CartCookieModel cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
@@ -53,7 +71,7 @@ namespace BioBalanceShop.Controllers
                     TempData["AddedToCartMessage"] = $"{quantity} products successfully added to cart";
                 }
 
-                return RedirectToAction("Details", "Product", new { id = productId });
+                return RedirectToAction("Details", "Product", new { id = productId, productInfo = model.GetProductInfo() });
         }
 
         [AllowAnonymous]

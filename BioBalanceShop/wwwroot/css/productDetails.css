@@ -1,19 +1,21 @@
-﻿/** {
-    box-sizing: border-box;
-}*/
-
-p {
+﻿p {
     font-size: 16px;
     margin: 5px;
 }
 
-input {
-    width: 100%;
-    height: auto;
-    text-align: center;
-    min-height: 40px;
-    margin: 10px
-}
+    p.productPrice {
+        font-size: 26px;
+        color: #6ab654;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        min-height: 40px;
+        margin: 10px
+    }
 
     input[type="number"] {
         max-width: 80px;

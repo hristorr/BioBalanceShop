@@ -1,8 +1,5 @@
 using BioBalanceShop.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using BioBalanceShop.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +38,12 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllerRoute(
+        name: "Product Details",
+        pattern: "/Product/Details/{id}/{productInfo}",
+        defaults: new { Controller = "Product", Action = "Details" }
+    );
+
     endpoints.MapControllerRoute(
             name: "areas",
             pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}"

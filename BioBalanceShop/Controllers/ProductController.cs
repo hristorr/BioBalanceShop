@@ -1,4 +1,5 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Extensions;
 using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,11 +50,16 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string productInfo)
         {
             var model = await _productService.GetProductByIdAsync(id);
 
             if (model == null) {
+                return BadRequest();
+            }
+
+            if (productInfo != model.GetProductInfo())
+            {
                 return BadRequest();
             }
 

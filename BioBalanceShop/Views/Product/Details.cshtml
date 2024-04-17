@@ -19,9 +19,9 @@
         <img class="responsive" style="width: 20rem;" src="@Model.ImageUrl" alt="Product Front Image">
     </div>
     <div class="flex-item-right">
-        <h2>@Model.Title</h2>
-        <h4>@Model.Subtitle</h4>
-        <p>
+        <h2><b>@Model.Title</b></h2>
+        <h5>@Model.Subtitle</h5>
+        <p class="productPrice">
             <b>
                 @if (Model.CurrencyIsSymbolPrefix)
                 {
@@ -34,7 +34,7 @@
                 }
             </b>
         </p>
-        <form asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@Model.Id" method="Post">
+        <form asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@Model.Id" asp-route-productInfo="@Model.GetProductInfo()" method="Post">
             <input name="quantity" type="number" max="@Model.QuantityInStock" min="1" value="@Model.QuantityToOrder" />
             <input type="submit" value="Add To Cart" class="btn btn-primary" />
         </form>

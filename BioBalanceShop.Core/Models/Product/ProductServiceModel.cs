@@ -1,9 +1,10 @@
-﻿using BioBalanceShop.Core.Models._Base;
+﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models._Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace BioBalanceShop.Core.Models.Product
 {
-    public class ProductServiceModel
+    public class ProductServiceModel : IProductModel
     {
         public int Id { get; set; }
 
