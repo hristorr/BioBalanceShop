@@ -1,10 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Admin.Order
 {
@@ -13,7 +7,6 @@ namespace BioBalanceShop.Core.Models.Admin.Order
         /// <summary>
         /// Order address identificator
         /// </summary>
-        [Comment("Order address identificator")]
         public int Id { get; set; }
 
         /// <summary>

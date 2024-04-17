@@ -4,61 +4,46 @@
     ViewBag.Title = "Product Details";
 }
 
-<head>
-    <style>
-        #closeMsg:hover{
-            color: #214f21;
-            cursor: pointer;
-        }
-    </style>
-</head>
+@section Styles {
+    <link rel="stylesheet" href="~/css/productDetails.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/messages.css" asp-append-version="true" />
+}
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-@if (!string.IsNullOrEmpty(ViewBag.AddedToCartMessage))
-{
-    <span id="addedToCartMsg" style="color: white; background-color:#214f21; padding: 10px; width: 100%; font-weight:bold; font-size: 2em; display: block; text-align: center">@ViewBag.AddedToCartMessage<span id="closeMsg" style="float: right; padding-right: 5px;">X</span></span>
-}
+<partial name="_SiteMessagePartial" />
 
-
-<div class="container" style="display:inline">
-    <div class="row">
-        <div class="col-4">
-            <img class="card-img-top" style="width: 20rem;"
-                 src="@Model.ImageUrl" alt="Product Front Image">
-        </div>
-        <div class="card col-8 border-0">
-            <h2>@Model.Title</h2>
-            <h4>@Model.Subtitle</h4>
-            <p>
-                <b>
-                    @if (Model.CurrencyIsSymbolPrefix)
-                    {
-                        @Model.CurrencySymbol
-                    }
-                    @String.Format("{0:f2}", Model.Price)
-                    @if (!Model.CurrencyIsSymbolPrefix)
-                    {
-                        @Model.CurrencySymbol
-                    }
-                </b>
-            </p>
-            <form asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@Model.Id" method="Post">
-                <input name="quantity" type="number" max="@Model.QuantityInStock" min="1" value="@Model.QuantityToOrder" />
-                <input type="submit" value="Add To Cart" class="btn btn-primary" />
-            </form>
-            <p style="font-size:16px;">@Model.Description</p>
-            <p style="font-size:16px;">@Model.Ingredients</p>
-        </div>
+<div class="flex-container">
+    <div class="flex-item-left">
+        <img class="responsive" style="width: 20rem;" src="@Model.ImageUrl" alt="Product Front Image">
+    </div>
+    <div class="flex-item-right">
+        <h2><b>@Model.Title</b></h2>
+        <h5>@Model.Subtitle</h5>
+        <p class="productPrice">
+            <b>
+                @if (Model.CurrencyIsSymbolPrefix)
+                {
+                    @Model.CurrencySymbol
+                }
+                @String.Format("{0:f2}", Model.Price)
+                @if (!Model.CurrencyIsSymbolPrefix)
+                {
+                    @Model.CurrencySymbol
+                }
+            </b>
+        </p>
+        <form asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@Model.Id" asp-route-productInfo="@Model.GetProductInfo()" method="Post">
+            <input name="quantity" type="number" max="@Model.QuantityInStock" min="1" value="@Model.QuantityToOrder" />
+            <input type="submit" value="Add To Cart" class="btn btn-primary" />
+        </form>
+        <p>@Model.Description</p>
+        <br />
+        <p>@Model.Ingredients</p>
     </div>
 </div>
 
-
 @section Scripts {
-    <script>
-        $("#closeMsg").on("click", function () {
-            $("#addedToCartMsg").css("display", "none");
-        });
-    </script>
+    <script src="~/js/messages.js"></script>
 }

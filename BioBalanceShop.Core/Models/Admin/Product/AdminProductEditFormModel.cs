@@ -1,15 +1,8 @@
-﻿using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
-using BioBalanceShop.Core.Models._Base;
+﻿using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Product;
+using System.ComponentModel.DataAnnotations;
+using static BioBalanceShop.Core.Constants.MessageConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 
 namespace BioBalanceShop.Core.Models.Admin.Product
 {
@@ -17,37 +10,63 @@ namespace BioBalanceShop.Core.Models.Admin.Product
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(ProductCodeMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(ProductCodeMaxLength,
+            MinimumLength = ProductCodeMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Product code")]
         public string ProductCode { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(TitleMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(TitleMaxLength,
+            MinimumLength = TitleMinLength,
+            ErrorMessage = LengthMessage)]
+        [Display(Name = "Product name")]
         public string Title { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(SubtitleMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(SubtitleMaxLength,
+            MinimumLength = SubtitleMinLength,
+            ErrorMessage = LengthMessage)]
+        [Display(Name = "Subtitle")]
         public string Subtitle { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(DescriptionMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(DescriptionMaxLength,
+            MinimumLength = DescriptionMinLength,
+            ErrorMessage = LengthMessage)]
+        [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(IngredeientsMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(IngredeientsMaxLength,
+            MinimumLength = IngredeientsMinLength,
+            ErrorMessage = LengthMessage)]
+        [Display(Name = "Ingredients")]
         public string Ingredients { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(ImageUrlMaxLength)]
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(ImageUrlMaxLength,
+            MinimumLength = ImageUrlMinLength,
+            ErrorMessage = LengthMessage)]
         [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [Range(typeof(int),
+            QuantityMinRange,
+            QuantityMaxRange,
+            ConvertValueInInvariantCulture = true,
+            ErrorMessage = RangeErrorMessage)]
         [Display(Name = "Stock quantity")]
         public int Quantity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
+        [Range(typeof(decimal),
+            PriceMinRange,
+            PriceMaxRange,
+            ConvertValueInInvariantCulture = true,
+            ErrorMessage = RangeErrorMessage)]
         [Display(Name = "Unit price")]
         public decimal Price { get; set; }
 

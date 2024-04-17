@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Customer
 {
@@ -12,7 +8,8 @@ namespace BioBalanceShop.Core.Models.Customer
         [Display(Name = "Country")]
         public int? Id { get; set; }
 
+        [Display(Name = "Country")]
+        [PersonalData]
         public string? Name { get; set; } = string.Empty;
-
     }
 }

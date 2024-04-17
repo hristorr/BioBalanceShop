@@ -26,5 +26,7 @@ namespace BioBalanceShop.Core.Constants
 
         public const string PasswordConfirmErrorMessage = "The password and confirmation password do not match";
 
+        public const string ProductCodeExistsErrorMessage = "The product code already exists. Please enter a unique product code";
+
     }
 }

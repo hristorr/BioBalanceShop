@@ -12,11 +12,11 @@ namespace BioBalanceShop.Core.Contracts
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserServiceModel>> GetAllUsersAsync();
+        Task<IEnumerable<AdminUserServiceModel>> GetAllUsersAsync();
 
         Task<string> GetUserFullNameAsync(string userId);
 
-        Task<UserQueryServiceModel> AllAsync(
+        Task<AdminUserQueryServiceModel> AllAsync(
           string? role = null,
           string? searchTerm = null,
           UserSorting sorting = UserSorting.Newest,
@@ -25,15 +25,15 @@ namespace BioBalanceShop.Core.Contracts
 
         Task DeleteUserByIdAsync(string userId);
 
-        Task EditUserAsync(UserEditFormModel model);
+        Task EditUserAsync(AdminUserEditFormModel model);
 
-        Task<UserEditFormModel> GetUserByIdAsync(string userId);
+        Task<AdminUserEditFormModel?> GetUserByIdAsync(string userId);
 
         Task<string> GetUserRole(ApplicationUser user);
 
         Task<IEnumerable<string>> GetAllRoles();
 
-        Task CreateUserAsync(UserCreateFormModel model);
+        Task CreateUserAsync(AdminUserCreateFormModel model);
 
         Task<bool> UserIsActive(string userId);
     }

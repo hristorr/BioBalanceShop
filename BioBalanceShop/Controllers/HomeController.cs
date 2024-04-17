@@ -1,9 +1,6 @@
 ﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Services;
-using BioBalanceShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace BioBalanceShop.Controllers
 {
@@ -25,6 +22,12 @@ namespace BioBalanceShop.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _productService.GetLastFiveProductsAsync();
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
             return View(model);
         }
 
@@ -41,6 +44,16 @@ namespace BioBalanceShop.Controllers
             if (statusCode == 401)
             {
                 return View("Error401");
+            }
+
+            if (statusCode == 404)
+            {
+                return View("Error404");
+            }
+
+            if (statusCode == 500)
+            {
+                return View("Error500");
             }
 
             return View();

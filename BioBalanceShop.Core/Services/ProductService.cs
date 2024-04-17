@@ -30,7 +30,7 @@ namespace BioBalanceShop.Core.Services
         public async Task<bool> ExistsAsync(int id)
         {
             return await _repository.AllReadOnly<Product>()
-                .AnyAsync(h => h.Id == id);
+                .AnyAsync(p => p.Id == id);
         }
 
         public async Task<ProductQueryServiceModel> AllAsync(string? category = null, string? searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 1)
@@ -135,36 +135,14 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity)
-        {
-            return await _repository
-               .AllReadOnly<Product>()
-               .Where(p => p.Id == id)
-               .Select(p => new CartIndexGetProductModel()
-               {
-                   ProductId = p.Id,
-                   Title = p.Title,
-                   ImageURL = p.ImageUrl,
-                   QuantityToOrder = quantity,
-                   QuantityInStock = p.Quantity,
-                   Price = p.Price,
-                   Currency = new CartIndexGetProductCurrencyModel()
-                   {
-                       Id = p.Shop.Currency.Id,
-                       CurrencySymbol = p.Shop.Currency.Symbol,
-                       CurrencyIsSymbolPrefix = p.Shop.Currency.IsSymbolPrefix
-                   }
-               })
-               .FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync()
+        public async Task<IEnumerable<HomeIndexProductModel>> GetLastFiveProductsAsync()
         {
             return await _repository
                 .AllReadOnly<Product>()
+                .Where(p => p.Quantity > 0)
                 .OrderByDescending(p => p.Id)
                 .Take(5)
-                .Select(p => new HomeIndexGetProductModel()
+                .Select(p => new HomeIndexProductModel()
                 {
                     Id = p.Id,
                     Title = p.Title,
@@ -174,5 +152,19 @@ namespace BioBalanceShop.Core.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> UpdateProductQuantityInStock(int productId, int orderedQuantity)
+        {
+            var productToUpdate = await _repository.GetByIdAsync<Product>(productId);
+
+            if (orderedQuantity > productToUpdate.Quantity)
+            {
+                return false;
+            }
+
+            productToUpdate.Quantity -= orderedQuantity;
+            await _repository.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

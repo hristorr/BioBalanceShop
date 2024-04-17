@@ -1,21 +1,17 @@
-﻿using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Models;
+﻿using BioBalanceShop.Attributes;
+using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Exceptions;
+using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Core.Models.Payment;
-using BioBalanceShop.Core.Services;
-using BioBalanceShop.Models;
+using BioBalanceShop.Core.Models.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Stripe;
-using Stripe.Checkout;
+using Stripe.Issuing;
 using System.Security.Claims;
-using BioBalanceShop.Infrastructure.Data.Enumerations;
-using Microsoft.AspNetCore.Identity;
-using BioBalanceShop.Infrastructure.Data.Models;
 using static BioBalanceShop.Core.Constants.CookieConstants;
-using BioBalanceShop.Core.Models._Base;
+using static BioBalanceShop.Infrastructure.Constants.ConfigurationConstants;
 
 namespace BioBalanceShop.Controllers
 {
@@ -25,6 +21,8 @@ namespace BioBalanceShop.Controllers
         private readonly IProductService _productService;
         private readonly IShopService _shopService;
         private readonly IPaymentService _paymentService;
+        private readonly ICartService _cartService;
+        private readonly ICookieService _cookieService;
         private readonly IOrderService _orderService;
         private readonly ILogger _logger;
 
@@ -33,6 +31,8 @@ namespace BioBalanceShop.Controllers
             IProductService productService,
             IShopService shopService,
             IPaymentService paymentService,
+            ICartService cartService,
+            ICookieService cookieService,
             IOrderService orderService,
             ILogger<CartController> logger)
         {
@@ -40,126 +40,104 @@ namespace BioBalanceShop.Controllers
             _productService = productService;
             _shopService = shopService;
             _paymentService = paymentService;
+            _cartService = cartService;
+            _cookieService = cookieService;
             _orderService = orderService;
             _logger = logger;
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Checkout()
+        public IActionResult GetStripeKey()
         {
-            var publishableKey = _configuration["StripeSettings:PublishableKey"];
-            ViewBag.PublishableKey = publishableKey;
-
-            var cart = GetOrCreateCart();
-
-            if (cart == null || cart.Items.Count() == 0)
-            {
-                return RedirectToAction("Index", "Cart");
-            }
-
-            var customer = await GeneratePaymentCheckoutGetCustomerModel();
-            var order = await GeneratePaymentCheckoutGetOrderModel(cart);
-
-            //CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
-
-            //var order = new PaymentCheckoutGetOrderModel();
-            //order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
-            //order.Currency = await _shopService.GetShopCurrency();
-
-            //if (currency != null)
-            //{
-            //    order.CurrencyCode = currency.CurrencyCode;
-            //    order.CurrencySymbol = currency.CurrencySymbol;
-            //    order.CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix;
-            //}
-
-
-            PaymentCheckoutPostModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
-
-            return View(checkoutModel);
+            var publishableKey = _configuration[StripeSettings.PublishableKey];
+            return Json(new { publishableKey });
         }
-
 
         [AllowAnonymous]
         [HttpGet]
+        [RequiresCookieConsent]
         public async Task<IActionResult> Charge()
         {
-            var publishableKey = _configuration["StripeSettings:PublishableKey"];
-            ViewBag.PublishableKey = publishableKey;
-
-            var model = GetOrderInfoFromCookie();
-            var currency = await _shopService.GetShopCurrency();
-            model.Order.Currency = new ShopCurrencyServiceModel()
+            try
             {
-                Id = currency.Id,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
-                CurrencySymbol = currency.CurrencySymbol
-            };
+                var model = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
 
-            return View(model);
+                var currency = await _shopService.GetShopCurrency();
+                model.Order.Currency = new ShopCurrencyServiceModel()
+                {
+                    Id = currency.Id,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyIsSymbolPrefix = currency.CurrencyIsSymbolPrefix,
+                    CurrencySymbol = currency.CurrencySymbol
+                };
 
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Charge/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
-
 
         [IgnoreAntiforgeryToken]
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Charge(string stripeToken, string stripeEmail)
+        [RequiresCookieConsent]
+        public async Task<IActionResult> Charge(string stripeToken)
         {
-            StripeConfiguration.ApiKey = _configuration["StripeSettings:SecretKey"];
-
-           
-            var orderInfo = GetOrderInfoFromCookie();
-
-            //var cart = GetOrCreateCart();
-
-            //CartIndexGetModel productsInCart = new CartIndexGetModel();
-
-            //foreach (var item in cart.Items)
-            //{
-            //    if (await _productService.ExistsAsync(item.ProductId))
-            //    {
-            //        CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
-            //        productsInCart.Items.Add(product);
-            //    }
-            //}
-
-            //decimal totalAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
-            //var currencyInfo = await _shopService.GetShopCurrency();
-            //var currencyCode = currencyInfo.CurrencyCode;
-
-
-
-            decimal totalAmount = orderInfo.Order.TotalOrderAmount;
-            var currencyCode = orderInfo.Order.Currency.CurrencyCode;
-
-
-            if (currencyCode == null)
+            if (string.IsNullOrEmpty(stripeToken))
             {
-                throw new Exception("Internal server error");
+                return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
             }
 
-            var options = new ChargeCreateOptions
+            try
             {
-                Amount = (long)(totalAmount * 100), // replace with the actual amount in cents
-                Currency = currencyCode.ToLower(),
-                Description = "BioBalance Payment",
-                Source = stripeToken,
-                ReceiptEmail = stripeEmail,
-            };
+                var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
+                CartIndexModel? productsInCart = await _cartService.GetCartProductsInfo(cart);
 
-            var service = new ChargeService();
-            Charge charge = service.Create(options);
-
-            // Handle success or failure based on charge status
-            if (charge.Status == "succeeded")
-            {
-                try
+                foreach (var item in productsInCart.Items)
                 {
-                    var cart = GetOrCreateCart();
-                    CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
+                    if (!await _productService.ExistsAsync(item.ProductId))
+                    {
+                        return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
+                    }
+
+                    if (item.QuantityToOrder > item.QuantityInStock)
+                    {
+                        return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
+                    }
+                }
+
+                StripeConfiguration.ApiKey = _configuration[StripeSettings.SecretKey];
+
+                var orderInfo = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
+
+                decimal totalAmount = orderInfo.Order.TotalOrderAmount;
+                var currencyCode = orderInfo.Order.Currency.CurrencyCode;
+
+                var options = new ChargeCreateOptions
+                {
+                    Amount = (long)(totalAmount * 100),
+                    Currency = currencyCode.ToLower(),
+                    Description = "BioBalance Payment",
+                    Source = stripeToken,
+                };
+
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+
+                if (charge.Status == "succeeded")
+                {
+                    foreach (var item in productsInCart.Items)
+                    {
+                        var result = await _productService.UpdateProductQuantityInStock(item.ProductId, item.QuantityToOrder);
+                        if (result == false)
+                        {
+                            return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status400BadRequest });
+                        }
+                    }
 
                     string orderNumber = await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
 
@@ -167,118 +145,86 @@ namespace BioBalanceShop.Controllers
                     {
                         ViewBag.OrderNumber = orderNumber;
                     }
+
+                    _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
+                    _cookieService.RemoveCookie(Response.Cookies, OrderInfoCookie);
+
+                    ViewBag.CustomerFirstName = orderInfo.Customer.FirstName;
+
+                    return View("PaymentSuccess");
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "PaymentController/Charge/CreatePaymentAsync");
-                    throw new Exception("Internal Server Error");
+                    return View("PaymentFailed");
                 }
-
-                //Empty cookie content
-                RemoveCookie(ShoppingCartCookie);
-                RemoveCookie(OrderInfoCookie);
-
-                
-                ViewBag.CustomerFirstName = orderInfo.Customer.FirstName;
-
-                // Payment success
-                return View("PaymentSuccess");
             }
-            else
+            catch (Exception ex)
             {
-                // Payment failed
-                return View("PaymentFailed");
+                _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
+                _logger.LogError(ex, "PaymentConroller/Charge/Post");
+                return RedirectToAction("Error", "Home", new { StatusCode = StatusCodes.Status500InternalServerError });
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            try
+            {
+                var publishableKey = _configuration[StripeSettings.PublishableKey];
+                ViewBag.PublishableKey = publishableKey;
 
-      
+                var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
-        //[IgnoreAntiforgeryToken]
+                if (cart == null || cart.Items.Count() == 0)
+                {
+                    return RedirectToAction("Index", "Cart");
+                }
+
+                var customer = await GeneratePaymentCheckoutGetCustomerModel();
+                var order = await GeneratePaymentCheckoutGetOrderModel(cart);
+                CheckoutFormModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
+
+                return View(checkoutModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Checkout/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Checkout(PaymentCheckoutPostModel model)
+        [RequiresCookieConsent]
+        public async Task<IActionResult> Checkout(CheckoutFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                model.Customer.Countries = await _shopService.AllCountriesAsync();
-                model.Order.Currency = await _shopService.GetShopCurrency();
-                return View(model);
-            }
-
-            SaveOrderInfoInCookie(model);
-            return RedirectToAction(nameof(Charge));
-        }
-
-
-        private PaymentCheckoutPostModel GetOrderInfoFromCookie()
-        {
-            PaymentCheckoutPostModel orderInfo;
-            string? orderCookie = Request.Cookies[OrderInfoCookie];
-
-            if (string.IsNullOrEmpty(orderCookie))
-            {
-                orderInfo = null;
-            }
-            else
-            {
-                orderInfo = JsonConvert.DeserializeObject<PaymentCheckoutPostModel>(orderCookie);
-            }
-
-            return orderInfo;
-        }
-
-        private void SaveOrderInfoInCookie(PaymentCheckoutPostModel model)
-        {
-            string orderInfo = JsonConvert.SerializeObject(model);
-            Response.Cookies.Append(OrderInfoCookie, orderInfo, new CookieOptions
-            {
-                Expires = DateTime.Now.AddHours(1),
-                HttpOnly = true,
-                Secure = true
-            });
-
-        }
-
-
-        private CartCookieModel GetOrCreateCart()
-        {
-            CartCookieModel cart;
-            string? cartCookie = Request.Cookies[ShoppingCartCookie];
-
-            if (string.IsNullOrEmpty(cartCookie))
-            {
-                cart = null;
-            }
-            else
-            {
-                cart = JsonConvert.DeserializeObject<CartCookieModel>(cartCookie);
-            }
-
-            return cart;
-        }
-
-        private async Task<CartIndexGetModel> GetCartProductInfo(CartCookieModel cart)
-        {
-            CartIndexGetModel productsInCart = new CartIndexGetModel();
-
-            foreach (var item in cart.Items)
-            {
-                if (await _productService.ExistsAsync(item.ProductId))
+                if (!ModelState.IsValid)
                 {
-                    CartIndexGetProductModel product = await _productService.GetProductFromCart(item.ProductId, item.Quantity);
-                    productsInCart.Items.Add(product);
-                }
-            }
 
-            return productsInCart;
+                    model.Customer.Countries = await _shopService.AllCountriesAsync();
+                    model.Order.Currency = await _shopService.GetShopCurrency();
+                    return View(model);
+                }
+
+                _cookieService.SaveOrderInfoInCookie(Response.Cookies, model);
+
+                return RedirectToAction(nameof(Charge));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PaymentConroller/Checkout/Post");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
 
-        private async Task<PaymentCheckoutPostCustomerModel> GeneratePaymentCheckoutGetCustomerModel()
+        private async Task<CheckoutCustomerFormModel> GeneratePaymentCheckoutGetCustomerModel()
         {
-            var customer = new PaymentCheckoutPostCustomerModel();
+            var customer = new CheckoutCustomerFormModel();
 
             if (await _paymentService.ExistsAsync(User.Id()))
             {
@@ -286,18 +232,18 @@ namespace BioBalanceShop.Controllers
             }
             else
             {
-                customer.Country = new PaymentCheckoutPostCountryModel();
+                customer.Country = new ShopCountryServiceModel();
             }
-                        
+
             customer.Countries = await _shopService.AllCountriesAsync();
             return customer;
         }
 
-        private async Task<PaymentCheckoutPostOrderModel> GeneratePaymentCheckoutGetOrderModel(CartCookieModel cart)
+        private async Task<CheckoutOrderFormModel> GeneratePaymentCheckoutGetOrderModel(CartCookieModel cart)
         {
-            CartIndexGetModel productsInCart = await GetCartProductInfo(cart);
+            CartIndexModel productsInCart = await _cartService.GetCartProductsInfo(cart);
 
-            var order = new PaymentCheckoutPostOrderModel();
+            var order = new CheckoutOrderFormModel();
             order.OrderAmount = productsInCart.Items.Select(i => i.Price * i.QuantityToOrder).Sum();
             order.Currency = await _shopService.GetShopCurrency();
 
@@ -307,22 +253,14 @@ namespace BioBalanceShop.Controllers
             return order;
         }
 
-        private async Task<PaymentCheckoutPostModel> GeneratePaymentCheckoutGetModel(PaymentCheckoutPostCustomerModel customer, PaymentCheckoutPostOrderModel order)
+        private async Task<CheckoutFormModel> GeneratePaymentCheckoutGetModel(CheckoutCustomerFormModel customer, CheckoutOrderFormModel order)
         {
-            var checkoutModel = new PaymentCheckoutPostModel()
+            var checkoutModel = new CheckoutFormModel()
             {
                 Customer = customer,
                 Order = order
             };
             return checkoutModel;
-        }
-
-        private void RemoveCookie(string cookie)
-        {
-            Response.Cookies.Append(cookie, "", new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(-1)
-            });
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IAdminProductService, AdminProductService>();
             services.AddScoped<IAdminShopSettingsService, AdminShopSettingsService>();
             services.AddScoped<IAdminOrderService, AdminOrderService>();
+            services.AddScoped<ICookieService, CookieService>();
+            services.AddScoped<ICartService, CartService>();
 
             return services;
         }

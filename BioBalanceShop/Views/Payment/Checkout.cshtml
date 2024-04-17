@@ -1,17 +1,21 @@
-﻿@model PaymentCheckoutPostModel
+﻿@model CheckoutFormModel
 
 @{
     ViewBag.Title = "Checkout";
 }
 
-<h1>Checkout</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/checkout.css" asp-append-version="true" />
+}
 
-<div class="row">
-    
-    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="flexContainer row">
+    <div class="flexItem">
         <form method="post">
             <div>
-                <h2>Customer Information</h2>
+                <h5>Customer Information</h5>
                 <div class="form-group">
                     <label asp-for="Customer.FirstName"></label>
                     <input asp-for="Customer.FirstName" class="form-control" placeholder="First name...">
@@ -71,7 +75,7 @@
             </div>
             <br />
             <div>
-                <h2>Order Information</h2>
+                <h5>Order Information</h5>
                 <div class="form-group">
                     <input type="hidden" asp-for="Order.Currency.Id" class="form-control" value="@Model.Order.Currency.Id">
                     <input type="hidden" asp-for="Order.Currency.CurrencyCode" class="form-control" value="@Model.Order.Currency.CurrencyCode">

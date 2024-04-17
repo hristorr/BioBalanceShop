@@ -1,13 +1,18 @@
-﻿@model UserEditFormModel
+﻿@model AdminUserEditFormModel
 
 @{
     ViewBag.Title = "Edit User";
 }
 
-<h1>Edit User</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/users.css" asp-append-version="true" />
+}
 
-<div class="row">
-    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="flexContainer">
+    <div class="flexItem flexItemLeft">
         <form method="post">
             <div class="form-group">
                 <label asp-for="@Model.UserName"></label>

@@ -1,5 +1,6 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models.Payment;
+using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ namespace BioBalanceShop.Core.Services
             _customerService = customerService;
         }
 
-        public async Task CreatePaymentAsync(PaymentCheckoutPostCreatePaymentModel model)
+        public async Task CreatePaymentAsync(PaymentServiceModel model)
         {
             await _repository.AddAsync(model);
             await _repository.SaveChangesAsync();
@@ -37,17 +38,17 @@ namespace BioBalanceShop.Core.Services
                 .AnyAsync(c => c.UserId == userId);
         }
 
-        public async Task<PaymentCheckoutPostCustomerModel> GetCustomerInfoAsync(string userId)
+        public async Task<CheckoutCustomerFormModel> GetCustomerInfoAsync(string userId)
         {
-            var customer = await _repository.AllReadOnly<Customer>()
-                .Where(c => c.UserId == userId)
-                .Select(c => new PaymentCheckoutPostCustomerModel()
+            var customer = await _repository.AllReadOnly<ApplicationUser>()
+                .Where(c => c.Id == userId)
+                .Select(c => new CheckoutCustomerFormModel()
                 {
-                    FirstName = c.User.FirstName,
-                    LastName = c.User.LastName,
-                    Email = c.User.Email,
-                    PhoneNumber = c.User.PhoneNumber,
-                    Country = new PaymentCheckoutPostCountryModel()
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Email = c.Email,
+                    PhoneNumber = c.PhoneNumber,
+                    Country = new ShopCountryServiceModel()
                 })
                 .FirstAsync();
 

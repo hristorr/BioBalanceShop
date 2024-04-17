@@ -11,7 +11,6 @@ namespace BioBalanceShop.Core.Models.Order
         /// <summary>
         /// Order address identificator
         /// </summary>
-        [Comment("Order address identificator")]
         public int Id { get; set; }
 
         /// <summary>

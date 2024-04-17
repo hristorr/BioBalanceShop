@@ -1,14 +1,6 @@
-﻿using BioBalanceShop.Infrastructure.Data.Enumerations;
-using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using BioBalanceShop.Core.Models._Base;
+using BioBalanceShop.Infrastructure.Data.Enumerations;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BioBalanceShop.Core.Models._Base;
 
 namespace BioBalanceShop.Core.Models.Order
 {
@@ -22,32 +14,37 @@ namespace BioBalanceShop.Core.Models.Order
         /// <summary>
         /// Order number
         /// </summary>
-        [Comment("Order number")]
+        [Display(Name = "Order number")]
         public string OrderNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Order date
         /// </summary>
+        [Display(Name = "Order date")]
         public DateTime OrderDate { get; set; }
 
         /// <summary>
         /// Order status
         /// </summary>
+        [Display(Name = "Order status")]
         public OrderStatus Status { get; set; }
 
         /// <summary>
         /// Order amount excluding shipping fee
         /// </summary>
+        [Display(Name = "Order items total amount")]
         public decimal Amount { get; set; }
 
         /// <summary>
         /// Order shipping fee
         /// </summary>
+        [Display(Name = "Shipping fee")]
         public decimal ShippingFee { get; set; }
 
         /// <summary>
         /// Order total amount including shipping fee
         /// </summary>
+        [Display(Name = "Order total amount")]
         public decimal TotalAmount { get; set; }
 
         /// <summary>

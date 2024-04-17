@@ -1,8 +1,12 @@
-﻿@model IEnumerable<HomeIndexGetProductModel>
+﻿@model IEnumerable<HomeIndexProductModel>
 
 @{
     ViewData["Title"] = "Bio Balance - Shop Healthy Products";
     var products = Model.ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
 
 @if (!products.Any())
@@ -23,12 +27,11 @@
         {
             var product = products[i];
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                <a asp-controller="Product" asp-action ="Details" asp-route-id="@product.Id">
-                <img class="d-block w-100" style="height:500px; width:300px!important; display: block; margin:auto;"
-                     src="@product.ImageUrl" alt="@product.Title">
-                    <div class="carousel-caption d-none d-md-block" style="color: #214f21; background-color:white; font-weight: bold; opacity: 0.8">
-                    <h3 style="margin: 5px auto;">@product.Title</h3>
-                    <h5 style="margin: 5px auto;">@product.Subtitle</h5>
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" asp-route-productInfo="@product.GetProductInfo()">
+                    <img class="d-block w-100" heigh="500" width="300" src="@product.ImageUrl" alt="@product.Title">
+                    <div class="carousel-caption d-none d-md-block">
+                    <h3>@product.Title</h3>
+                    <h5>@product.Subtitle</h5>
                 </div>
                 </a>
             </div>

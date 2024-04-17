@@ -1,13 +1,8 @@
 ﻿using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Product;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 using static BioBalanceShop.Core.Constants.MessageConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ProductData;
 
 namespace BioBalanceShop.Core.Models.Admin.Product
 {
@@ -17,27 +12,31 @@ namespace BioBalanceShop.Core.Models.Admin.Product
         [StringLength(TitleMaxLength,
             MinimumLength = TitleMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Product name")]
         public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(SubtitleMaxLength,
             MinimumLength = SubtitleMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Subtitle")]
         public string Subtitle { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(DescriptionMaxLength,
             MinimumLength = DescriptionMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(IngredeientsMaxLength,
             MinimumLength = IngredeientsMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Ingredients")]
         public string Ingredients { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
         [StringLength(ProductCodeMaxLength,
             MinimumLength = ProductCodeMinLength,
             ErrorMessage = LengthMessage)]
@@ -71,7 +70,7 @@ namespace BioBalanceShop.Core.Models.Admin.Product
 
         public ShopCurrencyServiceModel? Currency { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
         public int CategoryId { get; set; }
 
         public IEnumerable<CategoryAllServiceModel> Categories { get; set; } = new List<CategoryAllServiceModel>();

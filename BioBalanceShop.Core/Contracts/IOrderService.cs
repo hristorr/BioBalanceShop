@@ -14,7 +14,7 @@ namespace BioBalanceShop.Core.Contracts
 {
     public interface IOrderService
     {
-        Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId);
+        Task<string> CreateOrderAsync(CheckoutFormModel model, CartIndexModel productsInCart, string userId);
 
         string GenerateOrderNumber(int lastOrderNumber);
 
@@ -28,8 +28,12 @@ namespace BioBalanceShop.Core.Contracts
             int ordersPerPage = 1, 
             string? userId = null);
 
-        Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id);
+        Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id, string userId);
 
         Task<IEnumerable<OrderItemDetailsModel>> GetOrderItemsByOrderId(int id);
+
+        Task<string?> GetUserIdByOrderIdAsync(int id);
+
+        Task<bool> ExistsAsync(int id);
     }
 }

@@ -29,8 +29,8 @@ namespace BioBalanceShop.Core.Contracts
 
         Task<ProductDetailsServiceModel?> GetProductByIdAsync(int id);
 
-        Task<CartIndexGetProductModel?> GetProductFromCart(int id, int quantity);
+        Task<IEnumerable<HomeIndexProductModel>> GetLastFiveProductsAsync();
 
-        Task<IEnumerable<HomeIndexGetProductModel>> GetLastFiveProductsAsync();
+        Task<bool> UpdateProductQuantityInStock(int productId, int orderedQuantity);
     }
 }

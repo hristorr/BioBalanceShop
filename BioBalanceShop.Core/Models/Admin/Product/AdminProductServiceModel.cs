@@ -1,10 +1,5 @@
 ﻿using BioBalanceShop.Core.Models._Base;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Models.Admin.Product
 {
@@ -18,6 +13,7 @@ namespace BioBalanceShop.Core.Models.Admin.Product
         [Display(Name = "Product code")]
         public string ProductCode { get; set; } = string.Empty;
 
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = string.Empty;
 
         [Display(Name = "Stock quantity")]

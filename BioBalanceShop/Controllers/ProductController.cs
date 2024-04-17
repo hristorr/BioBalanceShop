@@ -1,8 +1,8 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Extensions;
 using BioBalanceShop.Core.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace BioBalanceShop.Controllers
 {
@@ -26,23 +26,31 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] ProductAllServiceModel model)
         {
-            var products = await _productService.AllAsync(
+            try
+            {
+                var products = await _productService.AllAsync(
                 model.Category,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
                 model.ProductsPerPage);
 
-            model.TotalProductsCount = products.TotalProductsCount;
-            model.Products = products.Products;
-            model.Categories = await _productService.AllCategoryNamesAsync();
+                model.TotalProductsCount = products.TotalProductsCount;
+                model.Products = products.Products;
+                model.Categories = await _productService.AllCategoryNamesAsync();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ProductConroller/All/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string productInfo)
         {
             var model = await _productService.GetProductByIdAsync(id);
 
@@ -50,14 +58,18 @@ namespace BioBalanceShop.Controllers
                 return BadRequest();
             }
 
+            if (productInfo != model.GetProductInfo())
+            {
+                return BadRequest();
+            }
+
             string? addedToCartMessage = TempData["AddedToCartMessage"] as string;
 
             if (!string.IsNullOrEmpty(addedToCartMessage))
             {
-                ViewBag.AddedToCartMessage = addedToCartMessage;
+                ViewBag.SiteMessage = addedToCartMessage;
             }
             
-
             return View(model);
         }
     }

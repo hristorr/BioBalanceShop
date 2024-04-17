@@ -11,5 +11,7 @@ namespace BioBalanceShop.Core.Constants
         public const string ShoppingCartCookie = "ShoppingCart";
 
         public const string OrderInfoCookie = "OrderInfo";
+
+        public const string ConsentCookie = "CookieConsent";
     }
 }

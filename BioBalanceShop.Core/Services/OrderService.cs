@@ -83,7 +83,7 @@ namespace BioBalanceShop.Core.Services
             };
         }
 
-        public async Task<string> CreateOrderAsync(PaymentCheckoutPostModel model, CartIndexGetModel productsInCart, string userId)
+        public async Task<string> CreateOrderAsync(CheckoutFormModel model, CartIndexModel productsInCart, string userId)
         {
             
             Payment payment = new Payment()
@@ -108,8 +108,6 @@ namespace BioBalanceShop.Core.Services
                 City = model.Customer.City,
                 CountryId = model.Customer.Country.Id
             };
-
-            //Add order items
 
             List<OrderItem> orderItems = new List<OrderItem>();
 
@@ -140,7 +138,6 @@ namespace BioBalanceShop.Core.Services
                 OrderRecipient = orderRecipient,
                 OrderItems = orderItems
             };
-
             
             if (userId != null)
             {
@@ -168,11 +165,11 @@ namespace BioBalanceShop.Core.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id)
+        public async Task<OrderDetailsServiceModel?> GetOrderByIdAsync(int id, string userId)
         {
             var order = await _repository
                 .AllReadOnly<Order>()
-                .Where(o => o.Id == id)
+                .Where(o => o.Id == id && o.Customer.UserId == userId)
                 .Select(o => new OrderDetailsServiceModel()
                 {
                     Id = o.Id,
@@ -225,6 +222,21 @@ namespace BioBalanceShop.Core.Services
                     Price = oi.Price
                 }))
                 .ToListAsync();
+        }
+
+        public async Task<string?> GetUserIdByOrderIdAsync(int id)
+        {
+            return await _repository
+           .AllReadOnly<Order>()
+           .Where(o => o.Id == id)
+           .Select(o => o.Customer.UserId)
+           .FirstOrDefaultAsync();  
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _repository.AllReadOnly<Order>()
+                .AnyAsync(o => o.Id == id);
         }
     }
 }

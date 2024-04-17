@@ -1,13 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models.Order;
-using BioBalanceShop.Core.Models.Payment;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static BioBalanceShop.Core.Constants.RoleConstants;
 using System.Security.Claims;
 
 namespace BioBalanceShop.Controllers
@@ -31,7 +27,9 @@ namespace BioBalanceShop.Controllers
         [HttpGet]
         public async Task<IActionResult> MyOrders([FromQuery] OrderAllGetModel model)
         {
-            var orders = await _orderService.AllAsync(
+            try
+            {
+                var orders = await _orderService.AllAsync(
                 model.OrderStatus,
                 model.SearchTerm,
                 model.Sorting,
@@ -39,18 +37,34 @@ namespace BioBalanceShop.Controllers
                 model.OrdersPerPage,
                 User.Id());
 
-            model.TotalOrdersCount = orders.TotalOrdersCount;
-            model.Orders = orders.Orders;
-            model.OrderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
+                model.TotalOrdersCount = orders.TotalOrdersCount;
+                model.Orders = orders.Orders;
+                model.OrderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToList();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "OrderConroller/MyOrders/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await _orderService.GetOrderByIdAsync(id);
+            if (!await _orderService.ExistsAsync(id))
+            {
+                return BadRequest();
+            }
 
+            if (await _orderService.GetUserIdByOrderIdAsync(id) != User.Id())
+            {
+                return Unauthorized();
+            }
+
+            var model = await _orderService.GetOrderByIdAsync(id, User.Id());
+            
             if (model == null)
             {
                 return BadRequest();

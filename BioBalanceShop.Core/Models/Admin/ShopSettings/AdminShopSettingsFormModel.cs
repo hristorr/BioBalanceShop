@@ -1,15 +1,7 @@
-﻿using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using BioBalanceShop.Core.Models._Base;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BioBalanceShop.Core.Models._Base;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderData;
 using static BioBalanceShop.Core.Constants.MessageConstants;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.OrderData;
 
 
 namespace BioBalanceShop.Core.Models.Admin.ShopSettings
@@ -19,7 +11,7 @@ namespace BioBalanceShop.Core.Models.Admin.ShopSettings
         /// <summary>
         /// Shop currency
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = RequiredMessage)]
         [Display(Name = "Currency")]
         public int CurrencyId { get; set; }
 

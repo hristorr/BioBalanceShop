@@ -29,34 +29,50 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
-            var model = await _adminShopSettingsService.AllShopSettingsAsync();
-            model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
-
-            string? updatedShopSettingsMessage = TempData["ShopSettingsUpdatedMessage"] as string;
-
-            if (!string.IsNullOrEmpty(updatedShopSettingsMessage))
+            try
             {
-                ViewBag.ShopSettingsUpdatedMessage = updatedShopSettingsMessage;
-            }
+                var model = await _adminShopSettingsService.AllShopSettingsAsync();
+                model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
 
-            return View(model);
+                string? updatedShopSettingsMessage = TempData["ShopSettingsUpdatedMessage"] as string;
+
+                if (!string.IsNullOrEmpty(updatedShopSettingsMessage))
+                {
+                    ViewBag.SiteMessage = updatedShopSettingsMessage;
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Get");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminShopSettingsFormModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
+                if (!ModelState.IsValid)
+                {
+                    model.Currencies = await _adminShopSettingsService.AllCurrenciesAsync();
 
-                return View(model);
+                    return View(model);
+                }
+
+                await _adminShopSettingsService.EditShopSettingsAsync(model);
+
+                TempData["ShopSettingsUpdatedMessage"] = "Successfully updated shop settings";
+
+                return RedirectToAction(nameof(Edit));
             }
-
-            await _adminShopSettingsService.EditShopSettingsAsync(model);
-
-            TempData["ShopSettingsUpdatedMessage"] = "Successfully updated shop settings";
-
-            return RedirectToAction(nameof(Edit));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Admin/ShopSettingsController/Edit/Post");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

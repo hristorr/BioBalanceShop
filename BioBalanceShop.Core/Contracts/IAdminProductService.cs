@@ -28,5 +28,7 @@ namespace BioBalanceShop.Core.Contracts
         Task CreateProductAsync(AdminProductCreateFormModel model, string userId);
 
         Task<bool> ProductCodeExistsAsync(string productCode);
+
+        Task<bool> ProductCodeExistsAsync(string productCode, int productId);
     }
 }
