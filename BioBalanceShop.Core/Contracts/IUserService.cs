@@ -1,12 +1,6 @@
 ﻿using BioBalanceShop.Core.Enumerations;
 using BioBalanceShop.Core.Models.Admin.User;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Contracts
 {

@@ -1,12 +1,6 @@
-﻿using BioBalanceShop.Infrastructure.Data;
-using BioBalanceShop.Infrastructure.Data.Enumerations;
+﻿using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
 
 public class SeedData

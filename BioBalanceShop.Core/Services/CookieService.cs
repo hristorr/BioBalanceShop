@@ -1,14 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Payment;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BioBalanceShop.Core.Models.Cart;
 using static BioBalanceShop.Core.Constants.CookieConstants;
-using BioBalanceShop.Core.Models.Payment;
 
 namespace BioBalanceShop.Core.Services
 {

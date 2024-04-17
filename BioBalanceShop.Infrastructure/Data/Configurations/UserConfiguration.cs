@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants;
-using BioBalanceShop.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BioBalanceShop.Infrastructure.Data.Configuration
 {

@@ -1,9 +1,8 @@
-﻿using BioBalanceShop.Core.Contracts;
+﻿using BioBalanceShop.Controllers;
+using BioBalanceShop.Core.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Security.Claims;
 using static BioBalanceShop.Core.Constants.CookieConstants;
-using BioBalanceShop.Controllers;
 
 namespace BioBalanceShop.Attributes
 {

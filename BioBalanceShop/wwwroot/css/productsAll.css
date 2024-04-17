@@ -19,8 +19,6 @@
 }
 
     .flex-item:hover {
-        /*        background-color: #dbf0db;
-        border: 1px solid #dbf0db;*/
         border: 1px solid #edf7ed;
         border-radius: 5px;
         box-shadow: 1px 1px 10px #214f21;

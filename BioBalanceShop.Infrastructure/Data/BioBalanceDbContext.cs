@@ -1,7 +1,6 @@
 ﻿using BioBalanceShop.Infrastructure.Data.Configuration;
 using BioBalanceShop.Infrastructure.Data.Configurations;
 using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
