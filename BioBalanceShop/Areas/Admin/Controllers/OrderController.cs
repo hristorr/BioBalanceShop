@@ -12,13 +12,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         private readonly IAdminOrderService _adminOrderService;
         private readonly IShopService _shopService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger _logger;
+        private readonly ILogger<OrderController> _logger;
 
         public OrderController(
             IAdminOrderService adminOrderService,
             IShopService shopService,
             UserManager<ApplicationUser> userManager,
-            ILogger<ProductController> logger)
+            ILogger<OrderController> logger)
         {
             _adminOrderService = adminOrderService;
             _shopService = shopService;

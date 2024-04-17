@@ -14,13 +14,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserController> _logger;
 
         public UserController(
             IUserService userService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<ProductController> logger)
+            ILogger<UserController> logger)
         {
             _userService = userService;
             _userManager = userManager;

@@ -41,7 +41,7 @@ namespace BioBalanceShop.Core.Services
                 if (!await _productService.ExistsAsync(item.ProductId))
                 {
                     cart.Items.RemoveAll(item => item.ProductId == item.ProductId);
-                    
+
                     throw new Exception("Product not found");
                 }
 

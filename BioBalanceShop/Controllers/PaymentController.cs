@@ -34,7 +34,7 @@ namespace BioBalanceShop.Controllers
             ICartService cartService,
             ICookieService cookieService,
             IOrderService orderService,
-            ILogger<CartController> logger)
+            ILogger<PaymentController> logger)
         {
             _configuration = configuration;
             _productService = productService;
@@ -141,10 +141,9 @@ namespace BioBalanceShop.Controllers
 
                     string orderNumber = await _orderService.CreateOrderAsync(orderInfo, productsInCart, User.Id());
 
-                    if (orderNumber != null)
-                    {
-                        ViewBag.OrderNumber = orderNumber;
-                    }
+
+                    ViewBag.OrderNumber = orderNumber ?? "";
+
 
                     _cookieService.RemoveCookie(Response.Cookies, ShoppingCartCookie);
                     _cookieService.RemoveCookie(Response.Cookies, OrderInfoCookie);
@@ -172,8 +171,8 @@ namespace BioBalanceShop.Controllers
         {
             try
             {
-                var publishableKey = _configuration[StripeSettings.PublishableKey];
-                ViewBag.PublishableKey = publishableKey;
+                //var publishableKey = _configuration[StripeSettings.PublishableKey];
+                //ViewBag.PublishableKey = publishableKey;
 
                 var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
@@ -184,7 +183,7 @@ namespace BioBalanceShop.Controllers
 
                 var customer = await GeneratePaymentCheckoutGetCustomerModel();
                 var order = await GeneratePaymentCheckoutGetOrderModel(cart);
-                CheckoutFormModel checkoutModel = await GeneratePaymentCheckoutGetModel(customer, order);
+                CheckoutFormModel checkoutModel = GeneratePaymentCheckoutGetModel(customer, order);
 
                 return View(checkoutModel);
             }
@@ -253,7 +252,7 @@ namespace BioBalanceShop.Controllers
             return order;
         }
 
-        private async Task<CheckoutFormModel> GeneratePaymentCheckoutGetModel(CheckoutCustomerFormModel customer, CheckoutOrderFormModel order)
+        private CheckoutFormModel GeneratePaymentCheckoutGetModel(CheckoutCustomerFormModel customer, CheckoutOrderFormModel order)
         {
             var checkoutModel = new CheckoutFormModel()
             {

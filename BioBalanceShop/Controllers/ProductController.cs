@@ -65,11 +65,8 @@ namespace BioBalanceShop.Controllers
 
             string? addedToCartMessage = TempData["AddedToCartMessage"] as string;
 
-            if (!string.IsNullOrEmpty(addedToCartMessage))
-            {
-                ViewBag.SiteMessage = addedToCartMessage;
-            }
-            
+            ViewBag.SiteMessage = addedToCartMessage ?? "";
+
             return View(model);
         }
     }
