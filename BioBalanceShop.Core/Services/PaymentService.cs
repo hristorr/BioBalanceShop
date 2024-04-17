@@ -3,14 +3,7 @@ using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Services
 {

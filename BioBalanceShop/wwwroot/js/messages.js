@@ -9,9 +9,3 @@ $(document).ready(function () {
         $msg.slideUp();
     }, 5000);
 });
-
-$(document).ready(function () {
-    $("#siteMsgClose").on("click", function () {
-        $("#siteMsg").css("display", "none");
-    });
-});

@@ -1,16 +1,10 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Enumerations;
-using BioBalanceShop.Core.Models.Cart;
 using BioBalanceShop.Core.Models.Home;
 using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Services
 {

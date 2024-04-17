@@ -1,20 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Enumerations;
-using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Admin.Product;
-using BioBalanceShop.Core.Models.Product;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace BioBalanceShop.Core.Services
 {

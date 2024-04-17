@@ -171,9 +171,6 @@ namespace BioBalanceShop.Controllers
         {
             try
             {
-                //var publishableKey = _configuration[StripeSettings.PublishableKey];
-                //ViewBag.PublishableKey = publishableKey;
-
                 var cart = _cookieService.GetOrCreateCartCookie(Request.Cookies[ShoppingCartCookie]);
 
                 if (cart == null || cart.Items.Count() == 0)

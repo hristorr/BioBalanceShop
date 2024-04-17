@@ -2,23 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Models.Customer;
+using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
-using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
-using BioBalanceShop.Core.Models.Payment;
-using BioBalanceShop.Core.Models.Customer;
-using BioBalanceShop.Core.Contracts;
-using BioBalanceShop.Core.Models.Shared;
-using Stripe.Tax;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using static BioBalanceShop.Core.Constants.RoleConstants;
+using static BioBalanceShop.Infrastructure.Constants.CustomClaims;
+using static BioBalanceShop.Infrastructure.Constants.DataConstants.ApplicationUserData;
 
 namespace BioBalanceShop.Areas.Identity.Pages.Account.Manage
 {

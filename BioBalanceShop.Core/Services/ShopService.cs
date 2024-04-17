@@ -1,15 +1,9 @@
 ﻿using BioBalanceShop.Core.Contracts;
 using BioBalanceShop.Core.Models._Base;
-using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Core.Models.Shared;
 using BioBalanceShop.Infrastructure.Data.Common;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BioBalanceShop.Core.Services
 {

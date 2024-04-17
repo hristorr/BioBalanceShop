@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BioBalanceShop.Infrastructure.Constants.DataConstants.AddressData;
 
 namespace BioBalanceShop.Infrastructure.Data.Models
