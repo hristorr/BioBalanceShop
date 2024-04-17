@@ -1,21 +1,13 @@
 ﻿using BioBalanceShop.Core.Contracts;
+using BioBalanceShop.Core.Enumerations;
+using BioBalanceShop.Core.Models._Base;
 using BioBalanceShop.Core.Models.Cart;
+using BioBalanceShop.Core.Models.Order;
 using BioBalanceShop.Core.Models.Payment;
 using BioBalanceShop.Infrastructure.Data.Common;
+using BioBalanceShop.Infrastructure.Data.Enumerations;
 using BioBalanceShop.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BioBalanceShop.Infrastructure.Data.Enumerations;
-using Microsoft.AspNetCore.Identity;
-using static BioBalanceShop.Infrastructure.Constants.DataConstants;
-using BioBalanceShop.Core.Models.Product;
-using BioBalanceShop.Core.Enumerations;
-using BioBalanceShop.Core.Models.Order;
-using BioBalanceShop.Core.Models._Base;
 
 namespace BioBalanceShop.Core.Services
 {

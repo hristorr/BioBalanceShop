@@ -11,13 +11,13 @@ namespace BioBalanceShop.Areas.Admin.Controllers
         private readonly IAdminShopSettingsService _adminShopSettingsService;
         private readonly IShopService _shopService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger _logger;
+        private readonly ILogger<ShopSettingsController> _logger;
 
         public ShopSettingsController(
             IAdminShopSettingsService adminShopSettingsService,
             IShopService shopService,
             UserManager<ApplicationUser> userManager,
-            ILogger<ProductController> logger)
+            ILogger<ShopSettingsController> logger)
         {
             _adminShopSettingsService = adminShopSettingsService;
             _shopService = shopService;
@@ -49,6 +49,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Edit(AdminShopSettingsFormModel model)
