@@ -4,10 +4,16 @@
     ViewBag.Title = "Cart";
 }
 
-<h2>Your Shopping Cart</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/cart.css" asp-append-version="true" />
+}
+
+<h2 class="text-center">Your Shopping Cart</h2>
+<hr />
+
 @if (Model.Items.Any())
 {
-    <form asp-controller="Cart" asp-action="UpdateCart" method="Post">
+    <form asp-controller="Cart" asp-action="UpdateCart" id="cartForm" method="Post">
         <div class="row">
             <table class="table table-striped">
                 <thead>
@@ -42,11 +48,11 @@
             </table>
         </div>
         <div class="text-center">
-            <input type="submit" value="Update Cart" class="btn btn-primary" />
         </div>
     </form>
     <div class="text-center">
-        <input class="btn btn-primary mt-3" value="Proceed to Checkout" onclick="location.href='@Url.Action("Checkout", "Payment")'" />
+        <input type="submit" form="cartForm" value="Update Cart" class="btn btn-primary" />
+        <input class="btn btn-primary" value="Proceed to Checkout" onclick="location.href='@Url.Action("Checkout", "Payment")'" />
     </div>
 }
 else
