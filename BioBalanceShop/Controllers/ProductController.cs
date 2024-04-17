@@ -61,7 +61,7 @@ namespace BioBalanceShop.Controllers
 
             if (!string.IsNullOrEmpty(addedToCartMessage))
             {
-                ViewBag.AddedToCartMessage = addedToCartMessage;
+                ViewBag.SiteMessage = addedToCartMessage;
             }
             
             return View(model);

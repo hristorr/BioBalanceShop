@@ -48,14 +48,19 @@ namespace BioBalanceShop.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        public IActionResult GetStripeKey()
+        {
+            var publishableKey = _configuration[StripeSettings.PublishableKey];
+            return Json(new { publishableKey });
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         [RequiresCookieConsent]
         public async Task<IActionResult> Charge()
         {
             try
             {
-                var publishableKey = _configuration[StripeSettings.PublishableKey];
-                ViewBag.PublishableKey = publishableKey;
-
                 var model = _cookieService.GetOrderInfoFromCookie(Request.Cookies[OrderInfoCookie]);
 
                 var currency = await _shopService.GetShopCurrency();

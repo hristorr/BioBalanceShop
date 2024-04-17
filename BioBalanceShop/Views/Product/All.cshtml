@@ -4,8 +4,15 @@
     ViewBag.Title = "All Products";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/productsAll.css" asp-append-version="true" />
+}
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
+
+
+
 
 <form method="get">
     <div class="row">
@@ -91,7 +98,8 @@
     <h2 class="text-center">No products found by the given criteria!</h2>
 }
 
-<div class="row">
+
+<div class="flex-container">
     @foreach (var product in Model.Products)
     {
         <partial name="_ProductPartial" model="@product" />

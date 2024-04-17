@@ -4,14 +4,18 @@
     ViewBag.Title = "Edit Product";
 }
 
-<h1>Edit Product</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/productsEdit.css" asp-append-version="true" />
+}
 
-<div class="row">
-    <div class="col-4">
-        <img class="card-img-top" style="width: 20rem;"
-             src="@Model.ImageUrl" alt="Product Front Image">
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="flexContainer">
+    <div class="flexItem">
+        <img class="card-img-top responsive" style="width: 20rem;" src="@Model.ImageUrl" alt="Product Front Image">
     </div>
-    <div class="col-sm-8">
+    <div class="flexItem flexItemRight">
         <form method="post">
             <div class="form-group">
                 <label asp-for="@Model.Title"></label>

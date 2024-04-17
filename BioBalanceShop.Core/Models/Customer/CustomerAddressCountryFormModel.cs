@@ -5,6 +5,7 @@ namespace BioBalanceShop.Core.Models.Customer
 {
     public class CustomerAddressCountryFormModel
     {
+        [Display(Name = "Country")]
         public int? Id { get; set; }
 
         [Display(Name = "Country")]

@@ -38,7 +38,7 @@ namespace BioBalanceShop.Areas.Admin.Controllers
 
                 if (!string.IsNullOrEmpty(updatedShopSettingsMessage))
                 {
-                    ViewBag.ShopSettingsUpdatedMessage = updatedShopSettingsMessage;
+                    ViewBag.SiteMessage = updatedShopSettingsMessage;
                 }
 
                 return View(model);

@@ -4,11 +4,15 @@
     ViewBag.Title = "All Products";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/common.css" asp-append-version="true" />
+}
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
 <div>
-    <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Create Product</a>
+    <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btnAdminCreate btn btn-warning mb-2 w-100 p-3 fw-bold">Create Product</a>
 </div>
 
 <form method="get">
@@ -126,15 +130,5 @@
 
 @section Scripts {
 
-    <script>
-        $(document).ready(function () {
-            $(".openModalBtn").click(function () {
-                var productId = $(this).data("id");
-                var productName = $(this).data("product");
-                $("#deleteProduct").attr("value", productId);
-                $("#productName").html(productName);
-                $("#modalConfirmDelete").modal('show');
-            });
-        });
-    </script>
+    <script src="~/js/admin/products.js" asp-append-version="true"></script>
 }
