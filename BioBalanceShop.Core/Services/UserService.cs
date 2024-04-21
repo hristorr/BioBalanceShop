@@ -225,6 +225,17 @@ namespace BioBalanceShop.Core.Services
                 await _userManager.AddToRoleAsync(userToAdd, model.Role);
             }
 
+            if (model.Role == CustomerRole)
+            {
+                userToAdd.Customer = new Customer()
+                {
+                    Address = new CustomerAddress()
+                    {
+                        Country = new Country()
+                    }
+                };
+            }
+
             var user = await _userManager.FindByNameAsync(userToAdd.UserName);
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(UserFullNameClaim, $"{userToAdd.FirstName} {userToAdd.LastName}"));
 
